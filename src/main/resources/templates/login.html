@@ -1,23 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8" />
+    <title>DSA In Motion | Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
 
-<h2>Login</h2>
+<header>
+    <div class="brand">DSA In Motion</div>
+    <nav>
+        <a href="/home">Home</a>
+    </nav>
+</header>
 
-<form action="/login" method="post">
-    <label>User ID:</label><br>
-    <input type="text" name="userid" required><br><br>
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Welcome Back</h2>
+            <p>Sign in to continue your algorithmic journey</p>
+        </div>
 
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
+        <form action="/login" method="post">
+            <input type="hidden" name="next" th:value="${next}" />
+            <div th:if="${param.success != null}" class="status-msg status-success">
+                Registration Successful! Please login. <i class="fa-solid fa-check"></i>
+            </div>
+            <div th:if="${param.error != null}" class="status-msg status-error">
+                Invalid credentials. Please try again. <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
 
-    <button type="submit">Login</button>
-</form>
+            <div class="form-group">
+                <label>User ID</label>
+                <input type="text" name="userid" class="form-control" placeholder="Enter your User ID" required="required" />
+            </div>
 
-<p style="color:red;">${error}</p>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" id="login-pwd" class="form-control" placeholder="Enter your password" required="required" />
+                <i class="fa-solid fa-eye pwd-toggle" onclick="togglePassword('login-pwd')"></i>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Login</button>
+        </form>
+
+        <div class="auth-footer">
+            Don't have an account? <a href="/register">Sign up here</a>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword(id) {
+    let field = document.getElementById(id);
+    let icon = field.nextElementSibling;
+    if (field.type === "password") {
+        field.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        field.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+</script>
 
 </body>
 </html>

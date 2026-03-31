@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DSA In Motion | Help</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main style="flex: 1; padding: 60px 20px; max-width: 1200px; margin: 0 auto; width: 100%;">
+    <!-- Hero Section -->
+    <div style="text-align: center; margin-bottom: 80px;">
+        <h1 style="font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; background: linear-gradient(90deg, var(--h-blue), var(--h-purple), var(--h-pink)); -webkit-background-clip: text; background-clip: text; color: transparent;">Help & Support</h1>
+        <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; line-height: 1.6;">Everything you need to know about navigating the DSA In Motion universe. Master the algorithms with clarity.</p>
+    </div>
+
+    <!-- FAQ Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 40px;">
+        <!-- Card 1 -->
+        <div class="help-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px; transition: var(--transition); position: relative; overflow: hidden; backdrop-filter: blur(10px);">
+            <div style="width: 60px; height: 60px; background: rgba(159, 206, 238, 0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; border: 1px solid rgba(159, 206, 238, 0.2);">
+                <i class="fa-solid fa-rocket" style="font-size: 1.5rem; color: var(--h-blue);"></i>
+            </div>
+            <h2 style="font-size: 1.6rem; margin-bottom: 15px; color: var(--text-white);">How to start?</h2>
+            <p style="color: var(--text-muted); line-height: 1.7; font-size: 1.05rem;">
+                Browse the <strong style="color: var(--h-blue);">Study Vault</strong> to see available data structures. Take a glance at the theories as a guest, then <a href="/login" style="color: var(--h-purple); text-decoration: underline;">Login</a> to unlock the full power of interactive visualizers.
+            </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="help-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px; transition: var(--transition); position: relative; overflow: hidden; backdrop-filter: blur(10px);">
+            <div style="width: 60px; height: 60px; background: rgba(169, 139, 209, 0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; border: 1px solid rgba(169, 139, 209, 0.2);">
+                <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 1.5rem; color: var(--h-purple);"></i>
+            </div>
+            <h2 style="font-size: 1.6rem; margin-bottom: 15px; color: var(--text-white);">Using Visualizers</h2>
+            <p style="color: var(--text-muted); line-height: 1.7; font-size: 1.05rem;">
+                Every visualizer feature a live <strong style="color: var(--h-purple);">Code Panel</strong>. As the data moves, watch the logic illuminate in real-time. Use the playback controls to rewind time and master every step.
+            </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="help-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px; transition: var(--transition); position: relative; overflow: hidden; backdrop-filter: blur(10px);">
+            <div style="width: 60px; height: 60px; background: rgba(244, 187, 215, 0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; border: 1px solid rgba(244, 187, 215, 0.2);">
+                <i class="fa-solid fa-vault" style="font-size: 1.5rem; color: var(--h-pink);"></i>
+            </div>
+            <h2 style="font-size: 1.6rem; margin-bottom: 15px; color: var(--text-white);">Account Security</h2>
+            <p style="color: var(--text-muted); line-height: 1.7; font-size: 1.05rem;">
+                Maintain your guardian status. Update your identity or forge a new password in the <a href="/profile" style="color: var(--h-pink); text-decoration: underline;">Profile</a> section. Keep your credentials shielded from the void.
+            </p>
+        </div>
+    </div>
+
+    <!-- Contact CTA -->
+    <div style="margin-top: 100px; text-align: center; padding: 50px; background: linear-gradient(135deg, rgba(159, 206, 238, 0.05), rgba(169, 139, 209, 0.05)); border: 1px solid var(--glass-border); border-radius: 32px; backdrop-filter: blur(5px);">
+        <h3 style="font-size: 2rem; margin-bottom: 15px; color: var(--text-main);">Still wandering in the code?</h3>
+        <p style="color: var(--text-muted); margin-bottom: 30px; font-size: 1.1rem;">Our support team is ready to guide you through any orbit.</p>
+        <a href="mailto:support@dsainmotion.com" style="display: inline-block; padding: 16px 40px; background: linear-gradient(90deg, var(--h-blue), var(--h-purple)); color: white; font-weight: 700; border-radius: 14px; box-shadow: 0 10px 20px rgba(169, 139, 209, 0.2); transition: var(--transition);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 30px rgba(169, 139, 209, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 20px rgba(169, 139, 209, 0.2)';">
+            Contact Support
+        </a>
+    </div>
+</main>
+
+<style>
+    .help-card:hover {
+        transform: translateY(-10px);
+        border-color: rgba(169, 139, 209, 0.5) !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(169, 139, 209, 0.1);
+    }
+</style>
+
+<footer>
+    © 2026 DSA In Motion | Crafted for visual learners.
+</footer>
+
+<script>
+
+</script>
+
+</body>
+</html>

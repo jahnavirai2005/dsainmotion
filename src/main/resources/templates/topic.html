@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DSA In Motion | [[${topic}]]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .topic-wrapper {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .topic-header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topic-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--secondary), var(--primary), var(--accent-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        .feedback-trigger {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid var(--purple-glow);
+            color: var(--purple-glow);
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .feedback-trigger:hover {
+            background: var(--purple-glow);
+            color: white;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+        }
+
+        .topic-content {
+            line-height: 1.8;
+            color: var(--text-main);
+            font-size: 1.1rem;
+        }
+
+        .topic-content p {
+            margin-bottom: 20px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: #0d0e21;
+            border: 1px solid rgba(169, 139, 209, 0.2);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: #d1d5db;
+            cursor: pointer;
+        }
+
+        .modal-header h2 {
+            margin-top: 0;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(169, 139, 209, 0.2);
+            border-radius: 10px;
+            color: var(--text-main);
+            padding: 12px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+            outline: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #60A5FA, #A855F7);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+            box-shadow: 0 5px 15px rgba(96, 165, 250, 0.3);
+        }
+
+        .success-msg {
+            display: none;
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div style="max-width: 900px; margin: 40px auto 0 auto; padding: 0 40px;">
+    <button class="back-button" onclick="window.location.href='/dashboard'">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+    </button>
+</div>
+
+<div class="topic-wrapper">
+    <div class="topic-header">
+        <h1 th:text="${topic}">Topic Title</h1>
+        <button class="feedback-trigger" onclick="openModal()">
+            <i class="fa-solid fa-message"></i> Feedback
+        </button>
+    </div>
+
+    <div class="topic-content" th:utext="${content}">
+        <!-- Dynamic content from DB -->
+    </div>
+
+    <div style="margin-top: 40px;">
+        <a href="/study-vault" style="color: #60A5FA; text-decoration: none;">← Back to Study Vault</a>
+    </div>
+</div>
+
+<!-- Feedback Modal -->
+<div id="feedbackModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <div class="modal-header">
+            <h2>Submit Feedback</h2>
+            <p style="color: #94a3b8; font-size: 0.9rem;">Share your thoughts on the <span th:text="${topic}">topic</span> content.</p>
+        </div>
+        
+        <form id="feedbackForm" onsubmit="submitFeedback(event)">
+            <input type="hidden" name="topic" th:value="${topic}">
+            <div class="form-group">
+                <label>Your Message</label>
+                <textarea name="message" placeholder="What did you think of this theory? Any suggestions?" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn" id="submitBtn">Send Feedback</button>
+        </form>
+
+        <div id="successMessage" class="success-msg">
+            <i class="fa-solid fa-circle-check"></i> Thank you! Your feedback has been saved.
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2026 DSA In Motion | Crafted for visual learners.
+</footer>
+
+<script>
+
+
+function openModal() {
+    const modal = document.getElementById('feedbackModal');
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('show'), 10);
+    document.getElementById('feedbackForm').style.display = 'block';
+    document.getElementById('successMessage').style.display = 'none';
+}
+
+function closeModal(event) {
+    const modal = document.getElementById('feedbackModal');
+    modal.classList.remove('show');
+    setTimeout(() => modal.style.display = 'none', 300);
+}
+
+function submitFeedback(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    const submitBtn = document.getElementById('submitBtn');
+    
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'Sending...';
+
+    // AJAX Submission
+    fetch('/feedback', {
+        method: 'POST',
+        body: new URLSearchParams(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('feedbackForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            setTimeout(closeModal, 2000);
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An unexpected error occurred.');
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Send Feedback';
+    });
+}
+</script>
+
+<script>
+    // Highlight active nav item
+    const currentPath = window.location.pathname.toLowerCase();
+    document.querySelectorAll('nav a').forEach(link => {
+        const href = link.getAttribute('href').toLowerCase();
+        if (currentPath === href || (href !== '/' && (currentPath.startsWith(href) || (href === '/study-vault' && currentPath.startsWith('/topic/'))))) {
+            link.classList.add('active');
+        }
+    });
+</script>
+
+</body>
+</html>

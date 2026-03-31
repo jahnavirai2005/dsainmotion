@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree Visualizer | DSA In Motion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #070814;
+            --sidebar-bg: #11132a;
+            --panel-bg: rgba(26, 27, 46, 0.6);
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --text-white: #ffffff;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --node-size: 50px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-white);
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--glass-border);
+            background: var(--bg-dark);
+        }
+
+        .back-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            flex: 1;
+            text-align: center;
+        }
+
+        /* 3-Column Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 340px 400px;
+            gap: 20px;
+            padding: 20px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Left: Viz Area */
+        .viz-container {
+            background: var(--panel-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            position: relative;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+
+        #tree-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #nodes-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .node {
+            position: absolute;
+            width: var(--node-size);
+            height: var(--node-size);
+            background: rgba(139, 92, 246, 0.2);
+            border: 2px solid var(--accent-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+            transform: translateX(-50%) translateY(-50%);
+        }
+
+        .node.root-node {
+            border-color: var(--accent-cyan);
+            border-width: 3px;
+        }
+
+        .node.active {
+            background: var(--accent-cyan);
+            box-shadow: 0 0 30px var(--accent-cyan);
+            transform: translateX(-50%) translateY(-50%) scale(1.2);
+        }
+
+        .node.found {
+            background: var(--accent-green);
+            box-shadow: 0 0 30px var(--accent-green);
+        }
+
+        .node.visited {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Middle: Operations */
+        .ops-panel {
+            background: var(--sidebar-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+            min-height: 400px;
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #818cf8;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 12px;
+            color: #fff;
+            margin-bottom: 15px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn-purple {
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+        }
+
+        .btn-pink {
+            background: linear-gradient(90deg, #ec4899, #f43f5e);
+        }
+
+        .btn-cyan {
+            background: linear-gradient(90deg, #06b6d4, #3b82f6);
+        }
+
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Right: Code/Explanation */
+        .info-panel {
+            display: grid;
+            grid-template-rows: auto auto 1fr;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        .status-box,
+        .stats-box,
+        .code-box {
+            background: var(--panel-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .code-box {
+            min-height: 300px;
+            overflow: hidden;
+        }
+
+        .code-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--accent-cyan);
+        }
+
+        .stats-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .highlight-val {
+            color: var(--accent-cyan);
+            font-weight: 800;
+        }
+
+        .status-heading {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        #status-msg {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .traversal-result {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: var(--accent-green);
+        }
+
+        .code-line {
+            display: block;
+            padding: 2px 10px;
+            border-radius: 4px;
+            white-space: pre;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .code-line.active-line {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--accent-cyan);
+            opacity: 1;
+            border-left: 3px solid var(--accent-cyan);
+            transform: translateX(5px);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--glass-border);
+            border-radius: 10px;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 15px;
+            }
+            .viz-container {
+                min-height: 300px;
+            }
+            .ops-panel {
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 1rem;
+            }
+            header h1 {
+                text-align: center;
+                font-size: 1.8rem;
+            }
+            .dashboard {
+                padding: 10px;
+                gap: 10px;
+            }
+            .info-panel {
+                grid-template-rows: auto;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="/dashboard" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+        <h1>Tree Visualizer</h1>
+    </header>
+    <main class="dashboard">
+        <!-- Viz Area -->
+        <section class="viz-container" id="viz-container">
+            <svg id="tree-svg">
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="rgba(255,255,255,0.2)" />
+                    </marker>
+                </defs>
+            </svg>
+            <div id="nodes-layer"></div>
+        </section>
+
+        <!-- Operations -->
+        <aside class="ops-panel">
+            <div class="panel-title"><i class="fas fa-tools"></i> Operations</div>
+
+            <div class="input-group">
+                <input type="number" id="node-val" placeholder="Enter Value (e.g. 50)">
+            </div>
+
+            <div class="btn-grid">
+                <button class="btn btn-purple" onclick="insertNode()">
+                    <i class="fas fa-plus"></i> Insert
+                </button>
+                <button class="btn btn-pink" onclick="deleteNode()">
+                    <i class="fas fa-minus"></i> Delete
+                </button>
+            </div>
+
+            <button class="btn btn-cyan" onclick="searchNode()" style="width: 100%; margin-top: 10px;">
+                <i class="fas fa-search"></i> Search Value
+            </button>
+
+            <div class="panel-title" style="margin-top: 30px;"><i class="fas fa-route"></i> Traversals</div>
+            <div class="btn-grid">
+                <button class="btn btn-ghost" onclick="traverse('inorder')">Inorder</button>
+                <button class="btn btn-ghost" onclick="traverse('preorder')">Preorder</button>
+                <button class="btn btn-ghost" onclick="traverse('postorder')">Postorder</button>
+                <button class="btn btn-ghost" onclick="traverse('bfs')">BFS</button>
+                <button class="btn btn-ghost" onclick="traverse('dfs')">DFS</button>
+            </div>
+
+            <button class="btn btn-ghost" style="color: var(--accent-red); margin-top: auto;" onclick="clearTree()">
+                <i class="fas fa-trash"></i> Clear Tree
+            </button>
+        </aside>
+
+        <!-- Info Panels -->
+        <section class="info-panel">
+            <div class="status-box">
+                <div class="status-heading">Execution Status</div>
+                <div id="status-msg">Ready. Enter a value to begin visualization.</div>
+                <div id="traversal-res" class="traversal-result" style="display: none;"></div>
+            </div>
+
+            <div class="stats-box">
+                <div class="status-heading">Tree Analysis</div>
+                <div class="stats-content">
+                    <div>Height: <span id="tree-height" class="highlight-val">0</span></div>
+                    <div>Total Nodes: <span id="total-nodes" class="highlight-val">0</span></div>
+                    <div>Leaf Nodes: <span id="leaf-nodes" class="highlight-val">None</span></div>
+                </div>
+            </div>
+
+            <div class="code-box">
+                <div class="status-heading">Live Code Execution</div>
+                <div id="code-output" class="code-container">
+                    <div class="code-line">// Algorithm logic will be displayed</div>
+                    <div class="code-line">// during execution...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        class Node {
+            constructor(val, x, y) {
+                this.val = val;
+                this.x = x;
+                this.y = y;
+                this.left = null;
+                this.right = null;
+                this.parent = null;
+            }
+        }
+
+        class TreeVisualizer {
+            constructor() {
+                this.root = null;
+                this.nodes = [];
+                this.svg = document.getElementById('tree-svg');
+                this.nodesLayer = document.getElementById('nodes-layer');
+                this.statusMsg = document.getElementById('status-msg');
+                this.traversalRes = document.getElementById('traversal-res');
+                this.codeOutput = document.getElementById('code-output');
+                this.treeHeight = document.getElementById('tree-height');
+                this.totalNodes = document.getElementById('total-nodes');
+                this.leafNodes = document.getElementById('leaf-nodes');
+                this.nodeValInput = document.getElementById('node-val');
+                this.init();
+            }
+
+            init() {
+                this.updateStats();
+                this.render();
+            }
+
+            insert(val) {
+                if (!val || isNaN(val)) {
+                    this.showStatus('Please enter a valid number.', 'error');
+                    return;
+                }
+                val = parseInt(val);
+                if (this.find(val)) {
+                    this.showStatus('Value already exists in the tree.', 'error');
+                    return;
+                }
+                const newNode = new Node(val, 0, 0);
+                if (!this.root) {
+                    this.root = newNode;
+                } else {
+                    this.insertNode(this.root, newNode);
+                }
+                this.nodes.push(newNode);
+                this.updatePositions();
+                this.render();
+                this.updateStats();
+                this.showStatus(`Inserted ${val} into the tree.`, 'success');
+                this.animateCode('insert');
+            }
+
+            insertNode(parent, newNode) {
+                if (newNode.val < parent.val) {
+                    if (parent.left) {
+                        this.insertNode(parent.left, newNode);
+                    } else {
+                        parent.left = newNode;
+                        newNode.parent = parent;
+                    }
+                } else {
+                    if (parent.right) {
+                        this.insertNode(parent.right, newNode);
+                    } else {
+                        parent.right = newNode;
+                        newNode.parent = parent;
+                    }
+                }
+            }
+
+            delete(val) {
+                if (!val || isNaN(val)) {
+                    this.showStatus('Please enter a valid number.', 'error');
+                    return;
+                }
+                val = parseInt(val);
+                const node = this.find(val);
+                if (!node) {
+                    this.showStatus('Value not found in the tree.', 'error');
+                    return;
+                }
+                this.removeNode(node);
+                this.nodes = this.nodes.filter(n => n !== node);
+                this.updatePositions();
+                this.render();
+                this.updateStats();
+                this.showStatus(`Deleted ${val} from the tree.`, 'success');
+                this.animateCode('delete');
+            }
+
+            removeNode(node) {
+                if (!node.left && !node.right) {
+                    // Leaf node
+                    if (node.parent) {
+                        if (node.parent.left === node) node.parent.left = null;
+                        else node.parent.right = null;
+                    } else {
+                        this.root = null;
+                    }
+                } else if (!node.left || !node.right) {
+                    // One child
+                    const child = node.left || node.right;
+                    if (node.parent) {
+                        if (node.parent.left === node) node.parent.left = child;
+                        else node.parent.right = child;
+                    } else {
+                        this.root = child;
+                    }
+                    child.parent = node.parent;
+                } else {
+                    // Two children
+                    const successor = this.findMin(node.right);
+                    node.val = successor.val;
+                    this.removeNode(successor);
+                }
+            }
+
+            findMin(node) {
+                while (node.left) node = node.left;
+                return node;
+            }
+
+            find(val) {
+                return this.nodes.find(n => n.val === val);
+            }
+
+            search(val) {
+                if (!val || isNaN(val)) {
+                    this.showStatus('Please enter a valid number.', 'error');
+                    return;
+                }
+                val = parseInt(val);
+                const node = this.find(val);
+                if (!node) {
+                    this.showStatus('Value not found in the tree.', 'error');
+                    return;
+                }
+                this.animateSearch(node);
+                this.showStatus(`Found ${val} in the tree.`, 'success');
+                this.animateCode('search');
+            }
+
+            animateSearch(targetNode) {
+                this.nodes.forEach(n => n.element?.classList.remove('active', 'visited', 'found'));
+                const path = [];
+                let current = this.root;
+                while (current) {
+                    path.push(current);
+                    if (current.val === targetNode.val) break;
+                    current = current.val > targetNode.val ? current.left : current.right;
+                }
+                let i = 0;
+                const interval = setInterval(() => {
+                    if (i < path.length) {
+                        const node = path[i];
+                        node.element.classList.add('visited');
+                        if (i === path.length - 1) node.element.classList.add('found');
+                        i++;
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 500);
+            }
+
+            traverse(type) {
+                if (!this.root) {
+                    this.showStatus('Tree is empty.', 'error');
+                    return;
+                }
+                const result = [];
+                switch (type) {
+                    case 'inorder':
+                        this.inorder(this.root, result);
+                        break;
+                    case 'preorder':
+                        this.preorder(this.root, result);
+                        break;
+                    case 'postorder':
+                        this.postorder(this.root, result);
+                        break;
+                    case 'bfs':
+                        this.bfs(result);
+                        break;
+                    case 'dfs':
+                        this.dfs(this.root, result);
+                        break;
+                }
+                this.traversalRes.textContent = `${type.toUpperCase()}: ${result.join(' -> ')}`;
+                this.traversalRes.style.display = 'block';
+                this.showStatus(`Performed ${type} traversal.`, 'success');
+                this.animateCode(type);
+            }
+
+            inorder(node, result) {
+                if (node) {
+                    this.inorder(node.left, result);
+                    result.push(node.val);
+                    this.inorder(node.right, result);
+                }
+            }
+
+            preorder(node, result) {
+                if (node) {
+                    result.push(node.val);
+                    this.preorder(node.left, result);
+                    this.preorder(node.right, result);
+                }
+            }
+
+            postorder(node, result) {
+                if (node) {
+                    this.postorder(node.left, result);
+                    this.postorder(node.right, result);
+                    result.push(node.val);
+                }
+            }
+
+            bfs(result) {
+                const queue = [this.root];
+                while (queue.length) {
+                    const node = queue.shift();
+                    result.push(node.val);
+                    if (node.left) queue.push(node.left);
+                    if (node.right) queue.push(node.right);
+                }
+            }
+
+            dfs(node, result) {
+                if (node) {
+                    result.push(node.val);
+                    this.dfs(node.left, result);
+                    this.dfs(node.right, result);
+                }
+            }
+
+            clear() {
+                this.root = null;
+                this.nodes = [];
+                this.render();
+                this.updateStats();
+                this.showStatus('Tree cleared.', 'success');
+                this.traversalRes.style.display = 'none';
+            }
+
+            updatePositions() {
+                if (!this.root) return;
+                const container = this.nodesLayer.parentElement;
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                this.updateNodePositions(this.root, width / 2, 50, width / 4);
+            }
+
+            updateNodePositions(node, x, y, offset) {
+                if (!node) return;
+                node.x = x;
+                node.y = y;
+                if (node.left) this.updateNodePositions(node.left, x - offset, y + 80, offset / 2);
+                if (node.right) this.updateNodePositions(node.right, x + offset, y + 80, offset / 2);
+            }
+
+            render() {
+                this.nodesLayer.innerHTML = '';
+                this.svg.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="rgba(255,255,255,0.2)" /></marker></defs>';
+                this.nodes.forEach(node => this.renderNode(node));
+                this.nodes.forEach(node => this.renderEdges(node));
+            }
+
+            renderNode(node) {
+                const div = document.createElement('div');
+                div.className = 'node';
+                if (node === this.root) div.classList.add('root-node');
+                div.textContent = node.val;
+                div.style.left = node.x + 'px';
+                div.style.top = node.y + 'px';
+                node.element = div;
+                this.nodesLayer.appendChild(div);
+            }
+
+            renderEdges(node) {
+                if (node.left) {
+                    this.drawEdge(node, node.left);
+                }
+                if (node.right) {
+                    this.drawEdge(node, node.right);
+                }
+            }
+
+            drawEdge(from, to) {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', from.x);
+                line.setAttribute('y1', from.y + 25);
+                line.setAttribute('x2', to.x);
+                line.setAttribute('y2', to.y - 25);
+                line.setAttribute('stroke', 'rgba(255,255,255,0.3)');
+                line.setAttribute('stroke-width', '2');
+                line.setAttribute('marker-end', 'url(#arrowhead)');
+                this.svg.appendChild(line);
+            }
+
+            updateStats() {
+                this.treeHeight.textContent = this.getHeight();
+                this.totalNodes.textContent = this.nodes.length;
+                this.leafNodes.textContent = this.getLeafCount();
+            }
+
+            getHeight() {
+                return this.getNodeHeight(this.root);
+            }
+
+            getNodeHeight(node) {
+                if (!node) return 0;
+                return 1 + Math.max(this.getNodeHeight(node.left), this.getNodeHeight(node.right));
+            }
+
+            getLeafCount() {
+                return this.nodes.filter(n => !n.left && !n.right).length;
+            }
+
+            showStatus(msg, type = 'info') {
+                this.statusMsg.textContent = msg;
+                this.statusMsg.style.color = type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#06b6d4';
+            }
+
+            animateCode(type, val = null) {
+                let code = '';
+                switch(type) {
+                    case 'insert':
+                        code = `void insert(Node root, int val) {
+    if (root == null) {
+        root = new Node(val);
+        return;
+    }
+    if (val < root.val) {
+        if (root.left == null) {
+            root.left = new Node(val);
+        } else {
+            insert(root.left, val);
+        }
+    } else {
+        if (root.right == null) {
+            root.right = new Node(val);
+        } else {
+            insert(root.right, val);
+        }
+    }
+}`;
+                        break;
+                    case 'delete':
+                        code = `void delete(Node root, int val) {
+    if (root == null) return;
+    if (val < root.val) {
+        delete(root.left, val);
+    } else if (val > root.val) {
+        delete(root.right, val);
+    } else {
+        if (root.left == null) {
+            root = root.right;
+        } else if (root.right == null) {
+            root = root.left;
+        } else {
+            Node successor = findMin(root.right);
+            root.val = successor.val;
+            delete(root.right, successor.val);
+        }
+    }
+}`;
+                        break;
+                    case 'search':
+                        code = `boolean search(Node root, int val) {
+    if (root == null) return false;
+    if (root.val == val) return true;
+    if (val < root.val) {
+        return search(root.left, val);
+    } else {
+        return search(root.right, val);
+    }
+}`;
+                        break;
+                    case 'inorder':
+                        code = `void inorder(Node root) {
+    if (root != null) {
+        inorder(root.left);
+        System.out.print(root.val + " ");
+        inorder(root.right);
+    }
+}`;
+                        break;
+                    case 'preorder':
+                        code = `void preorder(Node root) {
+    if (root != null) {
+        System.out.print(root.val + " ");
+        preorder(root.left);
+        preorder(root.right);
+    }
+}`;
+                        break;
+                    case 'postorder':
+                        code = `void postorder(Node root) {
+    if (root != null) {
+        postorder(root.left);
+        postorder(root.right);
+        System.out.print(root.val + " ");
+    }
+}`;
+                        break;
+                    case 'bfs':
+                        code = `void bfs(Node root) {
+    Queue<Node> queue = new LinkedList<>();
+    queue.add(root);
+    while (!queue.isEmpty()) {
+        Node node = queue.poll();
+        System.out.print(node.val + " ");
+        if (node.left != null) queue.add(node.left);
+        if (node.right != null) queue.add(node.right);
+    }
+}`;
+                        break;
+                    case 'dfs':
+                        code = `void dfs(Node root) {
+    if (root != null) {
+        System.out.print(root.val + " ");
+        dfs(root.left);
+        dfs(root.right);
+    }
+}`;
+                        break;
+                    default:
+                        code = '// Algorithm logic will be displayed\n// during execution...';
+                }
+                this.codeOutput.innerHTML = '';
+                const lines = code.split('\n');
+                lines.forEach((line, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'code-line';
+                    div.textContent = line;
+                    this.codeOutput.appendChild(div);
+                    setTimeout(() => div.classList.add('active-line'), i * 100);
+                });
+            }
+        }
+
+        const visualizer = new TreeVisualizer();
+
+        function insertNode() {
+            const val = document.getElementById('node-val').value;
+            visualizer.insert(val);
+        }
+
+        function deleteNode() {
+            const val = document.getElementById('node-val').value;
+            visualizer.delete(val);
+        }
+
+        function searchNode() {
+            const val = document.getElementById('node-val').value;
+            visualizer.search(val);
+        }
+
+        function traverse(type) {
+            visualizer.traverse(type);
+        }
+
+        function clearTree() {
+            visualizer.clear();
+        }
+    </script>
+</body>
+
+</html>

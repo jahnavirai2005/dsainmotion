@@ -2,219 +2,174 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DSA In Motion</title>
+    <title>DSA In Motion | Visual Learning Platform</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        body {
-            background: #ffffff;
-            color: #111;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 60px;
-        }
-
-        header h2 {
-            color: #3f51b5;
-        }
-
-        nav a {
-            margin-left: 25px;
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-        }
-
-        nav a:hover {
-            color: #3f51b5;
-        }
-
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 60px;
-        }
-
-        .hero-text {
-            max-width: 50%;
-        }
-
-        .hero-text h1 {
-            font-size: 52px;
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
-
-        .hero-text p {
-            font-size: 18px;
-            color: #555;
-            margin-bottom: 30px;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .btn {
-            padding: 12px 28px;
-            border-radius: 25px;
-            border: none;
-            font-size: 15px;
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .btn-login {
-            background: black;
-            color: white;
-        }
-
-        .btn-start {
-            background: #f1f1f1;
-            color: black;
-        }
-
-        .btn:hover {
-            opacity: 0.85;
-        }
-
-        .cards {
-            display: flex;
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .card {
-            width: 140px;
-            height: 160px;
-            background: #f5f5f5;
-            border-radius: 18px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #3f51b5;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            padding: 10px;
-        }
-
-        .card h3 {
-            margin-bottom: 6px;
-        }
-
-        .card p {
-            font-size: 13px;
-            color: #555;
-        }
-
-        /* Hover Expand Effect */
-        .card:hover {
-            transform: scale(1.15);
-            background: #3f51b5;
-            color: white;
-        }
-
-        .card:hover p {
-            color: #ddd;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #777;
-            font-size: 14px;
-        }
-
-        @media(max-width: 900px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
-            }
-            .hero-text {
-                max-width: 100%;
-            }
-            .cards {
-                justify-content: center;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/styles.css">
+    <!-- Load FontAwesome for beautiful icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
 
-<header>
-    <h2>DSA In Motion</h2>
-    <nav>
-        <a href="/">Home</a>
-        <a href="#">Lecture</a>
-        <a href="#">Notes</a>
-        <a href="#">About</a>
-        <a href="#">Help</a>
-    </nav>
-</header>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<section class="hero">
+<section id="home" class="hero" style="scroll-margin-top: 73px;">
     <div class="hero-text">
-        <h1>Where Data Moves<br>Logic Comes Alive</h1>
+        <div class="hero-badge">✨ Interactive Learning Reimagined</div>
+        <h1>Where Data Moves<br><span>Logic Comes Alive</span></h1>
         <p>
-            Data Structure with Animation makes complex DSA concepts easy to understand 
-            through clear, visual motion.
+            Master Data Structures and Algorithms through beautiful, interactive animations. 
+            Stop memorizing code and start seeing how the data actually moves in deep-space environments.
         </p>
 
-        <div class="buttons">
-            <a href="/login" class="btn btn-login">Login</a>
-            <a href="/login" class="btn btn-start">Get Started</a>
+        <div class="hero-buttons">
+            <a href="/register" class="btn btn-primary shadow-glow">Get Started</a>
+            <a href="#about" class="btn btn-glass">Learn More <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></a>
         </div>
+    </div>
+    
+    <!-- Animated Nebula/Space Visual -->
+    <div class="hero-visual">
+        <div class="nebula-glow"></div>
+        <div class="isometric-stack">
+            <div class="stack-layer base"></div>
+            <div class="stack-layer node-1" style="background: rgba(169, 139, 209, 0.4); border-color: #fff;">10</div>
+            <div class="stack-layer node-2" style="background: rgba(159, 206, 238, 0.4); border-color: #fff;">42</div>
+            <div class="stack-layer node-3" style="background: rgba(244, 187, 215, 0.4); border-color: #fff;">99</div>
+        </div>
+    </div>
+</section>
 
-        <!-- DSA CARDS -->
-        <div class="cards">
-            <div class="card" onclick="openPage('stack')">
-                <h3>Stack</h3>
-                <p>LIFO Structure</p>
+<!-- About Section -->
+<section id="about" style="scroll-margin-top: 73px;">
+    <div class="about-content">
+        <h2 style="background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent;">Why DSA In Motion?</h2>
+        <p>
+            Data Structures and Algorithms form the backbone of modern computer science, but learning them through static textbooks and dry code snippets can be overwhelming. <strong>DSA In Motion</strong> was created to bridge this gap.
+        </p>
+        <p>
+            We believe that complex logic becomes beautifully simple when you can see it in action. Our platform renders arrays, trees, queues, and linked lists in real-time. By connecting visual motion with underlying code mechanics, we make sure those abstract concepts click in your mind forever.
+        </p>
+
+        <div class="about-features">
+            <div class="about-feature">
+                <i class="fa-solid fa-eye"></i>
+                <h4>Visual Clarity</h4>
+                <p>Observe exactly how pointers shift and nodes reallocate in memory step-by-step.</p>
             </div>
-            <div class="card" onclick="openPage('queue')">
-                <h3>Queue</h3>
-                <p>FIFO Structure</p>
+            <div class="about-feature">
+                <i class="fa-solid fa-gamepad"></i>
+                <h4>Interactive Control</h4>
+                <p>Pause, rewind, and fast-forward algorithm states at your own pace to grasp every detail.</p>
             </div>
-            <div class="card" onclick="openPage('linkedlist')">
-                <h3>Linked List</h3>
-                <p>Dynamic Nodes</p>
+            <div class="about-feature">
+                <i class="fa-solid fa-code"></i>
+                <h4>Code Driven</h4>
+                <p>Side-by-side execution contexts so you map every animation frame to real logic.</p>
             </div>
-            <div class="card" onclick="openPage('tree')">
-                <h3>Tree</h3>
-                <p>Hierarchical Data</p>
+        </div>
+    </div>
+</section>
+
+<!-- Data Structures & Algorithms Section -->
+<section id="features" style="scroll-margin-top: 73px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <h2 style="font-size: 42px; font-weight: 800; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent;">Data Structures &amp; Algorithms</h2>
+            <p style="font-size: 18px; color: var(--text-muted); margin-top: 16px;">Click any card to explore interactive visualizations.</p>
+        </div>
+        <div class="features-grid">
+            <!-- Data Structures Category -->
+            <div class="category-header">
+                <h3><i class="fa-solid fa-layer-group"></i> Data Structures</h3>
+            </div>
+            <div class="about-features">
+                <div class="about-feature" onclick="location.href='/login'" style="display: flex; flex-direction: column;">
+                    <i class="fa-solid fa-table-list"></i>
+                    <h4>Array</h4>
+                    <p style="flex-grow: 1;">Indexed data, constant-time access and sequential animation.</p>
+                    <button class="back-button" style="margin-top: 15px; width: 100%; justify-content: center; margin-bottom: 0;">Visualize</button>
+                </div>
+                <div class="about-feature" onclick="location.href='/login'" style="display: flex; flex-direction: column;">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <h4>Stack</h4>
+                    <p style="flex-grow: 1;">LIFO push/pop animation, with depth motion and top tracking.</p>
+                    <button class="back-button" style="margin-top: 15px; width: 100%; justify-content: center; margin-bottom: 0;">Visualize</button>
+                </div>
+                <div class="about-feature" onclick="location.href='/login'" style="display: flex; flex-direction: column;">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <h4>Simple Queue</h4>
+                    <p style="flex-grow: 1;">FIFO enqueue/dequeue flow with head/tail progress.</p>
+                    <button class="back-button" style="margin-top: 15px; width: 100%; justify-content: center; margin-bottom: 0;">Visualize</button>
+                </div>
+                <div class="about-feature" onclick="location.href='/login'" style="display: flex; flex-direction: column;">
+                    <i class="fa-solid fa-redo"></i>
+                    <h4>Circular Queue</h4>
+                    <p style="flex-grow: 1;">Wrap-around circular motion and slot reuse.</p>
+                    <button class="back-button" style="margin-top: 15px; width: 100%; justify-content: center; margin-bottom: 0;">Visualize</button>
+                </div>
+                <div class="about-feature" onclick="location.href='/login'" style="display: flex; flex-direction: column;">
+                    <i class="fa-solid fa-arrow-up-9-1"></i>
+                    <h4>Priority Queue</h4>
+                    <p style="flex-grow: 1;">Priority reorder animations with dynamic indices.</p>
+                    <button class="back-button" style="margin-top: 15px; width: 100%; justify-content: center; margin-bottom: 0;">Visualize</button>
+                </div>
+                <div class="about-feature" onclick="location.href='/login'" style="display: flex; flex-direction: column;">
+                    <i class="fa-solid fa-arrows-left-right"></i>
+                    <h4>Deque</h4>
+                    <p style="flex-grow: 1;">Double-ended enqueue/dequeue with bidirectional animation.</p>
+                    <button class="back-button" style="margin-top: 15px; width: 100%; justify-content: center; margin-bottom: 0;">Visualize</button>
+                </div>
+                <div class="about-feature" onclick="location.href='/login'" style="display: flex; flex-direction: column;">
+                    <i class="fa-solid fa-link"></i>
+                    <h4>Singly Linked List</h4>
+                    <p style="flex-grow: 1;">Single-link pointer traversal and insertion ledgers.</p>
+                    <button class="back-button" style="margin-top: 15px; width: 100%; justify-content: center; margin-bottom: 0;">Visualize</button>
+                </div>
+                <div class="about-feature" onclick="location.href='/login'" style="display: flex; flex-direction: column;">
+                    <i class="fa-solid fa-link-slash"></i>
+                    <h4>Doubly Linked List</h4>
+                    <p style="flex-grow: 1;">Two-way pointers, reverse traversal, insert/delete visualization.</p>
+                    <button class="back-button" style="margin-top: 15px; width: 100%; justify-content: center; margin-bottom: 0;">Visualize</button>
+                </div>
+                <div class="about-feature" onclick="location.href='/login'" style="display: flex; flex-direction: column;">
+                    <i class="fa-solid fa-sitemap"></i>
+                    <h4>Tree</h4>
+                    <p style="flex-grow: 1;">Binary and hierarchical traversal with recursive roots.</p>
+                    <button class="back-button" style="margin-top: 15px; width: 100%; justify-content: center; margin-bottom: 0;">Visualize</button>
+                </div>
+            </div>
+
+            <!-- Algorithms Category -->
+            <div class="category-header">
+                <h3><i class="fa-solid fa-code-branch"></i> Algorithms</h3>
+            </div>
+            <div class="about-features" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="about-feature" onclick="location.href='/login'" style="display: flex; flex-direction: column;">
+                    <i class="fa-solid fa-sort-amount-up"></i>
+                    <h4>Sorting</h4>
+                    <p style="flex-grow: 1;">Watch comparison-based sorts animate element swapping.</p>
+                    <button class="back-button" style="margin-top: 15px; width: 100%; justify-content: center; margin-bottom: 0;">Visualize</button>
+                </div>
+                <div class="about-feature" onclick="location.href='/login'" style="display: flex; flex-direction: column;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <h4>Searching</h4>
+                    <p style="flex-grow: 1;">Linear and binary search highlight scanning and jump steps.</p>
+                    <button class="back-button" style="margin-top: 15px; width: 100%; justify-content: center; margin-bottom: 0;">Visualize</button>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
 <footer>
-    © 2026 DSA In Motion | Visual Learning Platform
+    © 2026 DSA In Motion | Crafted for visual learners.
 </footer>
 
 <script>
-    function openPage(type) {
-        window.location.href = "/" + type;
-    }
+function go(page) {
+    window.location.href = '/' + page;
+}
 </script>
 
 </body>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<header th:fragment="navbar">
+    <div class="brand" style="cursor: pointer" onclick="location.href='/'">DSA In Motion</div>
+    <nav>
+        <!-- Home Link: Redirects to /dashboard if logged in, else /home -->
+        <a th:href="${session.userId != null ? '/dashboard' : '/home'}" 
+           class="nav-link" 
+           th:classappend="${activePage == 'home'} ? 'active' : ''">Home</a>
+        
+        <a href="/study-vault" 
+           class="nav-link" 
+           th:classappend="${activePage == 'study-vault'} ? 'active' : ''">Study Vault</a>
+        
+        <a th:href="${activePage == 'home' ? '#about' : '/about'}" 
+           class="nav-link" 
+           th:classappend="${activePage == 'about'} ? 'active' : ''">About</a>
+        
+        <a href="/help" 
+           class="nav-link" 
+           th:classappend="${activePage == 'help'} ? 'active' : ''">Help</a>
+
+        <!-- Login Button for Guests -->
+        <a th:if="${session.userId == null}" href="/login" class="nav-link" style="background: var(--primary); color: white; border-radius: 8px; padding: 8px 20px; margin-left: 10px;">Login</a>
+
+        <!-- User Avatar Dropdown for Authenticated Users -->
+        <div th:if="${session.userId != null}" class="user-menu">
+            <div class="user-info-nav">
+                <div class="name" th:text="${name}">User</div>
+                <div class="email" th:text="${email}">user@example.com</div>
+            </div>
+            <div class="user-avatar" onclick="toggleDropdown()">
+                <span th:text="${initials}">U</span>
+            </div>
+            <div class="dropdown" id="userDropdown">
+                <a href="/profile" class="dropdown-item">
+                <i class="fa-solid fa-user" style="margin-right: 10px;"></i> Update Personal Info
+            </a>
+            <a href="/logout" class="dropdown-item">
+                <i class="fa-solid fa-sign-out-alt" style="margin-right: 10px;"></i> Logout
+            </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dropdown Toggle Script (Shared) -->
+    <script th:if="${session.userId != null}">
+        function toggleDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        document.addEventListener('click', function(event) {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdown = document.getElementById('userDropdown');
+            if (userMenu && !userMenu.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+    </script>
+</header>
+
+</body>
+</html>

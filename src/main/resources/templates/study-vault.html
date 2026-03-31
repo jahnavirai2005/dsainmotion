@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DSA In Motion | Study Vault</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+        .section-title {
+            grid-column: 1 / -1;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(169, 139, 209, 0.2);
+            color: var(--primary);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .topic-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        .topic-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+        .topic-card h3 {
+            font-size: 1.1rem;
+            margin: 0;
+            color: var(--text-main);
+        }
+        .topic-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.4;
+        }
+        .topic-card .icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="dashboard-wrapper">
+    <div class="dash-header" style="margin-bottom: 20px;">
+        <div class="dash-welcome">
+            <h1 style="font-size: 3rem; margin-bottom: 10px;">Study Vault</h1>
+            <p>A comprehensive library of data structures theory and concepts.</p>
+        </div>
+    </div>
+    
+    <div class="category-grid">
+        <!-- Arrays -->
+        <div class="section-title"><i class="fa-solid fa-table-cells"></i> Arrays</div>
+        <a th:href="${isLoggedIn ? '/topic/Array' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Arrays</h3><p style="flex-grow: 1;">Contiguous memory structures.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/1D Array' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>1D Array</h3><p style="flex-grow: 1;">Linear data storage.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/2D Array' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>2D Array</h3><p style="flex-grow: 1;">Matrices and grids.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/Multi-dimensional Array' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Multi-dimensional Array</h3><p style="flex-grow: 1;">High-dim structures.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+
+        <!-- Linked Lists -->
+        <div class="section-title"><i class="fa-solid fa-link"></i> Linked Lists</div>
+        <a th:href="${isLoggedIn ? '/topic/Linked List' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Linked List</h3><p style="flex-grow: 1;">Node-based linear structure.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/Singly Linked List' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Singly Linked List</h3><p style="flex-grow: 1;">One-way traversal.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/Doubly Linked List' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Doubly Linked List</h3><p style="flex-grow: 1;">Bidirectional traversal.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/Circular Linked List' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Circular Linked List</h3><p style="flex-grow: 1;">Infinite loop list.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+
+        <!-- Stacks -->
+        <div class="section-title"><i class="fa-solid fa-layer-group"></i> Stacks</div>
+        <a th:href="${isLoggedIn ? '/topic/Stack' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;">
+            <h3>Stack</h3>
+            <p style="flex-grow: 1;">Last-In, First-Out.</p>
+            <button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button>
+        </a>
+
+        <!-- Queues -->
+        <div class="section-title"><i class="fa-solid fa-arrows-to-circle"></i> Queues</div>
+        <a th:href="${isLoggedIn ? '/topic/Simple Queue' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Simple Queue</h3><p style="flex-grow: 1;">Basic FIFO.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/Circular Queue' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Circular Queue</h3><p style="flex-grow: 1;">Memory optimized.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/Priority Queue' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Priority Queue</h3><p style="flex-grow: 1;">Importance-based.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/Deque (Double Ended Queue)' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Deque</h3><p style="flex-grow: 1;">Two-way Queue.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+
+        <!-- Trees -->
+        <div class="section-title"><i class="fa-solid fa-tree"></i> Trees & Hierarchical</div>
+        <a th:href="${isLoggedIn ? '/topic/Binary Tree' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Binary Tree</h3><p style="flex-grow: 1;">Hierarchical tree basics.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/Binary Search Tree (BST)' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>BST</h3><p style="flex-grow: 1;">Ordered Search Logic.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/AVL Tree (Self-balancing)' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>AVL Tree</h3><p style="flex-grow: 1;">Balanced BST.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/Heap (Min Heap, Max Heap)' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Heap</h3><p style="flex-grow: 1;">Priority Sorting.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/B-Tree' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>B-Tree</h3><p style="flex-grow: 1;">DB Optimized structure.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/B+ Tree' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>B+ Tree</h3><p style="flex-grow: 1;">Leaf-linked indexing.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/Red-Black Tree' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Red-Black Tree</h3><p style="flex-grow: 1;">Balanced by coloring.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+        <a th:href="${isLoggedIn ? '/topic/Traversals' : '/login?next=study-vault'}" class="topic-card" style="display: flex; flex-direction: column;"><h3>Traversals</h3><p style="flex-grow: 1;">Pre, In, Post Traversals.</p><button class="back-button" style="margin-top: 10px; width: 100%; justify-content: center; margin-bottom: 0;">Learn</button></a>
+    </div>
+</div>
+
+<footer>
+    © 2026 DSA In Motion | Crafted for visual learners.
+</footer>
+
+<script>
+
+</script>
+
+</body>
+</html>

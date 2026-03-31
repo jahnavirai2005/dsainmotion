@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA In Motion | Stack Visualization</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- Color Variables & Setup --- */
+        :root {
+            --bg-main: #070814;
+            --bg-panel: rgba(13, 14, 33, 0.7);
+            --text-main: #E2E8F0;
+            --text-muted: #94A3B8;
+            --primary-gradient: linear-gradient(90deg, #9FCEEE, #A98BD1, #F4BBD7);
+            --accent-blue: #9FCEEE;
+            --accent-purple: #A98BD1;
+            --accent-pink: #F4BBD7;
+            --border-color: rgba(169, 139, 209, 0.2);
+            --primary: #A98BD1;
+            --secondary: #9FCEEE;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding-top: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(169, 139, 209, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(159, 206, 238, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(244, 187, 215, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(198, 181, 216, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .main-content {
+            padding: 40px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 3rem;
+            margin-bottom: 5px;
+            text-align: center;
+            letter-spacing: -1px;
+        }
+
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: 5px;
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            gap: 24px;
+            width: 100%;
+            max-width: 1200px;
+            align-items: stretch;
+        }
+
+        /* --- PANELS (Stack, Controls, Code) --- */
+        .stack-box,
+        .controls,
+        .code-box {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
+
+        h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        /* --- STACK AREA --- */
+        .stack-box {
+            background-color: transparent;
+            min-height: 400px;
+            justify-content: flex-end;
+            align-items: center;
+            position: relative;
+            border: 2px dashed rgba(169, 139, 209, 0.2);
+            padding: 20px;
+        }
+
+        .stack-item {
+            background: linear-gradient(135deg, rgba(13, 14, 33, 0.8), rgba(169, 139, 209, 0.1));
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-purple);
+            backdrop-filter: blur(5px);
+            margin-top: 8px;
+            width: 80%;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            border-radius: 8px;
+            animation: dropIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .stack-item.top-element {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(168, 85, 247, 0.2));
+            border-color: #ec4899;
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.3);
+            transform: scale(1.02);
+            z-index: 2;
+        }
+
+        #emptyMessage {
+            color: var(--text-muted);
+            font-style: italic;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        @keyframes dropIn {
+            from {
+                transform: translateY(-40px) scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* --- CONTROLS AREA --- */
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            font-size: 15px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input:focus {
+            border-color: var(--accent-purple);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 12px;
+            border: none;
+            border-radius: 9999px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            opacity: 0.95;
+        }
+
+        .btn-push {
+            background: var(--primary-gradient);
+        }
+
+        .btn-pop {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+        }
+
+        .btn-pop:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-peek {
+            background-color: rgba(168, 85, 247, 0.1);
+            border: 1px solid var(--accent-purple);
+            color: #d8b4fe;
+        }
+
+        .btn-peek:hover {
+            background-color: var(--accent-purple);
+            color: white;
+        }
+
+        .btn-clear {
+            background-color: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+
+        .btn-clear:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* Status & Notes box */
+        .status-box,
+        .notes-box {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .status-box {
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .status-box strong {
+            color: var(--accent-blue);
+        }
+
+        .notes-box {
+            border-left: 3px solid var(--text-muted);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .notes-box strong {
+            color: #e2e8f0;
+        }
+
+        .notes-box ul {
+            margin: 8px 0 0 0;
+            padding-left: 20px;
+        }
+
+        /* --- CODE AREA --- */
+        .code-box pre {
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--accent-blue);
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            flex: 1;
+        }
+
+
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="main-content">
+    <div class="brand-title" style="margin-bottom: 20px;">DSA In Motion</div>
+
+
+    <h1><span class="gradient-text">Stack</span> Visualization</h1>
+    <p class="subtitle">A Stack works on the <strong>LIFO</strong> (Last In, First Out) principle.</p>
+    <a href="/dashboard" class="back-button" style="margin-bottom: 30px; margin-top: 0; width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; background: linear-gradient(90deg, #9FCEEE, #A98BD1); color: #fff; border: none; border-radius: 16px; padding: 18px 0; box-shadow: 0 4px 24px rgba(159, 206, 238, 0.12);"><i class="fa-solid fa-arrow-left" style="margin-right: 12px;"></i> Back to Dashboard</a>
+
+    <div class="container">
+        <!-- Left Side: Visual Stack -->
+        <div class="stack-box" id="stackBox">
+            <div id="emptyMessage">Stack is Empty</div>
+        </div>
+
+        <!-- Right Side: Controls and Buttons -->
+        <div class="controls">
+            <h3>Operations</h3>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="number" id="maxSizeInput" placeholder="Set Max Size (e.g. 5)" min="1" style="margin-bottom: 0;">
+                <button class="btn-clear" onclick="setMaxSize()" style="margin-bottom: 0; padding: 0 15px; white-space: nowrap; font-size: 0.85rem;">SET SIZE</button>
+            </div>
+            
+            <input type="text" id="inputValue" placeholder="Enter a value (e.g., 10)">
+
+            <button class="btn-push" onclick="pushElement()">PUSH (Add to Top)</button>
+            <button class="btn-pop" onclick="popElement()">POP (Remove Top)</button>
+            <button class="btn-peek" onclick="peekElement()">PEEK (View Top)</button>
+            <button class="btn-clear" onclick="clearStack()">CLEAR STACK</button>
+
+            <div class="status-box">
+                <strong>Status:</strong>
+                <p id="statusText" style="margin-bottom: 5px;">Ready for operations...</p>
+                <div style="font-size: 0.8rem; color: #a1a1aa; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; margin-top: 8px;">
+                    <span id="sizeMessage">Current Size: 0</span> / <span id="maxSizeDisplay">8</span>
+                </div>
+            </div>
+
+            <div class="notes-box">
+                <strong>Stack Notes:</strong>
+                <ul>
+                    <li><strong>Push:</strong> Adds a new item to the top.</li>
+                    <li><strong>Pop:</strong> Removes the item from the top.</li>
+                    <li><strong>Peek:</strong> Views the item at the top without removing it.</li>
+                    <li><strong>LIFO:</strong> Last In, First Out principle.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Third Side: Code Display -->
+        <div class="code-box">
+            <h3>Live Code</h3>
+            <pre id="codeDisplay">// Select an operation to see the code...
+// Code will appear here.</pre>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    © 2026 DSA In Motion | Crafted for visual learners.
+</footer>
+
+<script>
+    // --- 1. Core Variables ---
+    let stackData = [];
+    let MAX_SIZE = 8;
+
+    // --- 2. Getting references to HTML elements ---
+    const inputValue = document.getElementById("inputValue");
+    const stackBox = document.getElementById("stackBox");
+    const emptyMessage = document.getElementById("emptyMessage");
+    const statusText = document.getElementById("statusText");
+    const codeDisplay = document.getElementById("codeDisplay");
+    const sizeMessage = document.getElementById("sizeMessage");
+    const maxSizeDisplay = document.getElementById("maxSizeDisplay");
+    if(maxSizeDisplay) maxSizeDisplay.innerText = MAX_SIZE;
+
+    // --- 2.5 Set Max Size dynamically ---
+    function setMaxSize() {
+        let newSize = parseInt(document.getElementById("maxSizeInput").value);
+        if (isNaN(newSize) || newSize <= 0) {
+            statusText.innerText = "Error: Please enter a valid positive number.";
+            return;
+        }
+        if (stackData.length > newSize) {
+            statusText.innerText = `Error: Cannot resize to ${newSize} because stack currently holds ${stackData.length} items.`;
+            alert(`Stack too large! Pop ${stackData.length - newSize} elements first, or Clear the stack.`);
+            return;
+        }
+        MAX_SIZE = newSize;
+        if (maxSizeDisplay) maxSizeDisplay.innerText = MAX_SIZE;
+        statusText.innerText = `Success: Maximum stack size initialized to ${MAX_SIZE}.`;
+        document.getElementById("maxSizeInput").value = "";
+    }
+
+    function showCode(operation) {
+        let codeStr = "";
+        if (operation === 'push') {
+            codeStr = `function push(value) {\n    if (top >= MAX_SIZE - 1) {\n        print("Stack Overflow");\n        return;\n    }\n    top++;\n    stack[top] = value;\n}`;
+        } else if (operation === 'pop') {
+            codeStr = `function pop() {\n    if (top < 0) {\n        print("Stack Underflow");\n        return;\n    }\n    let value = stack[top];\n    top--;\n    return value;\n}`;
+        } else if (operation === 'peek') {
+            codeStr = `function peek() {\n    if (top < 0) {\n        print("Stack is empty");\n        return;\n    }\n    return stack[top];\n}`;
+        } else if (operation === 'clear') {
+            codeStr = `function clear() {\n    top = -1;\n    // Reset stack\n}`;
+        }
+        if (codeDisplay) {
+            codeDisplay.innerText = codeStr;
+        }
+    }
+
+    function pushElement() {
+        showCode('push');
+        let val = inputValue.value;
+
+        if (val === "") {
+            statusText.innerText = "Error: Please enter a value!";
+            return;
+        }
+
+        if (stackData.length >= MAX_SIZE) {
+            statusText.innerText = "Error: Stack Overflow! The stack is full.";
+            alert("STOP! Stack Overflow.\nYou cannot push more items. The maximum size is " + MAX_SIZE + ".");
+            return;
+        }
+
+        stackData.push(val);
+
+        statusText.innerText = `Push: Added ${val} to the top of the stack.`;
+        inputValue.value = "";
+        refreshStackUI();
+    }
+
+    function popElement() {
+        showCode('pop');
+        if (stackData.length === 0) {
+            statusText.innerText = "Error: Stack Underflow! The stack is already empty.";
+            return;
+        }
+
+        let poppedValue = stackData.pop();
+
+        statusText.innerText = `Pop: Removed ${poppedValue} from the top.`;
+        refreshStackUI();
+    }
+
+    function peekElement() {
+        showCode('peek');
+        if (stackData.length === 0) {
+            statusText.innerText = "Error: Stack is empty! Nothing to peek.";
+            return;
+        }
+        let topValue = stackData[stackData.length - 1];
+        statusText.innerText = `Peek: The top element is ${topValue}.`;
+    }
+
+    function clearStack() {
+        showCode('clear');
+        stackData = [];
+        statusText.innerText = "Clear: Stack has been emptied.";
+        refreshStackUI();
+    }
+
+    function refreshStackUI() {
+        let existingItems = document.querySelectorAll(".stack-item");
+        existingItems.forEach(item => item.remove());
+
+        if (stackData.length === 0) {
+            emptyMessage.style.display = "block";
+        } else {
+            emptyMessage.style.display = "none";
+        }
+        if(sizeMessage) sizeMessage.innerText = "Current Size: " + stackData.length;
+
+        for (let i = stackData.length - 1; i >= 0; i--) {
+            let visualBox = document.createElement("div");
+            visualBox.className = "stack-item";
+
+            if (i === stackData.length - 1) {
+                visualBox.innerHTML = `${stackData[i]} <small>&nbsp;(TOP)</small>`;
+                visualBox.classList.add("top-element");
+            } else {
+                visualBox.innerText = stackData[i];
+            }
+
+            stackBox.appendChild(visualBox);
+        }
+    }
+
+
+
+    // Active nav link highlight
+    const currentPath = window.location.pathname.toLowerCase();
+    document.querySelectorAll('nav a').forEach(link => {
+        const href = link.getAttribute('href').toLowerCase();
+        if (currentPath === href || (href !== '/' && currentPath.startsWith(href))) {
+            link.classList.add('active');
+        }
+    });
+</script>
+
+</body>
+
+</html>

@@ -1,30 +1,140 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>User Registration</title>
+    <meta charset="UTF-8" />
+    <title>DSA In Motion | Create Account</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
 
-<h2>User Registration</h2>
+<header>
+    <div class="brand">DSA In Motion</div>
+    <nav>
+        <a href="/home">Home</a>
+        <a href="/login">Login</a>
+    </nav>
+</header>
 
-<form action="/register" method="post">
-    <label>User ID:</label><br>
-    <input type="text" name="user_id" required><br><br>
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Create Account</h2>
+            <p>Join the visual learning platform today</p>
+        </div>
 
-    <label>First Name:</label><br>
-    <input type="text" name="first_name" required><br><br>
+        <form action="/register" method="post" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label>User ID</label>
+                <input type="text" name="user_id" id="userid" class="form-control" placeholder="Choose a unique ID" required="required" th:value="${user_id}" />
+            </div>
 
-    <label>Last Name:</label><br>
-    <input type="text" name="last_name" required><br><br>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" name="first_name" id="fname" class="form-control" placeholder="First Name" required="required" th:value="${first_name}" />
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" id="lname" class="form-control" placeholder="Last Name" required="required" th:value="${last_name}" />
+                </div>
+            </div>
 
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="name@example.com" required="required" th:value="${email}" />
+            </div>
 
-    <label>Password:</label><br>
-    <input type="password" name="pass" required><br><br>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" name="phone" id="phone" class="form-control" placeholder="10-digit mobile number" required="required" th:value="${phone}" />
+            </div>
 
-    <button type="submit">Register</button>
-</form>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="pass" id="password" class="form-control" placeholder="Create a strong password" required="required" />
+                <i class="fa-solid fa-eye pwd-toggle" onclick="togglePassword('password')"></i>
+            </div>
+
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat password" required="required" />
+                <i class="fa-solid fa-eye pwd-toggle" onclick="togglePassword('confirmPassword')"></i>
+            </div>
+
+            <div th:if="${message != null}" th:classappend="${messageType == 'error'} ? 'status-error' : 'status-success'" class="status-msg">
+                <span th:text="${message}"></span>
+                <i th:if="${messageType == 'error'}" class="fa-solid fa-triangle-exclamation"></i>
+                <i th:if="${messageType == 'success'}" class="fa-solid fa-check"></i>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Create Account</button>
+        </form>
+        
+        <div class="auth-footer">
+            Already have an account? <a href="/login">Log in here</a>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword(id) {
+    let field = document.getElementById(id);
+    let icon = field.nextElementSibling;
+    if (field.type === "password") {
+        field.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        field.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+
+function validateForm() {
+    let fname = document.getElementById("fname").value.trim();
+    let lname = document.getElementById("lname").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+    let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
+    let errorBox = document.getElementById("error");
+
+    errorBox.style.display = "none";
+    errorBox.innerText = "";
+
+    function showError(msg) {
+        errorBox.innerHTML = msg + ' <i class="fa-solid fa-circle-exclamation"></i>';
+        errorBox.style.display = "block";
+        return false;
+    }
+
+    let nameRegex = /^[A-Za-z]+$/;
+    if (!nameRegex.test(fname) || !nameRegex.test(lname)) {
+        return showError("Name must contain only alphabets");
+    }
+
+    if (!/^\d{10}$/.test(phone)) {
+        return showError("Phone must be exactly 10 digits");
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
+        return showError("Enter a valid email address");
+    }
+
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password)) {
+        return showError("Password must be 8+ chars with A-Z, a-z, 0-9 & special char");
+    }
+
+    if (password !== confirmPassword) {
+        return showError("Passwords do not match");
+    }
+
+    return true;
+}
+</script>
 
 </body>
 </html>

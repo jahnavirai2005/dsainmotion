@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA In Motion | Queue Animations</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #070814;
+            --panel-bg: rgba(13, 14, 33, 0.7);
+            --text-main: #E2E8F0;
+            --text-muted: #94A3B8;
+            --cyan-glow: #9FCEEE;
+            --purple-glow: #A98BD1;
+            --pink-glow: #F4BBD7;
+            --border-glow: rgba(169, 139, 209, 0.4);
+            --font-ui: 'Inter', sans-serif;
+            --font-head: 'Poppins', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        body {
+            margin: 0; 
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(169, 139, 209, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(159, 206, 238, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(244, 187, 215, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(198, 181, 216, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .main-content {
+            padding: 40px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .brand-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #60A5FA, #A855F7, #EC4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        h1 { 
+            font-family: var(--font-head); font-weight: 800; font-size: 2.8rem; margin: 0; 
+            background: linear-gradient(90deg, #60A5FA, #A855F7, #EC4899); 
+            -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -1px;
+            text-align: center;
+        }
+        .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-top: 10px; margin-bottom: 30px; text-align: center; max-width: 800px; }
+
+        .tabs { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
+        .tab-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
+            color: var(--text-main); padding: 10px 20px; border-radius: 8px; cursor: pointer; 
+            font-family: var(--font-head); font-weight: 600; transition: all 0.3s ease;
+        }
+        .tab-btn.active, .tab-btn:hover { 
+            background: rgba(96, 165, 250, 0.15); border-color: var(--cyan-glow); 
+            box-shadow: 0 0 15px var(--border-glow); transform: translateY(-2px);
+        }
+
+        .main-container {
+            display: flex; gap: 20px; width: 100%; max-width: 1200px; align-items: stretch; flex-wrap: wrap; margin-top: 10px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--panel-bg); padding: 25px; border-radius: 16px; 
+            border: 1px solid rgba(169, 139, 209, 0.1); flex: 1; min-width: 300px; 
+            display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .sidebar h3 { font-family: var(--font-head); margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; color: var(--cyan-glow); font-size: 1.2rem; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; font-weight: 500;}
+        input, select { 
+            width: 100%; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.2); 
+            color: white; padding: 12px; border-radius: 8px; font-family: var(--font-ui); 
+            font-size: 1rem; outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        input:focus, select:focus { border-color: var(--cyan-glow); box-shadow: 0 0 8px rgba(96, 165, 250, 0.3); }
+
+        .btn-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+        button.action {
+            background: linear-gradient(90deg, #60A5FA, #A855F7, #EC4899); border: none; color: white; 
+            padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; 
+            transition: all 0.2s; font-family: var(--font-head); letter-spacing: 0.5px;
+        }
+        button.action:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4); }
+        button.action:active { transform: translateY(0); }
+        button.action.dequeue { background: linear-gradient(135deg, #ea580c, #dc2626); }
+        button.action.dequeue:hover { box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4); }
+        button.action.secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); }
+        button.action.secondary:hover { background: rgba(255,255,255,0.1); color: white; }
+        button.action.clear { background: transparent; border: 1px solid rgba(239, 68, 68, 0.5); color: #f87171; margin-top: auto; }
+        button.action.clear:hover { background: rgba(239, 68, 68, 0.1); }
+
+        /* Viz Area */
+        .viz-area { flex: 3; display: flex; flex-direction: column; gap: 20px; min-width: 300px; }
+        
+        .queue-display {
+            background: var(--panel-bg); border-radius: 16px; border: 1px solid rgba(169, 139, 209, 0.1); 
+            min-height: 400px; display: flex; align-items: center; position: relative; justify-content: center;
+            overflow: hidden; padding: 20px; box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .linear-wrapper {
+            display: flex; align-items: center; justify-content: flex-start; width: 100%; height: 100%; position: relative;
+        }
+
+        .queue-container { 
+            display: flex; gap: 12px; align-items: center; position: relative; transition: all 0.5s ease; width: 100%;
+        }
+
+        .queue-box {
+            min-width: 80px; height: 80px; background: rgba(6, 182, 212, 0.1); 
+            border: 2px solid var(--cyan-glow); border-radius: 12px; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; 
+            position: relative; box-shadow: 0 0 15px rgba(6, 182, 212, 0.2); backdrop-filter: blur(5px);
+            animation: slideIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            transition: all 0.4s ease; z-index: 5;
+        }
+        .queue-box:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 10px 25px rgba(6, 182, 212, 0.4); cursor: default; }
+
+        .queue-box .index-badge {
+            position: absolute; bottom: -28px; font-size: 0.8rem; color: var(--text-muted); 
+            font-weight: normal; font-family: var(--font-code); background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px;
+        }
+        .queue-box .priority-badge {
+            position: absolute; top: -10px; right: -10px; font-size: 0.7rem; color: #fff; 
+            padding: 3px 8px; border-radius: 12px; background: #3b82f6; font-weight: bold; 
+            border: 2px solid var(--panel-bg); box-shadow: 0 0 8px rgba(0,0,0,0.5);
+        }
+
+        /* Priority Colors */
+        .queue-box.prio-High { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+        .queue-box.prio-High .priority-badge { background: #ef4444; }
+        .queue-box.prio-Medium { border-color: #f59e0b; background: rgba(245, 158, 11, 0.1); box-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
+        .queue-box.prio-Medium .priority-badge { background: #f59e0b; }
+        .queue-box.prio-Low { border-color: #22c55e; background: rgba(34, 197, 94, 0.1); box-shadow: 0 0 15px rgba(34, 197, 94, 0.2); }
+        .queue-box.prio-Low .priority-badge { background: #22c55e; }
+
+        .empty-icon { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: var(--text-muted); display: flex; flex-direction: column; align-items: center; opacity: 0.4; font-size: 1.1rem; transition: 0.5s; font-style: italic; z-index: 1; }
+        .empty-icon span { font-size: 3rem; margin-bottom: 5px; opacity: 0.8; }
+
+        /* Panels below Viz */
+        .info-panels { display: flex; gap: 20px; flex-wrap: wrap; }
+        .note-card {
+            flex: 2; border-left: 4px solid #10b981; 
+            padding: 20px; border-radius: 12px; line-height: 1.6; font-size: 0.95rem; 
+            color: #d1d5db; transition: all 0.3s;
+            background: rgba(168, 85, 247, 0.05); border-left-color: var(--purple-glow);
+        }
+        .note-card strong { color: var(--purple-glow); font-size: 1.1rem; font-family: var(--font-head); display: block; margin-bottom: 5px; }
+        
+        .code-card {
+            flex: 1; min-width: 250px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(169, 139, 209, 0.1); 
+            padding: 20px; border-radius: 12px; font-family: var(--font-code); font-size: 0.9rem; 
+            color: var(--cyan-glow); display: flex; flex-direction: column; justify-content: center;
+        }
+        .code-card span { color: #a5b4fc; font-size: 0.8rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Animations */
+        @keyframes slideIn { from { transform: translateX(100px) scale(0.5); opacity: 0; } to { transform: translateX(0) scale(1); opacity: 1; } }
+        .slide-out { animation: slideOut 0.7s cubic-bezier(0.36, 0, 0.66, -0.56) forwards !important; }
+        .slide-out-right { animation: slideOutRight 0.7s cubic-bezier(0.36, 0, 0.66, -0.56) forwards !important; }
+        @keyframes slideOut { to { transform: translateX(-80px) scale(0.5); opacity: 0; } }
+        @keyframes slideOutRight { to { transform: translateX(80px) scale(0.5); opacity: 0; } }
+        
+        .peek-glow { animation: pulseGlow 1.5s ease; border-color: #fde047 !important; box-shadow: 0 0 30px rgba(253, 224, 71, 0.6) !important; transform: scale(1.1) !important; z-index: 10; }
+        @keyframes pulseGlow { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+
+        .toast {
+            position: fixed; bottom: 30px; right: 30px; background: #ef4444; color: white; 
+            padding: 15px 25px; border-radius: 8px; font-weight: bold; font-family: var(--font-head);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4); opacity: 0; pointer-events: none; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: translateY(50px) scale(0.9); z-index: 1000;
+        }
+        .toast.show { opacity: 1; transform: translateY(0) scale(1); }
+
+        /* Circular Visualization Styles */
+        .circle-container { position: relative; width: 340px; height: 340px; display: none; }
+        .circ-node {
+            position: absolute; width: 60px; height: 60px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.1); 
+            display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold;
+            background: var(--panel-bg); transition: all 0.4s ease; transform: translate(-50%, -50%);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); color: white; z-index: 3;
+        }
+        .circ-node .index-label {
+            position: absolute; bottom: -25px; font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-code);
+        }
+        .circ-node.filled {
+            border-color: var(--purple-glow); box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), inset 0 0 10px rgba(168, 85, 247, 0.2);
+            text-shadow: 0 0 8px rgba(255,255,255,0.6);
+        }
+        .connection-ring {
+            position: absolute; width: 260px; height: 260px; border-radius: 50%;
+            border: 2px dashed rgba(255,255,255,0.05);
+            top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; pointer-events: none;
+        }
+        .circ-pointer-badge {
+            position: absolute; font-size: 0.55rem; font-weight: bold; color: white; padding: 3px 8px; border-radius: 4px; font-family: var(--font-head);
+            transition: all 0.4s ease; z-index: 10; letter-spacing: 0.5px;
+        }
+        .circ-pointer-badge.front {
+            background: var(--purple-glow); top: -20px; left: 50%; transform: translateX(-50%); box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+        }
+        .circ-pointer-badge.rear {
+            background: var(--cyan-glow); bottom: -20px; left: 50%; transform: translateX(-50%); box-shadow: 0 0 10px rgba(6, 182, 212, 0.6); color: #000;
+        }
+
+        @keyframes popIn { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; } 50% { transform: translate(-50%, -50%) scale(1.1); } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+        .node-enter { animation: popIn 0.4s ease forwards; }
+
+
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="main-content">
+        <div class="brand-title">DSA In Motion</div>
+
+        <h1>Queue Animations - <span id="modeTitle">FIFO</span></h1>
+        <p class="subtitle" id="headerDesc">Discover how Data Structures manage elements dynamically.</p>
+        <a href="/dashboard" class="back-button"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="setMode('fifo')">Simple Queue</button>
+            <button class="tab-btn" onclick="setMode('circular')">Circular Queue</button>
+            <button class="tab-btn" onclick="setMode('priority')">Priority Queue</button>
+            <button class="tab-btn" onclick="setMode('deque')">Double Ended Queue (Deque)</button>
+        </div>
+
+        <div class="main-container">
+            
+            <div class="sidebar">
+                <h3>Controls</h3>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: flex-end;">
+                    <div style="flex: 1;">
+                        <label>Max Size:</label>
+                        <input type="number" id="maxSizeInput" value="6" min="3" max="15">
+                    </div>
+                    <button class="action secondary" onclick="setMaxSize()" id="btnSetSize" style="padding: 12px 15px; height: 46px; white-space: nowrap;">Set Size</button>
+                </div>
+                <div class="input-group">
+                    <label>Value to add:</label>
+                    <input type="text" id="nodeValue" placeholder="E.g. 42 or Apple">
+                </div>
+                <div class="input-group" id="priorityGroup" style="display: none;">
+                    <label>Priority level:</label>
+                    <select id="nodePriority">
+                        <option value="High">High (Urgent)</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="Low">Low (Backlog)</option>
+                    </select>
+                </div>
+                
+                <div class="btn-grid" id="standardBtns">
+                    <button class="action" onclick="enqueue()">Enqueue (Add to Rear)</button>
+                    <button class="action dequeue" onclick="dequeue()">Dequeue (Remove Front)</button>
+                </div>
+                
+                <div class="btn-grid" id="dequeBtns" style="display: none;">
+                    <button class="action" onclick="enqueueFront()">Enqueue Front</button>
+                    <button class="action" onclick="enqueueRear()">Enqueue Rear</button>
+                    <button class="action dequeue" onclick="dequeueFront()">Dequeue Front</button>
+                    <button class="action dequeue" onclick="dequeueRear()">Dequeue Rear</button>
+                </div>
+
+                <div class="btn-grid" style="margin-top: 20px;">
+                    <button class="action secondary" onclick="checkEmpty()">Is Empty?</button>
+                    <button class="action secondary" onclick="getSize()">Get Size</button>
+                    <button class="action clear" onclick="clearQueue()">Reset System</button>
+                </div>
+            </div>
+
+            <div class="viz-area">
+                <div class="queue-display" id="queueDisplay">
+                    <div class="empty-icon" id="emptyMessage">
+                        <span>⏳</span>
+                        Queue is Empty
+                    </div>
+                    
+                    <!-- Used for Linear Modes (FIFO, Priority, Deque) -->
+                    <div class="linear-wrapper" id="linearWrapper">
+                        <div class="queue-container" id="queueContainer"></div>
+                    </div>
+
+                    <!-- Used for Circular Mode Only -->
+                    <div class="circle-container" id="circleContainer">
+                        <div class="connection-ring"></div>
+                        <!-- Nodes generated dynamically -->
+                    </div>
+                </div>
+
+                <div class="info-panels">
+                    <div class="note-card" id="noteCard">
+                        <strong>Welcome to Queue Visualizer</strong>
+                        Select a mode above and add some elements! A standard Queue follows FIFO (First-In, First-Out).
+                    </div>
+                    <div class="code-card">
+                        <span>Algorithm / Live Code</span>
+                        <div id="codeSnippet" style="white-space: pre; overflow-x: auto;">// Awaiting action...<br>queue = new Array();</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 DSA In Motion | Crafted for visual learners.
+    </footer>
+    
+    <div class="toast" id="toast">Warning!</div>
+
+    <script>
+
+
+        // highlight active nav item
+        const currentPath = window.location.pathname.toLowerCase();
+        document.querySelectorAll('nav a').forEach(link => {
+            const href = link.getAttribute('href').toLowerCase();
+            if (currentPath === href || (href !== '/' && currentPath.startsWith(href))) {
+                link.classList.add('active');
+            }
+        });
+
+        // --- QUEUE LOGIC ---
+        let MAX_SIZE = 6; 
+        let queue = [];     
+        let mode = 'fifo';  
+        
+        let front = -1, rear = -1;
+        let circArray = new Array(MAX_SIZE).fill(null);
+
+        const inputVal = document.getElementById('nodeValue');
+        const prioInput = document.getElementById('nodePriority');
+        const qContainer = document.getElementById('queueContainer');
+        const linearWrapper = document.getElementById('linearWrapper');
+        const circleContainer = document.getElementById('circleContainer');
+        const emptyMsg = document.getElementById('emptyMessage');
+        const noteCard = document.getElementById('noteCard');
+        const codeSnip = document.getElementById('codeSnippet');
+        const toastEl = document.getElementById('toast');
+        const defaultRadius = 120;
+
+        // Init layout
+        drawCircularGrid();
+
+        function setMaxSize() {
+            let newSize = parseInt(document.getElementById("maxSizeInput").value);
+            if (isNaN(newSize) || newSize < 3 || newSize > 15) {
+                showToast("Please enter a valid size between 3 and 15!");
+                return;
+            }
+            let currentLength = mode === 'circular' ? (front === -1 ? 0 : (rear >= front ? rear - front + 1 : MAX_SIZE - front + rear + 1)) : queue.length;
+            if (currentLength > newSize) {
+                showToast("Queue too large! Dequeue elements or Reset first.");
+                return;
+            }
+
+            let oldMax = MAX_SIZE;
+            MAX_SIZE = newSize;
+
+            if (mode === 'circular') {
+                let newCirc = new Array(MAX_SIZE).fill(null);
+                if (front !== -1) {
+                    let j = 0;
+                    let i = front;
+                    while (true) {
+                        newCirc[j] = circArray[i];
+                        if (i === rear) break;
+                        i = (i + 1) % oldMax;
+                        j++;
+                    }
+                    front = 0;
+                    rear = j;
+                }
+                circArray = newCirc;
+                drawCircularGrid();
+                updateCircularPointers();
+            }
+
+            render();
+            showToast(`Maximum queue size updated to ${MAX_SIZE}.`);
+            
+            if(mode === 'circular') {
+                updateNote(`<b>Reset System / Set Size</b><br>Circular queue resized to ${MAX_SIZE}.`, `queue = new Array(${MAX_SIZE});\nfront = rear = -1;`);
+            }
+        }
+
+        function setMode(newMode) {
+            mode = newMode;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if (window.event) window.event.target.classList.add('active');
+            
+            document.getElementById('priorityGroup').style.display = mode === 'priority' ? 'block' : 'none';
+            document.getElementById('standardBtns').style.display = mode === 'deque' ? 'none' : 'flex';
+            document.getElementById('dequeBtns').style.display = mode === 'deque' ? 'flex' : 'none';
+            
+            const titles = { 'fifo': 'FIFO', 'circular': 'Circular', 'priority': 'Priority', 'deque': 'Deque' };
+            document.getElementById('modeTitle').innerText = titles[mode];
+
+            // Toggle Viz visibility
+            if (mode === 'circular') {
+                linearWrapper.style.display = 'none';
+                circleContainer.style.display = 'block';
+                document.getElementById('btnSetSize').innerText = 'Initialize'; 
+                drawCircularGrid();
+                updateCircularPointers();
+            } else {
+                linearWrapper.style.display = 'flex';
+                circleContainer.style.display = 'none';
+                document.getElementById('btnSetSize').innerText = 'Set Size';
+            }
+            
+            const desc = {
+                'fifo': "Standard FIFO Queue: Items pushed to end, processed from front.",
+                'circular': "Circular Queue Visualizer: Overcomes linear queue limits by circularly reusing elements.",
+                'priority': "Priority Queue: Higher priority elements instantly shift closer to the front.",
+                'deque': "Deque (Double-Ended Queue): Enqueue and dequeue from both front and rear ends."
+            };
+            document.getElementById('headerDesc').innerText = desc[mode];
+            
+            clearQueue(true); 
+            
+            let noteText = desc[mode];
+            noteCard.innerHTML = `<strong>Mode Changed</strong>${noteText}`;
+            codeSnip.innerHTML = `// Switched to ${mode} mode.\nqueue = new Array(${MAX_SIZE});`;
+        }
+
+        /* ACTIONS */
+        function enqueue() {
+            let val = inputVal.value.trim();
+            if(!val) return showToast("Please enter a value!");
+            
+            if (mode === 'circular') {
+                if ((rear + 1) % MAX_SIZE === front) return showToast("Queue Overflow! Queue is full.");
+                if (front === -1) front = 0;
+                rear = (rear + 1) % MAX_SIZE;
+                circArray[rear] = val;
+                
+                let targetNode = document.getElementById('circ-node-'+rear);
+                if(targetNode) {
+                    targetNode.classList.remove('node-enter');
+                    void targetNode.offsetWidth;
+                    targetNode.classList.add('node-enter');
+                }
+                
+                updateCircularPointers();
+                updateNote(`<b>Enqueued ${val} at Rear</b><br>Added to circular index ${rear}.`, `if (front == -1) front = 0;\nrear = (rear + 1) % ${MAX_SIZE}; // Result: ${rear}\nqueue[rear] = "${val}";`);
+                
+            } else if (mode === 'priority') {
+                if (queue.length >= MAX_SIZE) return showToast(`Queue Overflow! Cannot exceed ${MAX_SIZE} items.`);
+                let pLevel = prioInput.value;
+                let score = pLevel === "High" ? 1 : pLevel === "Medium" ? 2 : 3;
+                queue.push({ val, pLevel, score });
+                queue.sort((a, b) => a.score - b.score);
+                updateNote(`<b>Enqueued ${val} with ${pLevel} Priority</b><br>The queue resorts itself based on urgency.`, `queue.push({val: "${val}", prio: "${pLevel}"});\nqueue.sort();`);
+                render();
+            } else {
+                if (queue.length >= MAX_SIZE) return showToast(`Queue Overflow! Cannot exceed ${MAX_SIZE} items.`);
+                queue.push(val);
+                updateNote(`<b>Enqueued ${val}</b><br>New element joins the Rear.`, `if (rear == MAX_SIZE)\n    return OVERFLOW;\nqueue[rear] = "${val}";\nrear++;`);
+                render();
+            }
+            inputVal.value = "";
+        }
+
+        function dequeue() {
+            if (mode === 'circular') {
+                if (front === -1) return showToast("Queue Underflow! Queue is empty.");
+                let val = circArray[front];
+                circArray[front] = null;
+                
+                let oldFront = front;
+                if (front === rear) { front = -1; rear = -1; }
+                else { front = (front + 1) % MAX_SIZE; }
+                
+                let targetNode = document.getElementById('circ-node-'+oldFront);
+                if(targetNode) {
+                    targetNode.style.transform = 'translate(-50%, -50%) scale(0.8)';
+                    setTimeout(() => targetNode.style.transform = 'translate(-50%, -50%) scale(1)', 300);
+                }
+
+                updateCircularPointers();
+                updateNote(`<b>Dequeued ${val} from Front</b><br>Front pointer advanced to ${front}.`, `let val = queue[front]; // ${val}\nqueue[front] = null;\n\nif (front == rear) {\n    front = -1; rear = -1;\n} else {\n    front = (front + 1) % ${MAX_SIZE}; // Result: ${front}\n}`);
+            } else {
+                if(queue.length === 0) return showToast("Queue Underflow! Queue is already empty.");
+                let val = mode === 'priority' ? queue[0].val : queue[0];
+                updateNote(`<b>Dequeued ${val}</b><br>The first element was popped.`, `if (front == rear)\n    return UNDERFLOW;\nval = queue[front]; // ${val}\nfront++;\nreturn val;`);
+                
+                queue.shift();
+                removeVisual(0, false);
+                setTimeout(render, 700);
+            }
+        }
+
+        function enqueueFront() {
+            let val = inputVal.value.trim();
+            if(!val) return showToast("Please enter a value!");
+            if (queue.length >= MAX_SIZE) return showToast("Queue Overflow!");
+            queue.unshift(val);
+            inputVal.value = "";
+            updateNote(`<b>Enqueued ${val} to Front</b><br>Deque allows pushing right into the front slot!`, `if (front == 0)\n    return OVERFLOW;\nfront = front - 1;\nqueue[front] = "${val}";`);
+            render();
+        }
+        function enqueueRear() {
+            let val = inputVal.value.trim();
+            if(!val) return showToast("Please enter a value!");
+            if (queue.length >= MAX_SIZE) return showToast("Queue Overflow!");
+            queue.push(val);
+            inputVal.value = "";
+            updateNote(`<b>Enqueued ${val} to Rear</b><br>Standard append at the back.`, `if (rear == MAX_SIZE)\n    return OVERFLOW;\nqueue[rear] = "${val}";\nrear++;`);
+            render();
+        }
+        function dequeueFront() {
+            if(queue.length === 0) return showToast("Queue Underflow!");
+            let val = queue.shift();
+            updateNote(`<b>Dequeued ${val} from Front</b>`, `val = queue[front];\nfront++;\nreturn val;`);
+            removeVisual(0, false, false);
+            setTimeout(render, 700);
+        }
+        function dequeueRear() {
+            if(queue.length === 0) return showToast("Queue Underflow!");
+            let val = queue.pop();
+            updateNote(`<b>Dequeued ${val} from Rear</b>`, `rear--;\nval = queue[rear];\nreturn val;`);
+            removeVisual(queue.length, false, true); 
+            setTimeout(render, 700);
+        }
+
+        /* Common Actions */
+        function checkEmpty() {
+            let emptyState = mode === 'circular' ? (front === -1) : (queue.length === 0);
+            showToast(emptyState ? "Yes, Queue is currently Empty." : "No, Queue is NOT Empty.");
+            updateNote(`<b>Checking Is Empty?</b><br>Result: <b>${emptyState}</b>.`, `if (front == -1) // or queue.length == 0\n    return true;\nreturn false;`);
+        }
+
+        function getSize() {
+            let s = mode === 'circular' ? (front === -1 ? 0 : (rear >= front ? rear - front + 1 : MAX_SIZE - front + rear + 1)) : queue.length;
+            showToast(`Current Queue Size is: ${s}`);
+            updateNote(`<b>Get Size Analysis</b><br>Current Length: ${s}`, mode === 'circular' ? `return (SIZE - front + rear + 1) % SIZE;` : `return rear - front;`);
+        }
+
+        function clearQueue(silent=false) {
+            queue = [];
+            circArray = new Array(MAX_SIZE).fill(null);
+            front = -1; rear = -1;
+            
+            if(mode === 'circular') {
+                updateCircularPointers();
+            } else {
+                render();
+            }
+
+            if(!silent) {
+                updateNote(`<b>System Reset Completed</b><br>Pointers are reset to initial state.`, `queue = new Array(${MAX_SIZE});\nfront = -1;\nrear = -1;`);
+                showToast("Queue System Reset.");
+            }
+        }
+
+        /* Rendering Methods */
+        function drawCircularGrid() {
+            circleContainer.innerHTML = '<div class="connection-ring"></div>';
+            let cx = 170, cy = 170; 
+            
+            for(let i = 0; i < MAX_SIZE; i++) {
+                let angle = (i / MAX_SIZE) * (2 * Math.PI) - (Math.PI / 2);
+                let x = cx + defaultRadius * Math.cos(angle);
+                let y = cy + defaultRadius * Math.sin(angle);
+
+                let node = document.createElement('div');
+                node.className = 'circ-node';
+                node.id = 'circ-node-' + i;
+                node.style.left = x + 'px';
+                node.style.top = y + 'px';
+
+                node.innerHTML = `
+                    <span class="val-span"></span>
+                    <span class="index-label">${i}</span>
+                    <div class="circ-pointer-badge front" id="cp-f-${i}" style="display:none;">FRONT</div>
+                    <div class="circ-pointer-badge rear" id="cp-r-${i}" style="display:none;">REAR</div>
+                `;
+                circleContainer.appendChild(node);
+            }
+        }
+
+        function updateCircularPointers() {
+            let isEmpty = (front === -1);
+            emptyMsg.style.display = isEmpty ? 'flex' : 'none';
+
+            for(let i=0; i<MAX_SIZE; i++) {
+                let pf = document.getElementById('cp-f-'+i);
+                let pr = document.getElementById('cp-r-'+i);
+                if(pf) pf.style.display = (front === i) ? 'block' : 'none';
+                if(pr) pr.style.display = (rear === i) ? 'block' : 'none';
+                
+                let n = document.getElementById('circ-node-'+i);
+                if(!n) continue;
+                let valSpan = n.querySelector('.val-span');
+                
+                if (circArray[i] !== null) {
+                    n.classList.add('filled');
+                    valSpan.innerText = circArray[i];
+                } else {
+                    n.classList.remove('filled');
+                    valSpan.innerText = '';
+                }
+            }
+        }
+
+        function render() {
+            if (mode === 'circular') return; // Handled separately
+            
+            qContainer.innerHTML = '';
+            emptyMsg.style.display = queue.length === 0 ? 'flex' : 'none';
+            
+            queue.forEach((item, index) => {
+                let text = mode === 'priority' ? item.val : item;
+                let b = document.createElement('div');
+                b.className = 'queue-box';
+                b.innerText = text;
+                b.innerHTML += `<span class="index-badge">idx ${index}</span>`;
+                
+                if (mode === 'priority') {
+                    b.classList.add('prio-' + item.pLevel);
+                    b.innerHTML += `<span class="priority-badge">${item.pLevel}</span>`;
+                }
+                
+                qContainer.appendChild(b);
+            });
+        }
+
+        function removeVisual(index, isCircular, fromRear=false) {
+            let items = qContainer.children;
+            if(items.length > index) {
+                items[index].classList.add(fromRear ? 'slide-out-right' : 'slide-out');
+            }
+        }
+
+        function updateNote(txt, code) {
+            noteCard.innerHTML = txt;
+            codeSnip.innerHTML = code;
+        }
+
+        function showToast(msg) {
+            toastEl.innerText = msg;
+            toastEl.classList.add('show');
+            setTimeout(() => toastEl.classList.remove('show'), 2500);
+        }
+        
+        // Input enter capture
+        document.getElementById('nodeValue').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                if (mode === 'deque') enqueueRear();
+                else enqueue();
+            }
+        });
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DSA In Motion | Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="dashboard-wrapper" style="padding: 60px 20px; max-width: 1400px; margin: 0 auto;">
+    <!-- Centered Hero Section -->
+    <div style="text-align: center; margin-bottom: 60px;">
+        <h1 style="font-size: 3.5rem; font-weight: 800; margin-bottom: 15px; background: linear-gradient(90deg, var(--h-blue), var(--h-purple), var(--h-pink)); -webkit-background-clip: text; background-clip: text; color: transparent;">Welcome back, <span th:text="${name}"></span>! 👋</h1>
+        <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto;">Ready to master the algorithms? Pick a topic below and dive into the visual universe of data structures.</p>
+    </div>
+
+
+    <!-- Data Structures Section -->
+    <div style="margin-bottom: 60px;">
+        <div class="category-header" style="justify-content: flex-start; border-bottom: 1px solid rgba(169, 139, 209, 0.2); padding-bottom: 15px; margin-bottom: 30px;">
+            <h3 style="font-size: 1.8rem;"><i class="fa-solid fa-layer-group"></i> Data Structures</h3>
+        </div>
+        <div class="topics-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;">
+            <div class="topic-card" data-topic="array" onclick="go('array')" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="icon" style="background: rgba(159, 206, 238, 0.1); border: 1px solid rgba(159, 206, 238, 0.2);"><i class="fa-solid fa-table-cells" style="color: var(--h-blue);"></i></div>
+                <h3>Array</h3>
+                <p style="flex-grow: 1;">Master memory layouts, shifting, and standard operations.</p>
+                <button class="back-button" style="margin-top: 20px; width: 100%; justify-content: center; margin-bottom: 0;">Explore <i class="fa-solid fa-arrow-right" style="margin-left: 8px; font-size: 12px;"></i></button>
+            </div>
+            <div class="topic-card" data-topic="stack" onclick="go('stack')" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="icon" style="background: rgba(169, 139, 209, 0.1); border: 1px solid rgba(169, 139, 209, 0.2);"><i class="fa-solid fa-layer-group" style="color: var(--h-purple);"></i></div>
+                <h3>Stack</h3>
+                <p style="flex-grow: 1;">Explore Last-In-First-Out (LIFO) memory management and execution.</p>
+                <button class="back-button" style="margin-top: 20px; width: 100%; justify-content: center; margin-bottom: 0;">Explore <i class="fa-solid fa-arrow-right" style="margin-left: 8px; font-size: 12px;"></i></button>
+            </div>
+            <div class="topic-card" data-topic="queue" onclick="go('queue')" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="icon" style="background: rgba(244, 187, 215, 0.1); border: 1px solid rgba(244, 187, 215, 0.2);"><i class="fa-solid fa-people-arrows" style="color: var(--h-pink);"></i></div>
+                <h3>Queue</h3>
+                <p style="flex-grow: 1;">Understand First-In-First-Out (FIFO) sequences and buffering.</p>
+                <button class="back-button" style="margin-top: 20px; width: 100%; justify-content: center; margin-bottom: 0;">Explore <i class="fa-solid fa-arrow-right" style="margin-left: 8px; font-size: 12px;"></i></button>
+            </div>
+            <div class="topic-card" data-topic="linkedlist" onclick="go('topic/linkedlist')" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="icon" style="background: rgba(159, 206, 238, 0.1); border: 1px solid rgba(159, 206, 238, 0.2);"><i class="fa-solid fa-link" style="color: var(--h-blue);"></i></div>
+                <h3>Linked List</h3>
+                <p style="flex-grow: 1;">Visualize pointer connections and dynamic memory allocation.</p>
+                <button class="back-button" style="margin-top: 20px; width: 100%; justify-content: center; margin-bottom: 0;">Explore <i class="fa-solid fa-arrow-right" style="margin-left: 8px; font-size: 12px;"></i></button>
+            </div>
+            <div class="topic-card" data-topic="tree" onclick="go('tree')" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="icon" style="background: rgba(169, 139, 209, 0.1); border: 1px solid rgba(169, 139, 209, 0.2);"><i class="fa-solid fa-network-wired" style="color: var(--h-purple);"></i></div>
+                <h3>Tree</h3>
+                <p style="flex-grow: 1;">Master hierarchical data structures like Binary Search Trees.</p>
+                <button class="back-button" style="margin-top: 20px; width: 100%; justify-content: center; margin-bottom: 0;">Explore <i class="fa-solid fa-arrow-right" style="margin-left: 8px; font-size: 12px;"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Algorithms Section -->
+    <div>
+        <div class="category-header" style="justify-content: flex-start; border-bottom: 1px solid rgba(244, 187, 215, 0.2); padding-bottom: 15px; margin-bottom: 30px;">
+            <h3 style="font-size: 1.8rem;"><i class="fa-solid fa-code-branch"></i> Algorithms</h3>
+        </div>
+        <div class="topics-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;">
+            <div class="topic-card" data-topic="sorting" onclick="go('sorting')" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="icon" style="background: rgba(244, 187, 215, 0.1); border: 1px solid rgba(244, 187, 215, 0.2);"><i class="fa-solid fa-arrow-down-short-wide" style="color: var(--h-pink);"></i></div>
+                <h3>Sorting</h3>
+                <p style="flex-grow: 1;">Watch arrays morph and align through classic sorting algorithms.</p>
+                <button class="back-button" style="margin-top: 20px; width: 100%; justify-content: center; margin-bottom: 0;">Explore <i class="fa-solid fa-arrow-right" style="margin-left: 8px; font-size: 12px;"></i></button>
+            </div>
+            <div class="topic-card" data-topic="searching" onclick="go('searching')" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="icon" style="background: rgba(159, 206, 238, 0.1); border: 1px solid rgba(159, 206, 238, 0.2);"><i class="fa-solid fa-magnifying-glass" style="color: var(--h-blue);"></i></div>
+                <h3>Searching</h3>
+                <p style="flex-grow: 1;">Track element discovery via Linear & Binary search patterns.</p>
+                <button class="back-button" style="margin-top: 20px; width: 100%; justify-content: center; margin-bottom: 0;">Explore <i class="fa-solid fa-arrow-right" style="margin-left: 8px; font-size: 12px;"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2026 DSA In Motion | Crafted for visual learners.
+</footer>
+
+<script>
+function go(page){
+    window.location.href = "/" + page;
+}
+
+
+</script>
+
+<script>
+    // Highlight active nav item
+    const currentPath = window.location.pathname.toLowerCase();
+    document.querySelectorAll('nav a').forEach(link => {
+        const href = link.getAttribute('href').toLowerCase();
+        if (currentPath === href || (href !== '/' && currentPath.startsWith(href))) {
+            link.classList.add('active');
+        }
+    });
+</script>
+
+</body>
+</html>

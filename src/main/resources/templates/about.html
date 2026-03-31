@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DSA In Motion | About</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<section id="about" style="flex: 1; min-height: 80vh; padding: 60px 20px;">
+    <div class="about-content">
+        <h2 style="font-size: 3.5rem; margin-bottom: 30px; background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6); -webkit-background-clip: text; background-clip: text; color: transparent;">Why DSA In Motion?</h2>
+        <p style="font-size: 1.25rem; max-width: 900px; margin: 0 auto 40px; line-height: 1.8; color: var(--text-muted);">
+            Data Structures and Algorithms form the backbone of modern computer science, but learning them through static textbooks can be overwhelming. <strong>DSA In Motion</strong> bridges this gap by making logic visible.
+        </p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px;">
+            <div class="about-feature">
+                <i class="fa-solid fa-eye" style="font-size: 2.5rem; color: #9FCEEE;"></i>
+                <h4 style="font-size: 1.5rem; margin: 20px 0 10px;">Visual Clarity</h4>
+                <p style="color: var(--text-muted);">Observe exactly how pointers shift and nodes reallocate in memory step-by-step.</p>
+            </div>
+            <div class="about-feature">
+                <i class="fa-solid fa-gamepad" style="font-size: 2.5rem; color: #A98BD1;"></i>
+                <h4 style="font-size: 1.5rem; margin: 20px 0 10px;">Interactive Control</h4>
+                <p style="color: var(--text-muted);">Pause, rewind, and fast-forward algorithm states at your own pace to grasp every detail.</p>
+            </div>
+            <div class="about-feature">
+                <i class="fa-solid fa-code" style="font-size: 2.5rem; color: #F4BBD7;"></i>
+                <h4 style="font-size: 1.5rem; margin: 20px 0 10px;">Code Driven</h4>
+                <p style="color: var(--text-muted);">Side-by-side execution contexts so you map every animation frame to real logic.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 100px; text-align: center; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 40px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 24px;">
+            <h3 style="color: #A98BD1; font-size: 2.2rem; margin-bottom: 25px;">Our Mission</h3>
+            <p style="font-size: 1.2rem; line-height: 1.8; color: var(--text-main);">
+                We believe that complex logic becomes beautifully simple when you can see it in action. 
+                Our platform renders arrays, trees, queues, and linked lists in real-time. 
+                By connecting visual motion with underlying code mechanics, we make sure those abstract concepts click in your mind forever.
+            </p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    © 2026 DSA In Motion | Crafted for visual learners.
+</footer>
+
+</body>
+</html>

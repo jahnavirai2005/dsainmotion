@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Visualizer | DSA In Motion</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- Color Variables & Setup --- */
+        :root {
+            --bg-main: #070814;
+            --bg-panel: rgba(13, 14, 33, 0.7);
+            --text-main: #E2E8F0;
+            --text-muted: #94A3B8;
+            --primary-gradient: linear-gradient(90deg, #9FCEEE, #A98BD1, #F4BBD7);
+            --accent-blue: #9FCEEE;
+            --accent-purple: #A98BD1;
+            --accent-pink: #F4BBD7;
+            --accent-green: #C6B5D8;
+            --border-color: rgba(169, 139, 209, 0.2);
+
+            /* Bar Colors */
+            --bar-default: #A98BD1;
+            --bar-compare: #9FCEEE;
+            --bar-swap: #F4BBD7;
+            --bar-sorted: #C6B5D8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(169, 139, 209, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(159, 206, 238, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(244, 187, 215, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(198, 181, 216, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Header Section */
+        header {
+            background-color: var(--bg-main);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header .brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #fff;
+        }
+
+        .user-menu {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info-nav {
+            text-align: right;
+        }
+
+        .user-info-nav .name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-info-nav .email {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: #1e1b4b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            color: #cbd5e1;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+
+        /* Typography */
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            text-align: center;
+            letter-spacing: -1px;
+            margin-top: 20px;
+        }
+
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: 5px;
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout */
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px 40px 20px;
+        }
+
+        .top-row {
+            display: flex;
+            gap: 24px;
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+
+        /* Panels Shared Styles */
+        .panel {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            box-sizing: border-box;
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        /* --- VISUALIZATION AREA --- */
+        .visual-box {
+            flex: 2;
+            min-height: 450px;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bars-container {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 4px;
+            padding-top: 20px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 15px;
+            height: 300px;
+        }
+
+        .array-bar {
+            background-color: var(--bar-default);
+            width: 30px;
+            border-radius: 4px 4px 0 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 5px;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: height 0.15s ease, background-color 0.15s ease;
+            box-shadow: 0 0 10px rgba(96, 165, 250, 0.2);
+        }
+
+        .color-legend {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .color-box {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+
+        .status-box {
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--accent-purple);
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 0.95rem;
+            min-height: 48px;
+        }
+
+        .status-box strong {
+            color: var(--accent-blue);
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* --- CONTROLS AREA --- */
+        .controls-box {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        input[type="range"] {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            border-color: var(--accent-purple);
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0.95;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-primary { background: var(--primary-gradient); color: white; }
+        .btn-secondary { background: transparent; border: 1px solid var(--accent-blue); color: var(--accent-blue); }
+        .btn-danger { background-color: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; }
+        .btn-danger:hover:not(:disabled) { background-color: #ef4444; color: white; }
+
+        .complexity-box {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+
+        .complexity-item span {
+            color: var(--accent-pink);
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        /* --- CODE AREA --- */
+        .code-box {
+            width: 100%;
+        }
+
+        .code-box pre {
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--accent-blue);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .code-line {
+            display: block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .code-line.active {
+            background-color: rgba(168, 85, 247, 0.3);
+            color: #FFFFFF;
+            font-weight: bold;
+            border-left: 3px solid var(--accent-pink);
+        }
+
+        .back-button {
+            padding: 10px 22px;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #9FCEEE, #A98BD1);
+            color: white !important;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(169, 139, 209, 0.2);
+            text-decoration: none;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(169, 139, 209, 0.4);
+            filter: brightness(1.1);
+        }
+
+        footer {
+            padding: 2rem;
+            text-align: center;
+            color: #94a3b8;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div style="width: 100%; max-width: 1300px; margin: 20px auto 0 auto; padding: 0 20px;">
+    </div>
+
+
+    <h1><span class="gradient-text">Sorting</span> Visualizer</h1>
+    <p class="subtitle">An interactive tool to step-by-step visualize sorting algorithms and understand their inner workings.</p>
+    <a href="/dashboard" class="back-button" style="margin-bottom: 30px; margin-top: 0; width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; background: linear-gradient(90deg, #9FCEEE, #A98BD1); color: #fff; border: none; border-radius: 16px; padding: 18px 0; box-shadow: 0 4px 24px rgba(159, 206, 238, 0.12);"><i class="fa-solid fa-arrow-left" style="margin-right: 12px;"></i> Back to Dashboard</a>
+
+    <div class="container">
+        <div class="top-row">
+
+            <!-- Visualization Panel -->
+            <div class="panel visual-box">
+                <h3>Visualization</h3>
+
+                <div class="bars-container" id="barsContainer">
+                    <!-- Bars injected here -->
+                </div>
+
+                <div class="color-legend">
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: var(--bar-default)"></div> Unsorted
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: var(--bar-compare)"></div> Comparing
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: var(--bar-swap)"></div> Swapping
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: var(--bar-sorted)"></div> Sorted
+                    </div>
+                </div>
+
+                <div class="status-box">
+                    <strong>Current Action:</strong>
+                    <span id="explanationText">Ready to start sorting. Select parameters and click Start.</span>
+                </div>
+            </div>
+
+            <!-- Controls Panel -->
+            <div class="panel controls-box">
+                <h3>Settings</h3>
+
+                <div class="control-group">
+                    <label>Algorithm</label>
+                    <div class="btn-row" style="flex-wrap: wrap;">
+                        <button class="btn-primary" id="btnBubble" onclick="selectAlgo('bubble')">Bubble</button>
+                        <button class="btn-secondary" id="btnSelection" onclick="selectAlgo('selection')">Selection</button>
+                        <button class="btn-secondary" id="btnInsertion" onclick="selectAlgo('insertion')">Insertion</button>
+                    </div>
+                    <div class="btn-row" style="flex-wrap: wrap; margin-top: 10px;">
+                        <button class="btn-secondary" id="btnMerge" onclick="selectAlgo('merge')">Merge</button>
+                        <button class="btn-secondary" id="btnQuick" onclick="selectAlgo('quick')">Quick</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Custom Array (Comma Separated)</label>
+                    <input type="text" id="customArray" placeholder="E.g. 5, 23, 7, 18, 9">
+                </div>
+
+                <div class="btn-row" style="margin-bottom: 10px;">
+                    <button class="btn-secondary" id="btnGen" onclick="generateRandomArray()">Generate Random</button>
+                    <button class="btn-secondary" id="btnSet" onclick="setCustomArray()">Set Custom</button>
+                </div>
+
+                <div class="control-group" style="margin-bottom: 20px;">
+                    <label>Generate Array of Size</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="sizeInput" placeholder="E.g. 15" min="2" max="100" value="15" style="margin-bottom: 0;">
+                        <button class="btn-secondary" onclick="onSizeChange()" style="flex: 0 0 auto; padding: 0 15px;">Set Size</button>
+                    </div>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn-primary" id="btnStart" onclick="startSort()">START SORTING</button>
+                </div>
+
+                <div class="btn-row" style="margin-top: 5px;">
+                    <button class="btn-danger" id="btnPause" onclick="pauseResume()" disabled>Pause</button>
+                    <button class="btn-secondary" id="btnReset" onclick="resetApp()">Reset</button>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">Time: <span id="timeC">O(n²)</span></div>
+                    <div class="complexity-item">Space: <span id="spaceC">O(1)</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Panel -->
+        <div class="panel code-box">
+            <h3>Live Algorithm Code</h3>
+            <pre id="codeBlock"></pre>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 DSA In Motion | Crafted for visual learners.
+    </footer>
+
+    <script>
+        // DOM Elements
+        const barsContainer = document.getElementById('barsContainer');
+        const explanationText = document.getElementById('explanationText');
+        const codeBlock = document.getElementById('codeBlock');
+        const sizeInput = document.getElementById('sizeInput');
+        let currentAlgo = 'bubble';
+        const timeC = document.getElementById('timeC');
+        const spaceC = document.getElementById('spaceC');
+
+        // Buttons
+        const btnGen = document.getElementById('btnGen');
+        const btnSet = document.getElementById('btnSet');
+        const btnStart = document.getElementById('btnStart');
+        const btnPause = document.getElementById('btnPause');
+        const btnReset = document.getElementById('btnReset');
+        const customArrayInput = document.getElementById('customArray');
+
+        // State variables
+        let array = [];
+        let isSorting = false;
+        let isPaused = false;
+        let pauseResolver = null;
+        let abortController = null;
+        let animationDelay = 1000; // slow speed for easier understanding
+
+        // Colors
+        const COLOR_DEFAULT = "var(--bar-default)";
+        const COLOR_COMPARE = "var(--bar-compare)";
+        const COLOR_SWAP = "var(--bar-swap)";
+        const COLOR_SORTED = "var(--bar-sorted)";
+
+        const algoData = {
+            bubble: {
+                time: "O(n²)", space: "O(1)",
+                code: [
+                    "for (let i = 0; i < n - 1; i++) {",
+                    "    for (let j = 0; j < n - i - 1; j++) {",
+                    "        if (arr[j] > arr[j + 1]) {",
+                    "            swap(arr, j, j + 1);",
+                    "        }",
+                    "    }",
+                    "}"
+                ]
+            },
+            selection: {
+                time: "O(n²)", space: "O(1)",
+                code: [
+                    "for (let i = 0; i < n - 1; i++) {",
+                    "    let min_idx = i;",
+                    "    for (let j = i + 1; j < n; j++) {",
+                    "        if (arr[j] < arr[min_idx])",
+                    "            min_idx = j;",
+                    "    }",
+                    "    swap(arr, i, min_idx);",
+                    "}"
+                ]
+            },
+            insertion: {
+                time: "O(n²)", space: "O(1)",
+                code: [
+                    "for (let i = 1; i < n; i++) {",
+                    "    let key = arr[i];",
+                    "    let j = i - 1;",
+                    "    while (j >= 0 && arr[j] > key) {",
+                    "        arr[j + 1] = arr[j];",
+                    "        j--;",
+                    "    }",
+                    "    arr[j + 1] = key;",
+                    "}"
+                ]
+            },
+            merge: {
+                time: "O(n log n)", space: "O(n)",
+                code: [
+                    "function mergeSort(arr, l, r) {",
+                    "    if (l >= r) return;",
+                    "    let m = l + Math.floor((r - l) / 2);",
+                    "    mergeSort(arr, l, m);",
+                    "    mergeSort(arr, m + 1, r);",
+                    "    merge(arr, l, m, r);",
+                    "}"
+                ]
+            },
+            quick: {
+                time: "O(n log n)", space: "O(log n)",
+                code: [
+                    "function quickSort(arr, low, high) {",
+                    "    if (low < high) {",
+                    "        let pi = partition(arr, low, high);",
+                    "        quickSort(arr, low, pi - 1);",
+                    "        quickSort(arr, pi + 1, high);",
+                    "    }",
+                    "}"
+                ]
+            }
+        };
+
+        function sleep() {
+            return new Promise(async resolve => {
+                if (abortController.signal.aborted) return resolve();
+                if (isPaused) {
+                    await new Promise(res => pauseResolver = res);
+                }
+                setTimeout(resolve, animationDelay);
+            });
+        }
+
+        function checkAbort() {
+            if (abortController && abortController.signal.aborted) {
+                throw new Error("Aborted");
+            }
+        }
+
+        function explain(text) {
+            explanationText.innerHTML = text;
+        }
+
+        function highlightLine(...indices) {
+            document.querySelectorAll('.code-line').forEach(el => el.classList.remove('active'));
+            indices.forEach(idx => {
+                const line = document.getElementById(`line-${idx}`);
+                if (line) line.classList.add('active');
+            });
+        }
+
+        function onSizeChange() {
+            if (isSorting) return;
+            let val = parseInt(sizeInput.value);
+            if (isNaN(val) || val < 2) {
+                alert("Please enter a valid size (minimum 2).");
+                return;
+            }
+            if (val > 100) {
+                alert("Maximum size is 100.");
+                sizeInput.value = 100;
+            }
+            generateRandomArray();
+        }
+
+        function selectAlgo(algo) {
+            currentAlgo = algo;
+            document.getElementById('btnBubble').className = algo === 'bubble' ? 'btn-primary' : 'btn-secondary';
+            document.getElementById('btnSelection').className = algo === 'selection' ? 'btn-primary' : 'btn-secondary';
+            document.getElementById('btnInsertion').className = algo === 'insertion' ? 'btn-primary' : 'btn-secondary';
+            document.getElementById('btnMerge').className = algo === 'merge' ? 'btn-primary' : 'btn-secondary';
+            document.getElementById('btnQuick').className = algo === 'quick' ? 'btn-primary' : 'btn-secondary';
+            updateAlgoSettings();
+        }
+
+        function updateAlgoSettings() {
+            const algo = currentAlgo;
+            const data = algoData[algo];
+            timeC.innerText = data.time;
+            spaceC.innerText = data.space;
+
+            codeBlock.innerHTML = data.code.map((line, idx) => {
+                const formatted = line.replace(/^( +)/, match => '&nbsp;'.repeat(match.length));
+                return `<span class="code-line" id="line-${idx}">${formatted}</span>`;
+            }).join("\n");
+        }
+
+        function pauseResume() {
+            if (!isSorting) return;
+            isPaused = !isPaused;
+            if (isPaused) {
+                btnPause.innerText = "Resume";
+                btnPause.classList.remove("btn-danger");
+                btnPause.classList.add("btn-secondary");
+                explain("⏸️ Sorting paused.");
+            } else {
+                btnPause.innerText = "Pause";
+                btnPause.classList.add("btn-danger");
+                btnPause.classList.remove("btn-secondary");
+                explain("▶️ Sorting resumed.");
+                if (pauseResolver) pauseResolver();
+            }
+        }
+
+        function setControlsState(sorting) {
+            isSorting = sorting;
+            btnGen.disabled = sorting;
+            btnSet.disabled = sorting;
+            btnStart.disabled = sorting;
+            document.getElementById('btnBubble').disabled = sorting;
+            document.getElementById('btnSelection').disabled = sorting;
+            document.getElementById('btnInsertion').disabled = sorting;
+            document.getElementById('btnMerge').disabled = sorting;
+            document.getElementById('btnQuick').disabled = sorting;
+            sizeInput.disabled = sorting;
+            customArrayInput.disabled = sorting;
+
+            if (sorting) {
+                btnPause.disabled = false;
+                isPaused = false;
+                btnPause.innerText = "Pause";
+                btnPause.className = "btn-danger";
+            } else {
+                btnPause.disabled = true;
+            }
+        }
+
+        function resetApp() {
+            if (abortController) {
+                abortController.abort();
+            }
+            if (isPaused && pauseResolver) {
+                pauseResolver();
+            }
+            setControlsState(false);
+            generateRandomArray();
+            explain("System reset. Ready to start.");
+            highlightLine(-1);
+        }
+
+        function generateRandomArray() {
+            const size = parseInt(sizeInput.value) || 15;
+            array = [];
+            for (let i = 0; i < size; i++) {
+                array.push(Math.floor(Math.random() * 95) + 5);
+            }
+            renderArray();
+        }
+
+        function setCustomArray() {
+            const val = customArrayInput.value;
+            if (!val) return;
+
+            let parsed = val.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x) && x > 0);
+            if (parsed.length < 2) {
+                alert("Please provide at least 2 valid positive numbers, separated by commas.");
+                return;
+            }
+            if (parsed.length > 50) {
+                alert("Limiting to maximum 50 elements for visualization.");
+                parsed = parsed.slice(0, 50);
+            }
+
+            array = parsed;
+            sizeInput.value = array.length;
+            renderArray();
+            explain("Custom array loaded.");
+        }
+
+        function renderArray() {
+            barsContainer.innerHTML = "";
+            let maxVal = Math.max(...array, 10);
+
+            array.forEach((val) => {
+                const bar = document.createElement("div");
+                bar.classList.add("array-bar");
+                const heightPercent = (val / maxVal) * 100;
+                bar.style.height = `${Math.max(10, heightPercent)}%`;
+
+                if (array.length <= 25) {
+                    bar.innerText = val;
+                }
+
+                bar.style.width = `${Math.max(8, 100 / array.length - 1)}%`;
+                barsContainer.appendChild(bar);
+            });
+        }
+
+        function getBars() {
+            return document.querySelectorAll(".array-bar");
+        }
+
+        function swapVisuals(bar1, bar2) {
+            let tempHeight = bar1.style.height;
+            let tempText = bar1.innerText;
+
+            bar1.style.height = bar2.style.height;
+            bar1.innerText = bar2.innerText;
+
+            bar2.style.height = tempHeight;
+            bar2.innerText = tempText;
+        }
+
+        async function startSort() {
+            if (isSorting) return;
+            setControlsState(true);
+            abortController = new AbortController();
+            const algo = currentAlgo;
+
+            try {
+                if (algo === 'bubble') await bubbleSort();
+                else if (algo === 'selection') await selectionSort();
+                else if (algo === 'insertion') await insertionSort();
+                else if (algo === 'merge') await mergeSortEntry();
+                else if (algo === 'quick') await quickSort(0, array.length - 1);
+
+                if (!abortController.signal.aborted) {
+                    explain("✅ <strong>Sorting Complete!</strong>");
+                    const bars = getBars();
+                    for (let i = 0; i < bars.length; i++) {
+                        bars[i].style.backgroundColor = COLOR_SORTED;
+                        await new Promise(r => setTimeout(r, 10));
+                    }
+                    highlightLine(-1);
+                }
+            } catch (err) {
+                if (err.message !== "Aborted") console.error("Sorting error:", err);
+            } finally {
+                setControlsState(false);
+            }
+        }
+
+        async function bubbleSort() {
+            let bars = getBars();
+            let n = array.length;
+            highlightLine(0);
+            for (let i = 0; i < n - 1; i++) {
+                highlightLine(1);
+                for (let j = 0; j < n - i - 1; j++) {
+                    checkAbort();
+                    highlightLine(2);
+                    explain(`Comparing index ${j} and ${j + 1} (${array[j]} vs ${array[j + 1]})`);
+                    bars[j].style.backgroundColor = COLOR_COMPARE;
+                    bars[j + 1].style.backgroundColor = COLOR_COMPARE;
+                    await sleep();
+                    if (array[j] > array[j + 1]) {
+                        highlightLine(3);
+                        explain(`Swapping ${array[j]} and ${array[j + 1]}`);
+                        bars[j].style.backgroundColor = COLOR_SWAP;
+                        bars[j + 1].style.backgroundColor = COLOR_SWAP;
+                        let temp = array[j];
+                        array[j] = array[j + 1];
+                        array[j + 1] = temp;
+                        swapVisuals(bars[j], bars[j + 1]);
+                        await sleep();
+                    }
+                    bars[j].style.backgroundColor = COLOR_DEFAULT;
+                    bars[j + 1].style.backgroundColor = COLOR_DEFAULT;
+                }
+                bars[n - i - 1].style.backgroundColor = COLOR_SORTED;
+            }
+            bars[0].style.backgroundColor = COLOR_SORTED;
+        }
+
+        async function selectionSort() {
+            let bars = getBars();
+            let n = array.length;
+            for (let i = 0; i < n - 1; i++) {
+                highlightLine(0, 1);
+                let min_idx = i;
+                bars[min_idx].style.backgroundColor = COLOR_SWAP;
+                for (let j = i + 1; j < n; j++) {
+                    checkAbort();
+                    highlightLine(2, 3);
+                    bars[j].style.backgroundColor = COLOR_COMPARE;
+                    await sleep();
+                    if (array[j] < array[min_idx]) {
+                        highlightLine(4);
+                        if (min_idx !== i) bars[min_idx].style.backgroundColor = COLOR_DEFAULT;
+                        min_idx = j;
+                        bars[min_idx].style.backgroundColor = COLOR_SWAP;
+                    } else {
+                        bars[j].style.backgroundColor = COLOR_DEFAULT;
+                    }
+                }
+                highlightLine(6);
+                if (min_idx !== i) {
+                    let temp = array[i];
+                    array[i] = array[min_idx];
+                    array[min_idx] = temp;
+                    bars[i].style.backgroundColor = COLOR_SWAP;
+                    swapVisuals(bars[i], bars[min_idx]);
+                    await sleep();
+                }
+                bars[min_idx].style.backgroundColor = COLOR_DEFAULT;
+                bars[i].style.backgroundColor = COLOR_SORTED;
+            }
+            bars[n - 1].style.backgroundColor = COLOR_SORTED;
+        }
+
+        async function insertionSort() {
+            let bars = getBars();
+            let n = array.length;
+            bars[0].style.backgroundColor = COLOR_SORTED;
+            for (let i = 1; i < n; i++) {
+                highlightLine(0, 1, 2);
+                let key = array[i];
+                let keyText = bars[i].innerText;
+                let keyHeight = bars[i].style.height;
+                let j = i - 1;
+                bars[i].style.backgroundColor = COLOR_SWAP;
+                await sleep();
+                while (j >= 0 && array[j] > key) {
+                    checkAbort();
+                    highlightLine(3, 4);
+                    bars[j].style.backgroundColor = COLOR_COMPARE;
+                    await sleep();
+                    array[j + 1] = array[j];
+                    bars[j + 1].style.height = bars[j].style.height;
+                    bars[j + 1].innerText = bars[j].innerText;
+                    bars[j].style.backgroundColor = COLOR_SORTED;
+                    j = j - 1;
+                    highlightLine(5);
+                }
+                highlightLine(7);
+                array[j + 1] = key;
+                bars[j + 1].style.height = keyHeight;
+                bars[j + 1].innerText = keyText;
+                bars[j + 1].style.backgroundColor = COLOR_SORTED;
+                await sleep();
+            }
+        }
+
+        async function mergeSortEntry() { await mergeSort(0, array.length - 1); }
+        async function mergeSort(l, r) {
+            checkAbort();
+            highlightLine(1);
+            if (l >= r) return;
+            highlightLine(2);
+            let m = l + Math.floor((r - l) / 2);
+            highlightLine(3);
+            await mergeSort(l, m);
+            highlightLine(4);
+            await mergeSort(m + 1, r);
+            highlightLine(5);
+            await merge(l, m, r);
+        }
+
+        async function merge(l, m, r) {
+            let n1 = m - l + 1, n2 = r - m;
+            let L = array.slice(l, m + 1), R = array.slice(m + 1, r + 1);
+            let bars = getBars();
+            let i = 0, j = 0, k = l;
+            while (i < n1 && j < n2) {
+                checkAbort();
+                bars[k].style.backgroundColor = COLOR_COMPARE;
+                await sleep();
+                if (L[i] <= R[j]) { array[k] = L[i]; i++; }
+                else { array[k] = R[j]; j++; }
+                let maxVal = Math.max(...array, 10);
+                bars[k].style.height = `${Math.max(10, (array[k] / maxVal) * 100)}%`;
+                if (array.length <= 25) bars[k].innerText = array[k];
+                bars[k].style.backgroundColor = COLOR_SWAP;
+                await sleep();
+                bars[k].style.backgroundColor = COLOR_SORTED;
+                k++;
+            }
+            while (i < n1) {
+                checkAbort();
+                array[k] = L[i];
+                let maxVal = Math.max(...array, 10);
+                bars[k].style.height = `${Math.max(10, (array[k] / maxVal) * 100)}%`;
+                if (array.length <= 25) bars[k].innerText = array[k];
+                bars[k].style.backgroundColor = COLOR_SORTED;
+                await sleep();
+                i++; k++;
+            }
+            while (j < n2) {
+                checkAbort();
+                array[k] = R[j];
+                let maxVal = Math.max(...array, 10);
+                bars[k].style.height = `${Math.max(10, (array[k] / maxVal) * 100)}%`;
+                if (array.length <= 25) bars[k].innerText = array[k];
+                bars[k].style.backgroundColor = COLOR_SORTED;
+                await sleep();
+                j++; k++;
+            }
+        }
+
+        async function quickSort(low, high) {
+            checkAbort();
+            highlightLine(1);
+            if (low < high) {
+                highlightLine(2);
+                let pi = await partition(low, high);
+                highlightLine(3);
+                await quickSort(low, pi - 1);
+                highlightLine(4);
+                await quickSort(pi + 1, high);
+            } else if (low === high && low >= 0) {
+                getBars()[low].style.backgroundColor = COLOR_SORTED;
+            }
+        }
+
+        async function partition(low, high) {
+            let bars = getBars(), pivot = array[high];
+            bars[high].style.backgroundColor = COLOR_SWAP;
+            await sleep();
+            let i = low - 1;
+            for (let j = low; j < high; j++) {
+                checkAbort();
+                bars[j].style.backgroundColor = COLOR_COMPARE;
+                await sleep();
+                if (array[j] < pivot) {
+                    i++;
+                    let temp = array[i]; array[i] = array[j]; array[j] = temp;
+                    bars[i].style.backgroundColor = COLOR_SWAP;
+                    if (i !== j) bars[j].style.backgroundColor = COLOR_SWAP;
+                    swapVisuals(bars[i], bars[j]);
+                    await sleep();
+                    bars[i].style.backgroundColor = COLOR_DEFAULT;
+                }
+                if (j !== i) bars[j].style.backgroundColor = COLOR_DEFAULT;
+            }
+            let temp = array[i + 1]; array[i + 1] = array[high]; array[high] = temp;
+            swapVisuals(bars[i + 1], bars[high]);
+            bars[high].style.backgroundColor = COLOR_DEFAULT;
+            bars[i + 1].style.backgroundColor = COLOR_SORTED;
+            await sleep();
+            return i + 1;
+        }
+
+        function toggleDropdown() {
+            document.getElementById('userDropdown').classList.toggle('show');
+        }
+
+        document.addEventListener('click', function(event) {
+            const userMenu = document.querySelector('.user-menu');
+            if (userMenu && !userMenu.contains(event.target)) {
+                document.getElementById('userDropdown').classList.remove('show');
+            }
+        });
+
+        window.onload = () => {
+            updateAlgoSettings();
+            generateRandomArray();
+        };
+    </script>
+</body>
+
+</html>
