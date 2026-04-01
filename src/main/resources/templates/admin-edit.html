@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Topic</title>
+
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #070814, #111428);
+            color: #e2e8f0;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+        }
+
+      .edit-container {
+    width: 95%;
+    max-width: 1400px;   /* 🔥 increase width */
+    margin: auto;
+    background: rgba(26, 28, 58, 0.85);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            background: linear-gradient(135deg, #9FCEEE, #A98BD1);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        textarea {
+            width: 100%;
+            height: 400px;
+            background: #0f1226;
+            color: #e2e8f0;
+            border: 1px solid rgba(169, 139, 209, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 14px;
+            outline: none;
+            resize: none;
+        }
+
+        textarea:focus {
+            border-color: #a855f7;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #9FCEEE, #A98BD1);
+            color: black;
+        }
+
+        .save-btn:hover {
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 1px solid #94a3b8;
+            color: #94a3b8;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="edit-container">
+
+    <h2>Edit Study Content</h2>
+
+    <form action="/admin/update" method="post">
+
+        <input type="hidden" name="id" th:value="${topic.id}"/>
+
+        <textarea name="contentJson"
+                  th:text="${topic.contentJson}">
+        </textarea>
+
+        <div class="btn-group">
+            <a href="/admin-dashboard" class="btn back-btn">← Back</a>
+            <button type="submit" class="btn save-btn">Save Changes</button>
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

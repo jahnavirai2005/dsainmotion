@@ -6,6 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        .toggle-btn {
+            background: rgba(169, 139, 209, 0.1);
+            border: 1px solid rgba(169, 139, 209, 0.3);
+            color: var(--primary, #A98BD1);
+            padding: 8px 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            margin-bottom: 20px;
+            margin-top: 10px;
+            border-radius: 30px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .toggle-btn:hover {
+            background: rgba(169, 139, 209, 0.2);
+            border-color: var(--primary, #A98BD1);
+            transform: translateY(-2px);
+        }
+        .form-container {
+            display: none;
+        }
+        .form-container.active {
+            display: block;
+        }
+        .back-btn {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            color: var(--cyan, #06b6d4);
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-btn:hover {
+            background: rgba(6, 182, 212, 0.2);
+            transform: translateX(-4px);
+        }
+    </style>
 </head>
 <body>
 
@@ -19,34 +69,61 @@
 <div class="auth-wrapper">
     <div class="auth-card">
         <div class="auth-header">
-            <h2>Welcome Back</h2>
-            <p>Sign in to continue your algorithmic journey</p>
+            <h2 id="form-title">Welcome Back</h2>
+            <p id="form-subtitle">Sign in to continue your algorithmic journey</p>
+            <button class="toggle-btn" id="toggle-btn" onclick="toggleLogin()"><i class="fa-solid fa-user-shield"></i> Login as Admin</button>
         </div>
 
-        <form action="/login" method="post">
-            <input type="hidden" name="next" th:value="${next}" />
-            <div th:if="${param.success != null}" class="status-msg status-success">
-                Registration Successful! Please login. <i class="fa-solid fa-check"></i>
-            </div>
-            <div th:if="${param.error != null}" class="status-msg status-error">
-                Invalid credentials. Please try again. <i class="fa-solid fa-triangle-exclamation"></i>
-            </div>
+        <!-- User Login Form -->
+        <div id="user-form" class="form-container active">
+            <form action="/login" method="post">
+                <input type="hidden" name="next" th:value="${next}" />
+                <div th:if="${param.success != null}" class="status-msg status-success">
+                    Registration Successful! Please login. <i class="fa-solid fa-check"></i>
+                </div>
+                <div th:if="${param.error != null}" class="status-msg status-error">
+                    Invalid credentials. Please try again. <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
 
-            <div class="form-group">
-                <label>User ID</label>
-                <input type="text" name="userid" class="form-control" placeholder="Enter your User ID" required="required" />
-            </div>
+                <div class="form-group">
+                    <label>User ID</label>
+                    <input type="text" name="userid" class="form-control" placeholder="Enter your User ID" required="required" />
+                </div>
 
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" id="login-pwd" class="form-control" placeholder="Enter your password" required="required" />
-                <i class="fa-solid fa-eye pwd-toggle" onclick="togglePassword('login-pwd')"></i>
-            </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" id="login-pwd" class="form-control" placeholder="Enter your password" required="required" />
+                    <i class="fa-solid fa-eye pwd-toggle" onclick="togglePassword('login-pwd')"></i>
+                </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Login</button>
-        </form>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Login</button>
+            </form>
+        </div>
 
-        <div class="auth-footer">
+        <!-- Admin Login Form -->
+        <div id="admin-form" class="form-container">
+            <button type="button" class="back-btn" onclick="toggleLogin()"><i class="fa-solid fa-arrow-left"></i> Back to User Login</button>
+            <form action="/admin-login" method="post">
+                <div th:if="${param.adminError != null}" class="status-msg status-error">
+                    Invalid admin credentials. Please try again. <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+
+                <div class="form-group">
+                    <label>Admin ID / Username</label>
+                    <input type="text" name="adminId" class="form-control" placeholder="Enter your Admin ID" required="required" />
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" id="admin-pwd" class="form-control" placeholder="Enter your password" required="required" />
+                    <i class="fa-solid fa-eye pwd-toggle" onclick="togglePassword('admin-pwd')"></i>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Login</button>
+            </form>
+        </div>
+
+        <div class="auth-footer" id="user-footer">
             Don't have an account? <a href="/register">Sign up here</a>
         </div>
     </div>
@@ -64,6 +141,33 @@ function togglePassword(id) {
         field.type = "password";
         icon.classList.remove("fa-eye-slash");
         icon.classList.add("fa-eye");
+    }
+}
+
+function toggleLogin() {
+    const userForm = document.getElementById('user-form');
+    const adminForm = document.getElementById('admin-form');
+    const toggleBtn = document.getElementById('toggle-btn');
+    const title = document.getElementById('form-title');
+    const subtitle = document.getElementById('form-subtitle');
+    const footer = document.getElementById('user-footer');
+
+    if (userForm.classList.contains('active')) {
+        // Switch to admin
+        userForm.classList.remove('active');
+        adminForm.classList.add('active');
+        toggleBtn.style.display = 'none';
+        title.textContent = 'Admin Login';
+        subtitle.textContent = 'Access the admin panel';
+        footer.style.display = 'none';
+    } else {
+        // Switch to user
+        adminForm.classList.remove('active');
+        userForm.classList.add('active');
+        toggleBtn.style.display = 'block';
+        title.textContent = 'Welcome Back';
+        subtitle.textContent = 'Sign in to continue your algorithmic journey';
+        footer.style.display = 'block';
     }
 }
 </script>

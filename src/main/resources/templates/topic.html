@@ -185,9 +185,7 @@
 <div class="topic-wrapper">
     <div class="topic-header">
         <h1 th:text="${topic}">Topic Title</h1>
-        <button class="feedback-trigger" onclick="openModal()">
-            <i class="fa-solid fa-message"></i> Feedback
-        </button>
+        
     </div>
 
     <div class="topic-content" th:utext="${content}">
@@ -199,32 +197,11 @@
     </div>
 </div>
 
-<!-- Feedback Modal -->
-<div id="feedbackModal" class="modal" onclick="closeModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <span class="modal-close" onclick="closeModal()">&times;</span>
-        <div class="modal-header">
-            <h2>Submit Feedback</h2>
-            <p style="color: #94a3b8; font-size: 0.9rem;">Share your thoughts on the <span th:text="${topic}">topic</span> content.</p>
-        </div>
-        
-        <form id="feedbackForm" onsubmit="submitFeedback(event)">
-            <input type="hidden" name="topic" th:value="${topic}">
-            <div class="form-group">
-                <label>Your Message</label>
-                <textarea name="message" placeholder="What did you think of this theory? Any suggestions?" required></textarea>
-            </div>
-            <button type="submit" class="submit-btn" id="submitBtn">Send Feedback</button>
-        </form>
-
-        <div id="successMessage" class="success-msg">
-            <i class="fa-solid fa-circle-check"></i> Thank you! Your feedback has been saved.
-        </div>
-    </div>
+<!-- Feedback Fragment -->
+<div class="topic-wrapper" style="margin-top:20px; box-shadow:none; padding: 20px 40px;">
+<div th:replace="~{fragments/feedback :: feedback}"></div>
 </div>
 
-<footer>
-    © 2026 DSA In Motion | Crafted for visual learners.
 </footer>
 
 <script>

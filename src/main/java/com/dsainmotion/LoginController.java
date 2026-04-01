@@ -7,13 +7,31 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 
 import com.dsainmotion.entity.User;
+import com.dsainmotion.entity.Admin;
+import com.dsainmotion.entity.Feedback;
 import com.dsainmotion.repository.UserRepository;
+import com.dsainmotion.repository.AdminRepository;
+import com.dsainmotion.repository.FeedbackRepository;
+import com.dsainmotion.repository.StudyVaultRepository;
+
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.dsainmotion.entity.StudyVault;
+import com.dsainmotion.entity.User;
+
 
 @Controller
 public class LoginController {
+    @Autowired
+private StudyVaultRepository studyVaultRepository;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
+
+    @Autowired
+    private FeedbackRepository feedbackRepository;
 
     // Helper method to generate user initials
     private String getInitials(String firstName) {
@@ -183,6 +201,209 @@ public class LoginController {
             return "redirect:" + errorUrl;
         }
     }
+
+    @PostMapping("/admin-login")
+    public String loginAdmin(
+            @RequestParam(name = "adminId") String adminId,
+            @RequestParam(name = "password") String password,
+            Model model,
+            HttpSession session) {
+
+        System.out.println("Admin login attempt: adminId=" + adminId + ", password=" + password);
+
+        Admin admin = adminRepository.getAdminById(adminId);
+
+        System.out.println("Found admin: " + (admin != null ? admin.getAdminId() : "null"));
+
+        if (admin != null) {
+            System.out.println("Stored password: " + admin.getPassword());
+            System.out.println("Password match: " + admin.getPassword().equals(password));
+        }
+
+        if (admin != null && admin.getPassword().equals(password)) {
+            session.setAttribute("adminId", admin.getAdminId());
+            session.setAttribute("adminName", admin.getFirstName() + " " + admin.getLastName());
+            session.setAttribute("adminEmail", admin.getEmail());
+            return "redirect:/admin-dashboard";
+        } else {
+            return "redirect:/login?adminError=true";
+        }
+    }
+
+   @GetMapping("/admin-dashboard")
+public String adminDashboard(HttpSession session, Model model) {
+
+    if (session.getAttribute("adminId") == null) {
+        return "redirect:/login";
+    }
+
+
+    model.addAttribute("adminName", session.getAttribute("adminName"));
+    model.addAttribute("adminEmail", session.getAttribute("adminEmail"));
+
+
+    model.addAttribute("users", userRepository.findAll());
+    model.addAttribute("feedbacks", feedbackRepository.findAll());
+
+    model.addAttribute("studyVault", studyVaultRepository.findAll());
+
+    return "admin-dashboard";
+}
+@GetMapping("/admin/edit/{id}")
+public String editPage(@PathVariable int id, Model model) {
+
+    StudyVault data = studyVaultRepository.findById(id).orElse(null);
+
+    model.addAttribute("topic", data);
+
+    return "admin-edit";
+}
+@PostMapping("/admin/update")
+public String update(@RequestParam int id,
+                     @RequestParam String contentJson) {
+
+    StudyVault data = studyVaultRepository.findById(id).orElse(null);
+
+    if (data != null) {
+        data.setContentJson(contentJson);
+        studyVaultRepository.save(data);
+    }
+
+    return "redirect:/admin-dashboard";
+}
+
+    @PostMapping("/admin/users/delete")
+    public String deleteUser(@RequestParam("userId") String userId, HttpSession session) {
+        if (session.getAttribute("adminId") == null) {
+            return "redirect:/login";
+        }
+        try {
+            userRepository.deleteById(userId);
+        } catch (Exception e) {
+            System.err.println("Failed to delete user: " + userId);
+            e.printStackTrace();
+        }
+        return "redirect:/admin-dashboard";
+    }
+
+    @PostMapping("/admin/feedback/read")
+    @ResponseBody
+    public String markFeedbackRead(@RequestParam("feedbackId") Integer feedbackId, HttpSession session) {
+        if (session.getAttribute("adminId") == null) {
+            return "unauthorized";
+        }
+        try {
+            Feedback fb = feedbackRepository.findById(feedbackId).orElse(null);
+            if (fb != null) {
+                fb.setIsRead(true);
+                feedbackRepository.save(fb);
+                return "success";
+            }
+            return "not_found";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
+    @GetMapping("/admin/profile")
+    public String adminProfile(HttpSession session, Model model) {
+        String adminId = (String) session.getAttribute("adminId");
+        if (adminId == null) return "redirect:/login";
+
+        Admin admin = adminRepository.getAdminById(adminId);
+        if (admin != null) {
+            model.addAttribute("admin", admin);
+            model.addAttribute("adminName", admin.getFirstName() + " " + admin.getLastName());
+            String initials = admin.getFirstName().trim().isEmpty() ? "A" : String.valueOf(Character.toUpperCase(admin.getFirstName().trim().charAt(0)));
+            model.addAttribute("initials", initials);
+            model.addAttribute("adminEmail", admin.getEmail());
+        }
+        return "admin-profile";
+    }
+
+    @PostMapping("/admin/profile/update")
+    public String updateAdminProfile(
+            @RequestParam(name = "firstName") String firstName,
+            @RequestParam(name = "lastName") String lastName,
+            @RequestParam(name = "email") String email,
+            @RequestParam(name = "phone") String phone,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        String adminId = (String) session.getAttribute("adminId");
+        if (adminId == null) return "redirect:/login";
+
+        Admin admin = adminRepository.getAdminById(adminId);
+        if (admin != null) {
+            if (!firstName.matches("^[A-Za-z]+$") || !lastName.matches("^[A-Za-z]+$")) {
+                redirectAttributes.addFlashAttribute("error", "Name must contain only alphabets.");
+                return "redirect:/admin/profile";
+            }
+            if (!phone.matches("^\\d{10}$")) {
+                redirectAttributes.addFlashAttribute("error", "Phone must be exactly 10 digits.");
+                return "redirect:/admin/profile";
+            }
+            if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+                redirectAttributes.addFlashAttribute("error", "Enter a valid email address.");
+                return "redirect:/admin/profile";
+            }
+
+            admin.setFirstName(firstName);
+            admin.setLastName(lastName);
+            admin.setEmail(email);
+            admin.setPhone(phone);
+            adminRepository.save(admin);
+
+            // Update session attributes
+            session.setAttribute("adminName", admin.getFirstName() + " " + admin.getLastName());
+            session.setAttribute("adminEmail", admin.getEmail());
+
+            redirectAttributes.addFlashAttribute("success", "Profile updated successfully!");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Admin not found.");
+        }
+
+        return "redirect:/admin/profile";
+    }
+
+    @PostMapping("/admin/profile/change-password")
+    public String changeAdminPassword(
+            @RequestParam(name = "currentPassword") String currentPassword,
+            @RequestParam(name = "newPassword") String newPassword,
+            @RequestParam(name = "confirmPassword") String confirmPassword,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        String adminId = (String) session.getAttribute("adminId");
+        if (adminId == null) return "redirect:/login";
+
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("pwdError", "New passwords do not match.");
+            return "redirect:/admin/profile";
+        }
+
+        if (!newPassword.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,}$")) {
+            redirectAttributes.addFlashAttribute("pwdError", "Password must be 8+ chars with A-Z, a-z, 0-9 & special char.");
+            return "redirect:/admin/profile";
+        }
+
+        Admin admin = adminRepository.getAdminById(adminId);
+        if (admin != null) {
+            if (admin.getPassword().equals(currentPassword)) {
+                admin.setPassword(newPassword);
+                adminRepository.save(admin);
+                redirectAttributes.addFlashAttribute("pwdSuccess", "Password changed successfully!");
+            } else {
+                redirectAttributes.addFlashAttribute("pwdError", "Current password is incorrect.");
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("pwdError", "Admin not found.");
+        }
+
+        return "redirect:/admin/profile";
+    }
+
 
     @GetMapping("/register")
     public String registerPage(

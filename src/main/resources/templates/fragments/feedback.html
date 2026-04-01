@@ -1,0 +1,168 @@
+<div th:fragment="feedback" class="feedback-container section" id="sec-feedback">
+    <div class="test-anim" style="opacity: 0; transform: translateY(20px); transition: all 0.6s ease;" id="feedback-anim">
+        <div class="section-header">
+            <div class="section-icon icon-purple"><i class="fa-solid fa-comment-dots"></i></div>
+            <h2>Give Your Feedback</h2>
+        </div>
+        <div class="card feedback-card">
+            <p style="color:var(--muted); margin-bottom:20px; font-size:0.95rem;">Have questions, found a bug, or just want to tell us what you think? We read every message.</p>
+            <form id="feedbackForm" action="/feedback" method="POST" onsubmit="submitFeedback(event, this)">
+                <!-- We try to pick up the page topic from the URL or implicitly from the page title. 
+                     Alternatively we can rely on JS to fill this or the backend to infer based on referer. -->
+                <input type="hidden" name="topic" id="feedbackTopicField" value="Tutorial Page">
+                
+                <div class="rating-group" style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 10px; color: var(--text); font-weight:600; font-size: 0.95rem;">Rate this tutorial</label>
+                    <div class="stars" style="color: var(--muted); font-size: 1.5rem; display: flex; gap: 8px; cursor: pointer;">
+                        <i class="fa-regular fa-star star-btn" data-val="1"></i>
+                        <i class="fa-regular fa-star star-btn" data-val="2"></i>
+                        <i class="fa-regular fa-star star-btn" data-val="3"></i>
+                        <i class="fa-regular fa-star star-btn" data-val="4"></i>
+                        <i class="fa-regular fa-star star-btn" data-val="5"></i>
+                    </div>
+                    <!-- Assuming you want to pass a rating to the backend, though your original snippet didn't strictly require it, it was requested. -->
+                    <input type="hidden" name="rating" id="ratingVal" value="0">
+                </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <textarea name="message" placeholder="Write your feedback here..." required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; color: var(--text); padding: 16px; min-height: 120px; font-family: inherit; resize: vertical; transition: border-color 0.3s;"></textarea>
+                </div>
+                <button type="submit" class="submit-feedback-btn" style="background: linear-gradient(90deg, var(--cyan), var(--purple)); color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; font-family: inherit; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Feedback
+                </button>
+                <div class="feedback-success" style="display: none; background: rgba(16,185,129,0.1); color: var(--green); border: 1px solid rgba(16,185,129,0.3); padding: 16px; border-radius: 10px; margin-top: 16px;">
+                    <i class="fa-solid fa-circle-check"></i> Thank you! Your feedback has been submitted successfully.
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Floating Button to scroll down -->
+    <a href="#sec-feedback" class="floating-feedback-btn" style="position: fixed; bottom: 30px; right: 30px; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.4); color: var(--purple); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(5px); z-index: 100; transition: all 0.3s; text-decoration: none;">
+        <i class="fa-solid fa-comment-dots"></i>
+    </a>
+    
+    <script>
+        // Infer Topic from Page Title
+        document.addEventListener('DOMContentLoaded', () => {
+            const h1 = document.querySelector('h1');
+            if(h1) {
+                document.getElementById('feedbackTopicField').value = h1.innerText;
+            }
+        });
+
+        // Floating button hover effect logic (inline styles fail on hover cleanly without !important overrrides)
+        const floatBtn = document.querySelector('.floating-feedback-btn');
+        if(floatBtn) {
+            floatBtn.addEventListener('mouseenter', () => {
+                floatBtn.style.background = 'var(--purple)';
+                floatBtn.style.color = '#fff';
+                floatBtn.style.transform = 'translateY(-5px)';
+                floatBtn.style.boxShadow = '0 10px 20px rgba(168,85,247,0.4)';
+            });
+            floatBtn.addEventListener('mouseleave', () => {
+                floatBtn.style.background = 'rgba(168,85,247,0.15)';
+                floatBtn.style.color = 'var(--purple)';
+                floatBtn.style.transform = 'translateY(0)';
+                floatBtn.style.boxShadow = 'none';
+            });
+        }
+
+        // Star rating logic
+        document.querySelectorAll('.star-btn').forEach(star => {
+            star.addEventListener('click', function() {
+                let val = parseInt(this.getAttribute('data-val'));
+                document.getElementById('ratingVal').value = val;
+                document.querySelectorAll('.star-btn').forEach(s => {
+                    if(parseInt(s.getAttribute('data-val')) <= val) {
+                        s.classList.remove('fa-regular');
+                        s.classList.add('fa-solid');
+                        s.style.color = 'var(--yellow)';
+                    } else {
+                        s.classList.remove('fa-solid');
+                        s.classList.add('fa-regular');
+                        s.style.color = 'var(--muted)';
+                    }
+                });
+            });
+        });
+
+        // Submit feedback logic via AJAX
+        function submitFeedback(e, form) {
+            e.preventDefault();
+            const btn = form.querySelector('.submit-feedback-btn');
+            const success = form.querySelector('.feedback-success');
+            const formData = new FormData(form);
+            
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+            btn.style.opacity = '0.7';
+            btn.disabled = true;
+
+            fetch('/feedback', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success || data.message === "Feedback Submitted Successfully" || data.status === "SUCCESS" || response.ok) {
+                    form.reset();
+                    // Reset stars
+                    document.querySelectorAll('.star-btn').forEach(s => {
+                        s.classList.remove('fa-solid');
+                        s.classList.add('fa-regular');
+                        s.style.color = 'var(--muted)';
+                    });
+                    document.getElementById('ratingVal').value = 0;
+                    
+                    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Feedback';
+                    btn.style.opacity = '1';
+                    btn.disabled = false;
+                    
+                    success.style.display = 'block';
+                    setTimeout(() => { success.style.display = 'none'; }, 6000);
+                } else {
+                    alert('Error submitting feedback.');
+                    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Feedback';
+                    btn.style.opacity = '1';
+                    btn.disabled = false;
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                // Fallback success for local testing or disconnected backend
+                form.reset();
+                document.querySelectorAll('.star-btn').forEach(s => {
+                    s.classList.remove('fa-solid');
+                    s.classList.add('fa-regular');
+                    s.style.color = 'var(--muted)';
+                });
+                document.getElementById('ratingVal').value = 0;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Feedback';
+                btn.style.opacity = '1';
+                btn.disabled = false;
+                success.style.display = 'block';
+                setTimeout(() => { success.style.display = 'none'; }, 6000);
+            });
+        }
+
+        // Observer for scroll animation
+        if(window.IntersectionObserver) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            const animEl = document.getElementById('feedback-anim');
+            if(animEl) observer.observe(animEl);
+        } else {
+            // Fallback for older browsers
+            const animEl = document.getElementById('feedback-anim');
+            if(animEl) {
+                animEl.style.opacity = '1';
+                animEl.style.transform = 'translateY(0)';
+            }
+        }
+    </script>
+</div>

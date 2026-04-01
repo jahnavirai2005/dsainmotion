@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Profile | DSA In Motion</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-main: #0F1020;
+            --bg-panel: #1A1C29;
+            --text-main: #FFFFFF;
+            --text-muted: #94A3B8;
+            --primary-gradient: linear-gradient(90deg, #60A5FA, #A855F7, #EC4899);
+            --accent-blue: #60A5FA;
+            --accent-purple: #A855F7;
+            --accent-pink: #EC4899;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --hover-bg: rgba(255, 255, 255, 0.05);
+
+            --glass-bg: rgba(26, 28, 41, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(15, 16, 32, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .logo-text .highlight {
+            color: var(--text-main);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links li a:hover {
+            color: var(--text-main);
+            background-color: var(--hover-bg);
+        }
+
+        .nav-links li a.active {
+            color: var(--text-main);
+            background-color: rgba(168, 85, 247, 0.15);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: var(--bg-panel);
+            padding: 6px 6px 6px 16px;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .admin-profile:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .admin-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .admin-email {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .admin-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #A855F7, #60A5FA);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            color: white;
+            position: relative;
+        }
+
+        .profile-wrapper {
+            position: relative;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: calc(100% + 15px);
+            right: 0;
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            min-width: 200px;
+            padding: 8px 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .profile-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .profile-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .profile-dropdown a:hover {
+            background-color: var(--hover-bg);
+            color: var(--text-main);
+        }
+
+        .profile-dropdown a i {
+            width: 16px;
+            text-align: center;
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 4px 0;
+        }
+
+        .profile-dropdown a.text-danger {
+            color: #F87171;
+        }
+        
+        .profile-dropdown a.text-danger i {
+            color: #F87171;
+        }
+        
+        .profile-dropdown a.text-danger:hover {
+            background-color: rgba(248, 113, 113, 0.1);
+            color: #FCA5A5;
+        }
+
+        /* Profile Page Specific Styles */
+        .content-area {
+            padding: 40px 60px;
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .profile-grid-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-grid-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .profile-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--glass-shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(169, 139, 209, 0.1);
+            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .card-header i {
+            font-size: 1.5rem;
+            color: var(--accent-purple);
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .status-msg {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .msg-success {
+            background: rgba(52, 211, 153, 0.1);
+            color: #34D399;
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+
+        .msg-error {
+            background: rgba(248, 113, 113, 0.1);
+            color: #F87171;
+            border: 1px solid rgba(248, 113, 113, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-main);
+            padding: 12px 16px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-blue);
+            outline: none;
+            box-shadow: 0 0 10px rgba(96, 165, 250, 0.2);
+        }
+
+        .submit-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.4);
+            opacity: 0.95;
+        }
+
+        .password-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-text">DSA In <span class="highlight">Motion</span></span>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="/admin-dashboard"><i class="fas fa-arrow-left"></i> Back to Dashboard</a></li>
+        </ul>
+
+        <div class="profile-wrapper">
+            <div class="admin-profile" onclick="toggleProfileDropdown(event)">
+                <div class="admin-info">
+                    <span class="admin-name" th:text="${adminName}">Admin Name</span>
+                    <span class="admin-email" th:text="${adminEmail}">admin@example.com</span>
+                </div>
+                <div class="admin-avatar" th:text="${initials}">
+                    A
+                </div>
+            </div>
+            
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="/admin/profile"><i class="fas fa-user-edit"></i> Update Profile</a>
+                <div class="dropdown-divider"></div>
+                <a href="/logout" class="text-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="content-area">
+        <div class="profile-grid-wrapper">
+            <!-- Personal Information Card -->
+            <div class="profile-card">
+                <div class="card-header">
+                    <i class="fa-solid fa-id-card"></i>
+                    <h2>Personal Information</h2>
+                </div>
+
+                <div th:if="${success}" class="status-msg msg-success">
+                    <i class="fa-solid fa-circle-check"></i> <span th:text="${success}"></span>
+                </div>
+                <div th:if="${error}" class="status-msg msg-error">
+                    <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${error}"></span>
+                </div>
+
+                <form th:action="@{/admin/profile/update}" method="post" onsubmit="return validatePersonalForm()">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" name="firstName" id="firstName" class="form-control" th:value="${admin.firstName}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="lastName" id="lastName" class="form-control" th:value="${admin.lastName}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email" id="email" class="form-control" th:value="${admin.email}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" name="phone" id="phone" class="form-control" th:value="${admin.phone}" required>
+                    </div>
+                    <button type="submit" class="submit-btn" id="personalSubmitBtn">Update Profile</button>
+                </form>
+            </div>
+
+            <!-- Security Information Card -->
+            <div class="profile-card" id="security-section">
+                <div class="card-header">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h2>Security</h2>
+                </div>
+
+                <div th:if="${pwdSuccess}" class="status-msg msg-success">
+                    <i class="fa-solid fa-circle-check"></i> <span th:text="${pwdSuccess}"></span>
+                </div>
+                <div th:if="${pwdError}" class="status-msg msg-error">
+                    <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${pwdError}"></span>
+                </div>
+
+                <form th:action="@{/admin/profile/change-password}" method="post" onsubmit="return validatePasswordForm()">
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" name="currentPassword" id="currentPassword" class="form-control" required placeholder="••••••••">
+                    </div>
+                    <div class="form-group" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+                        <label>New Password</label>
+                        <input type="password" name="newPassword" id="newPassword" class="form-control" required placeholder="Minimum 8 characters">
+                        <div class="password-hint">8+ chars, A-Z, a-z, 0-9 & special char</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" required placeholder="Repeat new password">
+                    </div>
+                    <button type="submit" class="submit-btn" id="passwordSubmitBtn">Change Password</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleProfileDropdown(event) {
+            event.stopPropagation();
+            document.getElementById('profileDropdown').classList.toggle('show');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-wrapper')) {
+                var dropdowns = document.getElementsByClassName("profile-dropdown");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+        function validatePersonalForm() {
+            const fname = document.getElementById("firstName").value.trim();
+            const lname = document.getElementById("lastName").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+
+            const nameRegex = /^[A-Za-z]+$/;
+            if (!nameRegex.test(fname) || !nameRegex.test(lname)) {
+                alert("Name must contain only alphabets.");
+                return false;
+            }
+
+            if (!/^\d{10}$/.test(phone)) {
+                alert("Phone must be exactly 10 digits.");
+                return false;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
+                alert("Enter a valid email address.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function validatePasswordForm() {
+            const newPass = document.getElementById("newPassword").value;
+            const confirmPass = document.getElementById("confirmPassword").value;
+
+            if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(newPass)) {
+                alert("Password must be 8+ chars with A-Z, a-z, 0-9 & special char.");
+                return false;
+            }
+
+            if (newPass !== confirmPass) {
+                alert("New passwords do not match.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>

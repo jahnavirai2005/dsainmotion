@@ -62,6 +62,7 @@
                 <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat password" required="required" />
                 <i class="fa-solid fa-eye pwd-toggle" onclick="togglePassword('confirmPassword')"></i>
             </div>
+            <div id="error" class="status-msg status-error" style="display: none;"></div>
 
             <div th:if="${message != null}" th:classappend="${messageType == 'error'} ? 'status-error' : 'status-success'" class="status-msg">
                 <span th:text="${message}"></span>

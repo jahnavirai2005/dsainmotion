@@ -24,6 +24,9 @@ public class Feedback {
     @Column(name = "created_on")
     private LocalDateTime createdOn;
 
+    @Column(name = "is_read")
+    private Boolean isRead = false;
+
     @PrePersist
     protected void onCreate() {
         createdOn = LocalDateTime.now();
@@ -71,5 +74,13 @@ public class Feedback {
 
     public void setCreatedOn(LocalDateTime createdOn) {
         this.createdOn = createdOn;
+    }
+
+    public Boolean getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(Boolean isRead) {
+        this.isRead = isRead;
     }
 }
