@@ -82,7 +82,6 @@ public class StudyVaultController {
                                 Map.class
                         );
 
-                // 🔥 FIX: ensure sections is a LIST (not string)
                 Object sectionsObj = content.get("sections");
 
                 if (sectionsObj instanceof String) {

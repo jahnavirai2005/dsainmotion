@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Array Visualizer | DSA In Motion</title>
     <!-- Google Fonts: Poppins for headings, Inter for body, Outfit for brand -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;600&family=Outfit:wght@400;600;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* --- Color Variables & Setup --- */
@@ -20,7 +22,7 @@
             --accent-purple: #A98BD1;
             --accent-pink: #F4BBD7;
             --border-color: rgba(169, 139, 209, 0.2);
-            
+
             /* Box Colors */
             --box-default: #A98BD1;
             --box-active: #9FCEEE;
@@ -36,7 +38,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background-image: 
+            background-image:
                 radial-gradient(at 0% 0%, rgba(169, 139, 209, 0.1) 0px, transparent 50%),
                 radial-gradient(at 100% 0%, rgba(159, 206, 238, 0.1) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(244, 187, 215, 0.1) 0px, transparent 50%),
@@ -79,7 +81,8 @@
             transition: color 0.3s;
         }
 
-        .nav-link:hover, .nav-link.active {
+        .nav-link:hover,
+        .nav-link.active {
             color: #fff;
         }
 
@@ -245,7 +248,7 @@
             overflow-x: auto;
             overflow-y: hidden;
             border-radius: 8px;
-            background-color: rgba(0,0,0,0.2);
+            background-color: rgba(0, 0, 0, 0.2);
         }
 
         .array-box-wrapper {
@@ -268,26 +271,29 @@
             font-weight: bold;
             color: white;
             transition: background-color 0.8s ease, transform 0.8s ease, opacity 0.8s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
 
         .array-box.active {
-            background-color: var(--box-active); /* Yellow */
+            background-color: var(--box-active);
+            /* Yellow */
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(251, 191, 36, 0.4);
             border-color: #FCD34D;
         }
 
         .array-box.insert {
-            background-color: var(--box-insert); /* Green */
+            background-color: var(--box-insert);
+            /* Green */
             transform: scale(1.1);
             box-shadow: 0 8px 20px rgba(52, 211, 153, 0.4);
             border-color: #6EE7B7;
         }
 
         .array-box.delete {
-            background-color: var(--box-delete); /* Red */
+            background-color: var(--box-delete);
+            /* Red */
             transform: scale(0.9);
             opacity: 0.7;
             border-color: #FCA5A5;
@@ -350,10 +356,10 @@
         }
 
         .control-group {
-            background: rgba(0,0,0,0.15);
+            background: rgba(0, 0, 0, 0.15);
             padding: 15px;
             border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .control-group label {
@@ -370,7 +376,8 @@
             margin-bottom: 8px;
         }
 
-        input[type="text"], input[type="number"] {
+        input[type="text"],
+        input[type="number"] {
             flex: 1;
             width: 100%;
             padding: 10px;
@@ -413,11 +420,32 @@
             box-shadow: none;
         }
 
-        .btn-primary { background: var(--primary-gradient); color: white; border: none; }
-        .btn-secondary { background: transparent; border: 1px solid var(--accent-blue); color: var(--accent-blue); }
-        .btn-secondary:hover:not(:disabled) { background-color: rgba(96, 165, 250, 0.1); }
-        .btn-danger { background-color: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; }
-        .btn-danger:hover:not(:disabled) { background-color: #ef4444; color: white; }
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: rgba(96, 165, 250, 0.1);
+        }
+
+        .btn-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background-color: #ef4444;
+            color: white;
+        }
 
         .complexity-box {
             display: flex;
@@ -498,7 +526,7 @@
             margin: 0 auto;
             width: 100%;
         }
-        
+
         .back-button {
             padding: 10px 22px;
             margin-bottom: 24px;
@@ -516,7 +544,7 @@
             box-shadow: 0 4px 15px rgba(169, 139, 209, 0.2);
             text-decoration: none;
         }
-        
+
         .back-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(169, 139, 209, 0.4);
@@ -535,527 +563,544 @@
 
 <body>
 
-<div th:replace="~{fragments/navbar :: navbar}"></div>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <div class="main-content">
-        <div class="brand-title">DSA In Motion</div>
-        <h1><span class="gradient-text">Array</span> Visualizer</h1>
-        <p class="subtitle">Gain intuition on array memory layouts, shifting operations, insertions, deletions, and standard traversals.</p>
-        <a href="/dashboard" class="back-button" style="margin-bottom: 30px; margin-top: 0; width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; background: linear-gradient(90deg, #9FCEEE, #A98BD1); color: #fff; border: none; border-radius: 16px; padding: 18px 0; box-shadow: 0 4px 24px rgba(159, 206, 238, 0.12);"><i class="fa-solid fa-arrow-left" style="margin-right: 12px;"></i> Back to Dashboard</a>
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+            <div class="brand-title" style="margin-bottom: 20px;">DSA In Motion</div>
+            <h1><span class="gradient-text">Array</span> Visualizer</h1>
+            <p class="subtitle">Gain intuition on array memory layouts, shifting operations, insertions, deletions, and
+                standard traversals.</p>
+            <a href="/dashboard" class="back-button"
+                style="margin-bottom: 30px; margin-top: 0; width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; background: linear-gradient(90deg, #9FCEEE, #A98BD1); color: #fff; border: none; border-radius: 16px; padding: 18px 0; box-shadow: 0 4px 24px rgba(159, 206, 238, 0.12); text-decoration: none;"><i
+                    class="fa-solid fa-arrow-left" style="margin-right: 12px;"></i> Back to Dashboard</a>
+        </div>
         <div class="container">
-        <div class="top-row">
-            
-            <!-- Visualization Panel -->
-            <div class="main-content" style="flex: 1; padding: 40px 20px; max-width: 1400px; margin: 0 auto; width: 100%;">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; padding-bottom: 10px;">
-                    <h3 style="border: none; margin: 0; padding: 0;">Visualization</h3>
-                    <div style="font-size: 0.9rem; color: var(--text-muted);">
-                        Length: <strong id="arrLenDisplay" style="color: white;">0</strong> / <span id="arrMaxDisplay">15</span>
+            <div class="top-row">
+
+                <!-- Visualization Panel -->
+                <div class="main-content"
+                    style="flex: 1; padding: 40px 20px; max-width: 1400px; margin: 0 auto; width: 100%;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; padding-bottom: 10px;">
+                        <h3 style="border: none; margin: 0; padding: 0;">Visualization</h3>
+                        <div style="font-size: 0.9rem; color: var(--text-muted);">
+                            Length: <strong id="arrLenDisplay" style="color: white;">0</strong> / <span
+                                id="arrMaxDisplay">15</span>
+                        </div>
+                    </div>
+
+                    <div class="array-container" id="arrayContainer">
+                        <!-- Array Boxes Injected Here -->
+                    </div>
+
+                    <div class="color-legend">
+                        <div class="legend-item">
+                            <div class="color-box" style="background-color: var(--box-default)"></div> Default
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-box" style="background-color: var(--box-active)"></div> Active / Tracking
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-box" style="background-color: var(--box-insert)"></div> Inserted / Updated
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-box" style="background-color: var(--box-delete)"></div> Deleting
+                        </div>
+                    </div>
+
+                    <div class="status-box">
+                        <strong>Current Action:</strong>
+                        <span id="explanationText">Array initialized. Ready for operations.</span>
                     </div>
                 </div>
-                
-                <div class="array-container" id="arrayContainer">
-                    <!-- Array Boxes Injected Here -->
-                </div>
 
-                <div class="color-legend">
-                    <div class="legend-item"><div class="color-box" style="background-color: var(--box-default)"></div> Default</div>
-                    <div class="legend-item"><div class="color-box" style="background-color: var(--box-active)"></div> Active / Tracking</div>
-                    <div class="legend-item"><div class="color-box" style="background-color: var(--box-insert)"></div> Inserted / Updated</div>
-                    <div class="legend-item"><div class="color-box" style="background-color: var(--box-delete)"></div> Deleting</div>
-                </div>
+                <!-- Controls Panel -->
+                <div class="panel controls-box">
+                    <h3 style="margin-bottom: 10px;">Operations</h3>
 
-                <div class="status-box">
-                    <strong>Current Action:</strong>
-                    <span id="explanationText">Array initialized. Ready for operations.</span>
+                    <div class="control-group">
+                        <label>Create / Reset Array</label>
+                        <div class="input-row">
+                            <input type="text" id="initArray" placeholder="Custom: E.g. 5,10,15">
+                            <button class="btn-secondary" onclick="createCustomArray()">Set</button>
+                        </div>
+                        <div class="input-row" style="margin-bottom: 0;">
+                            <input type="number" id="arrSize" placeholder="Size (max 15)" value="7" max="15" min="1">
+                            <button class="btn-secondary" onclick="generateRandomArray()">Random</button>
+                            <button class="btn-danger" onclick="resetArray()">Clear</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Insert Element</label>
+                        <div class="input-row" style="margin-bottom: 0;">
+                            <input type="number" id="insertVal" placeholder="Value">
+                            <input type="number" id="insertIdx" placeholder="Index">
+                            <button class="btn-primary" onclick="visualizeInsert()">Insert</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Delete Element</label>
+                        <div class="input-row" style="margin-bottom: 0;">
+                            <input type="number" id="deleteIdx" placeholder="Index to Delete">
+                            <button class="btn-primary" onclick="visualizeDelete()">Delete</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Update Element</label>
+                        <div class="input-row" style="margin-bottom: 0;">
+                            <input type="number" id="updateVal" placeholder="New Value">
+                            <input type="number" id="updateIdx" placeholder="Index">
+                            <button class="btn-primary" onclick="visualizeUpdate()">Update</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Search Element (Linear)</label>
+                        <div class="input-row" style="margin-bottom: 0;">
+                            <input type="number" id="searchVal" placeholder="Value to Find">
+                            <button class="btn-primary" onclick="visualizeSearch()">Search</button>
+                        </div>
+                    </div>
+
+                    <div class="complexity-box">
+                        <div class="complexity-item">Time: <span id="timeC">O(1)</span></div>
+                        <div class="complexity-item">Space: <span id="spaceC">O(1)</span></div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Controls Panel -->
-            <div class="panel controls-box">
-                <h3 style="margin-bottom: 10px;">Operations</h3>
-                
-                <div class="control-group">
-                    <label>Create / Reset Array</label>
-                    <div class="input-row">
-                        <input type="text" id="initArray" placeholder="Custom: E.g. 5,10,15">
-                        <button class="btn-secondary" onclick="createCustomArray()">Set</button>
-                    </div>
-                    <div class="input-row" style="margin-bottom: 0;">
-                        <input type="number" id="arrSize" placeholder="Size (max 15)" value="7" max="15" min="1">
-                        <button class="btn-secondary" onclick="generateRandomArray()">Random</button>
-                        <button class="btn-danger" onclick="resetArray()">Clear</button>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label>Insert Element</label>
-                    <div class="input-row" style="margin-bottom: 0;">
-                        <input type="number" id="insertVal" placeholder="Value">
-                        <input type="number" id="insertIdx" placeholder="Index">
-                        <button class="btn-primary" onclick="visualizeInsert()">Insert</button>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label>Delete Element</label>
-                    <div class="input-row" style="margin-bottom: 0;">
-                        <input type="number" id="deleteIdx" placeholder="Index to Delete">
-                        <button class="btn-primary" onclick="visualizeDelete()">Delete</button>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label>Update Element</label>
-                    <div class="input-row" style="margin-bottom: 0;">
-                        <input type="number" id="updateVal" placeholder="New Value">
-                        <input type="number" id="updateIdx" placeholder="Index">
-                        <button class="btn-primary" onclick="visualizeUpdate()">Update</button>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label>Search Element (Linear)</label>
-                    <div class="input-row" style="margin-bottom: 0;">
-                        <input type="number" id="searchVal" placeholder="Value to Find">
-                        <button class="btn-primary" onclick="visualizeSearch()">Search</button>
-                    </div>
-                </div>
-
-                <div class="complexity-box">
-                    <div class="complexity-item">Time: <span id="timeC">O(1)</span></div>
-                    <div class="complexity-item">Space: <span id="spaceC">O(1)</span></div>
-                </div>
+            <!-- Code Panel -->
+            <div class="panel code-box">
+                <h3>Algorithm Executing</h3>
+                <pre
+                    id="codeBlock"><span style="color: var(--text-muted);">// Select an operation to see its algorithm code here.</span></pre>
             </div>
         </div>
 
-        <!-- Code Panel -->
-        <div class="panel code-box">
-            <h3>Algorithm Executing</h3>
-            <pre id="codeBlock"><span style="color: var(--text-muted);">// Select an operation to see its algorithm code here.</span></pre>
-        </div>
-    </div>
+        <div class="toast" id="toast">Error Message</div>
 
-    <div class="toast" id="toast">Error Message</div>
+        <footer>
+            © 2026 DSA In Motion | Crafted for visual learners.
+        </footer>
 
-    <footer>
-        © 2026 DSA In Motion | Crafted for visual learners.
-    </footer>
+        <script>
+            // DOM Elements
+            const arrayContainer = document.getElementById('arrayContainer');
+            const explanationText = document.getElementById('explanationText');
+            const codeBlock = document.getElementById('codeBlock');
+            const timeC = document.getElementById('timeC');
+            const spaceC = document.getElementById('spaceC');
+            const arrLenDisplay = document.getElementById('arrLenDisplay');
+            const toastEl = document.getElementById('toast');
 
-    <script>
-        // DOM Elements
-        const arrayContainer = document.getElementById('arrayContainer');
-        const explanationText = document.getElementById('explanationText');
-        const codeBlock = document.getElementById('codeBlock');
-        const timeC = document.getElementById('timeC');
-        const spaceC = document.getElementById('spaceC');
-        const arrLenDisplay = document.getElementById('arrLenDisplay');
-        const toastEl = document.getElementById('toast');
+            // Inputs
+            const initArrayDesc = document.getElementById('initArray');
+            const arrSizeInput = document.getElementById('arrSize');
+            const insertVal = document.getElementById('insertVal');
+            const insertIdx = document.getElementById('insertIdx');
+            const deleteIdx = document.getElementById('deleteIdx');
+            const updateVal = document.getElementById('updateVal');
+            const updateIdx = document.getElementById('updateIdx');
+            const searchVal = document.getElementById('searchVal');
 
-        // Inputs
-        const initArrayDesc = document.getElementById('initArray');
-        const arrSizeInput = document.getElementById('arrSize');
-        const insertVal = document.getElementById('insertVal');
-        const insertIdx = document.getElementById('insertIdx');
-        const deleteIdx = document.getElementById('deleteIdx');
-        const updateVal = document.getElementById('updateVal');
-        const updateIdx = document.getElementById('updateIdx');
-        const searchVal = document.getElementById('searchVal');
+            // State Variables
+            let array = [];
+            const MAX_SIZE = 15;
+            let isAnimating = false;
+            let animationSpeed = 800;
+            const BOX_WIDTH = 65;
+            const BOX_GAP = 15;
 
-        // State Variables
-        let array = [];
-        const MAX_SIZE = 15;
-        let isAnimating = false;
-        let animationSpeed = 800;
-        const BOX_WIDTH = 65;
-        const BOX_GAP = 15;
-
-        // Code Snippets
-        const codeSnippets = {
-            insert: {
-                time: "O(n)", space: "O(1)",
-                code: [
-                    "function insertIntoArray(arr, value, index) {",
-                    "    // Shift elements to the right to make space",
-                    "    for (let i = arr.length; i > index; i--) {",
-                    "        arr[i] = arr[i - 1];",
-                    "    }",
-                    "    // Insert the new value at the specified index",
-                    "    arr[index] = value;",
-                    "}"
-                ]
-            },
-            delete: {
-                time: "O(n)", space: "O(1)",
-                code: [
-                    "function deleteFromArray(arr, index) {",
-                    "    // Shift elements to the left to overwrite the deleted element",
-                    "    for (let i = index; i < arr.length - 1; i++) {",
-                    "        arr[i] = arr[i + 1];",
-                    "    }",
-                    "    // Remove the last duplicate element",
-                    "    arr.length = arr.length - 1;",
-                    "}"
-                ]
-            },
-            update: {
-                time: "O(1)", space: "O(1)",
-                code: [
-                    "function updateArray(arr, value, index) {",
-                    "    // Directly access and overwrite the value at the index",
-                    "    if (index >= 0 && index < arr.length) {",
-                    "        arr[index] = value;",
-                    "    }",
-                    "}"
-                ]
-            },
-            search: {
-                time: "O(n)", space: "O(1)",
-                code: [
-                    "function linearSearch(arr, target) {",
-                    "    // Traverse array comparing each element to target",
-                    "    for (let i = 0; i < arr.length; i++) {",
-                    "        if (arr[i] === target) {",
-                    "            return i; // Found",
-                    "        }",
-                    "    }",
-                    "    return -1; // Not Found",
-                    "}"
-                ]
-            }
-        };
-
-        // Utilities
-        function sleep(ms = animationSpeed) {
-            return new Promise(resolve => setTimeout(resolve, ms * 2.5));
-        }
-
-        function showToast(msg) {
-            toastEl.innerText = msg;
-            toastEl.classList.add('show');
-            setTimeout(() => toastEl.classList.remove('show'), 3000);
-        }
-
-        function explain(text, color = "var(--text-main)") {
-            explanationText.innerHTML = `<span style="color: ${color}">${text}</span>`;
-        }
-
-        function loadCode(operation) {
-            const data = codeSnippets[operation];
-            timeC.innerText = data.time;
-            spaceC.innerText = data.space;
-            codeBlock.innerHTML = data.code.map((line, idx) => {
-                const formatted = line.replace(/^( +)/, match => '&nbsp;'.repeat(match.length));
-                return `<span class="code-line" id="line-${idx}">${formatted}</span>`;
-            }).join("\n");
-        }
-
-        function highlightLine(...indices) {
-            document.querySelectorAll('.code-line').forEach(el => el.classList.remove('active'));
-            indices.forEach(idx => {
-                const line = document.getElementById(`line-${idx}`);
-                if(line) line.classList.add('active');
-            });
-        }
-
-        function lockControls(locked) {
-            isAnimating = locked;
-            document.querySelectorAll('button, input').forEach(el => {
-                el.disabled = locked;
-            });
-        }
-
-        function renderArray() {
-            arrayContainer.innerHTML = "";
-            arrLenDisplay.innerText = array.length;
-            
-            array.forEach((val, idx) => {
-                const wrapper = document.createElement("div");
-                wrapper.classList.add("array-box-wrapper");
-                wrapper.id = `wrapper-${idx}`;
-                
-                const box = document.createElement("div");
-                box.classList.add("array-box");
-                box.id = `box-${idx}`;
-                box.innerText = val;
-                
-                const label = document.createElement("div");
-                label.classList.add("index-label");
-                label.innerText = `[${idx}]`;
-                
-                wrapper.appendChild(box);
-                wrapper.appendChild(label);
-                
-                arrayContainer.appendChild(wrapper);
-            });
-        }
-
-        function getWrapper(idx) {
-            return document.getElementById(`wrapper-${idx}`);
-        }
-        function getBox(idx) {
-            return document.getElementById(`box-${idx}`);
-        }
-
-        function generateRandomArray() {
-            if(isAnimating) return;
-            let size = parseInt(arrSizeInput.value);
-            if(isNaN(size) || size < 1) size = 7;
-            if(size > MAX_SIZE) {
-                size = MAX_SIZE;
-                arrSizeInput.value = MAX_SIZE;
-                showToast(`Reduced to maximum size: ${MAX_SIZE}`);
-            }
-            array = [];
-            for (let i = 0; i < size; i++) {
-                array.push(Math.floor(Math.random() * 90) + 10);
-            }
-            renderArray();
-            explain(`Generated random array of size ${size}.`);
-            codeBlock.innerHTML = `<span style="color: var(--text-muted);">// Random array created. Select an operation to visualize its code.</span>`;
-            timeC.innerText = "O(1)"; spaceC.innerText = "O(n)";
-        }
-
-        function createCustomArray() {
-            if(isAnimating) return;
-            let text = initArrayDesc.value.trim();
-            if(!text) {
-                showToast("Enter comma separated numbers first.");
-                return;
-            }
-            let parsed = text.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
-            if(parsed.length === 0) {
-                showToast("No valid numbers found!");
-                return;
-            }
-            if(parsed.length > MAX_SIZE) {
-                parsed = parsed.slice(0, MAX_SIZE);
-                showToast(`Truncated to max ${MAX_SIZE} elements.`);
-            }
-            array = parsed;
-            arrSizeInput.value = array.length;
-            renderArray();
-            explain(`Custom array initialized with ${array.length} elements.`);
-            codeBlock.innerHTML = `<span style="color: var(--text-muted);">// Custom array created. Select an operation to visualize its code.</span>`;
-            timeC.innerText = "O(1)"; spaceC.innerText = "O(n)";
-        }
-
-        function resetArray() {
-            if(isAnimating) return;
-            array = [];
-            renderArray();
-            explain("Array cleared.");
-        }
-
-        async function visualizeInsert() {
-            if(isAnimating) return;
-            let val = parseInt(insertVal.value);
-            let idx = parseInt(insertIdx.value);
-            
-            if(isNaN(val) || isNaN(idx)) return showToast("Provide both Value and Index!");
-            if(idx < 0 || idx > array.length) return showToast(`Invalid Index. Must be between 0 and ${array.length}.`);
-            if(array.length >= MAX_SIZE) return showToast(`Array is full! (Max ${MAX_SIZE})`);
-
-            lockControls(true);
-            loadCode('insert');
-            explain(`Started adding ${val} at index ${idx}.`);
-            highlightLine(0);
-            await sleep(500);
-
-            highlightLine(2);
-            explain(`Shifting elements from index ${idx} to the right to make space.`);
-            
-            const shiftAmount = BOX_WIDTH + BOX_GAP;
-            for(let i = idx; i < array.length; i++) {
-                getWrapper(i).style.transform = `translateX(${shiftAmount}px)`;
-            }
-            
-            for(let i = array.length - 1; i >= idx; i--) {
-                highlightLine(3);
-                getBox(i).classList.add('active');
-                explain(`Moved element ${array[i]} to index ${i + 1}.`);
-                await sleep(500);
-                getBox(i).classList.remove('active');
-            }
-
-            if(array.length > idx) {
-                await sleep(300);
-            }
-
-            array.splice(idx, 0, val);
-            renderArray();
-
-            highlightLine(5, 6);
-            explain(`Inserted value ${val} at index ${idx}.`, "var(--box-insert)");
-            let newBox = getBox(idx);
-            newBox.classList.add('insert');
-            await sleep(1000);
-            newBox.classList.remove('insert');
-            
-            highlightLine(-1);
-            explain(`Insertion complete. Array size is now ${array.length}.`);
-            insertVal.value = "";
-            insertIdx.value = "";
-            lockControls(false);
-        }
-
-        async function visualizeDelete() {
-            if(isAnimating) return;
-            let idx = parseInt(deleteIdx.value);
-            
-            if(isNaN(idx)) return showToast("Provide an Index to delete!");
-            if(idx < 0 || idx >= array.length) return showToast(`Invalid Index. Must be between 0 and ${array.length - 1}.`);
-
-            lockControls(true);
-            loadCode('delete');
-            highlightLine(0);
-            explain(`Going to delete element at index ${idx}.`);
-            await sleep(500);
-
-            let targetBox = getBox(idx);
-            targetBox.classList.add('delete');
-            explain(`Element ${array[idx]} targeted for deletion.`, "var(--box-delete)");
-            await sleep(800);
-
-            targetBox.style.opacity = '0';
-            targetBox.style.transform = 'scale(0.5)';
-            await sleep(400);
-
-            highlightLine(2);
-            explain(`Shifting subsequent elements left to fill the gap.`);
-            
-            const shiftAmount = -(BOX_WIDTH + BOX_GAP);
-            for(let i = idx + 1; i < array.length; i++) {
-                highlightLine(3);
-                let w = getWrapper(i);
-                getBox(i).classList.add('active');
-                w.style.transform = `translateX(${shiftAmount}px)`;
-                explain(`Shifted element ${array[i]} to index ${i - 1}.`);
-                await sleep(500);
-                getBox(i).classList.remove('active');
-            }
-
-            highlightLine(5, 6);
-            explain(`Removing the excess duplicate element at the rear.`);
-            await sleep(600);
-            
-            let removed = array.splice(idx, 1)[0];
-            renderArray();
-
-            highlightLine(-1);
-            explain(`Deleted ${removed} completely. Array size is now ${array.length}.`);
-            deleteIdx.value = "";
-            lockControls(false);
-        }
-
-        async function visualizeUpdate() {
-            if(isAnimating) return;
-            let val = parseInt(updateVal.value);
-            let idx = parseInt(updateIdx.value);
-            
-            if(isNaN(val) || isNaN(idx)) return showToast("Provide both Value and Index!");
-            if(idx < 0 || idx >= array.length) return showToast(`Invalid Index. Must be between 0 and ${array.length - 1}.`);
-
-            lockControls(true);
-            loadCode('update');
-            highlightLine(0);
-            explain(`Updating index ${idx} to value ${val}.`);
-            await sleep(500);
-
-            highlightLine(2);
-            let box = getBox(idx);
-            box.classList.add('active');
-            explain(`Accessing index ${idx}... Currently holds ${array[idx]}.`);
-            await sleep(800);
-
-            highlightLine(3);
-            array[idx] = val;
-            box.innerText = val;
-            box.classList.remove('active');
-            box.classList.add('insert');
-            explain(`Overwritten with new value ${val}.`, "var(--box-insert)");
-            
-            await sleep(1000);
-            box.classList.remove('insert');
-            
-            highlightLine(-1);
-            explain(`Update successful.`);
-            updateVal.value = "";
-            updateIdx.value = "";
-            lockControls(false);
-        }
-
-        async function visualizeSearch() {
-            if(isAnimating) return;
-            let target = parseInt(searchVal.value);
-            
-            if(isNaN(target)) return showToast("Provide a Value to search for!");
-            if(array.length === 0) return showToast("Array is empty!");
-
-            lockControls(true);
-            loadCode('search');
-            highlightLine(0);
-            explain(`Starting Linear Search for target: ${target}`);
-            await sleep(500);
-
-            let found = false;
-
-            for(let i = 0; i < array.length; i++) {
-                highlightLine(2);
-                let box = getBox(i);
-                box.classList.add('active');
-                explain(`Checking index ${i}. Value is ${array[i]}.`);
-                await sleep(500);
-
-                highlightLine(3);
-                if(array[i] === target) {
-                    highlightLine(4, 5);
-                    box.classList.remove('active');
-                    box.classList.add('insert');
-                    explain(`<strong>Target ${target} found at index ${i}!</strong>`, "var(--box-insert)");
-                    found = true;
-                    await sleep(1500);
-                    box.classList.remove('insert');
-                    break;
-                } else {
-                    explain(`${array[i]} is not ${target}. Moving to next element.`);
-                    await sleep(400);
+            // Code Snippets
+            const codeSnippets = {
+                insert: {
+                    time: "O(n)", space: "O(1)",
+                    code: [
+                        "function insertIntoArray(arr, value, index) {",
+                        "    // Shift elements to the right to make space",
+                        "    for (let i = arr.length; i > index; i--) {",
+                        "        arr[i] = arr[i - 1];",
+                        "    }",
+                        "    // Insert the new value at the specified index",
+                        "    arr[index] = value;",
+                        "}"
+                    ]
+                },
+                delete: {
+                    time: "O(n)", space: "O(1)",
+                    code: [
+                        "function deleteFromArray(arr, index) {",
+                        "    // Shift elements to the left to overwrite the deleted element",
+                        "    for (let i = index; i < arr.length - 1; i++) {",
+                        "        arr[i] = arr[i + 1];",
+                        "    }",
+                        "    // Remove the last duplicate element",
+                        "    arr.length = arr.length - 1;",
+                        "}"
+                    ]
+                },
+                update: {
+                    time: "O(1)", space: "O(1)",
+                    code: [
+                        "function updateArray(arr, value, index) {",
+                        "    // Directly access and overwrite the value at the index",
+                        "    if (index >= 0 && index < arr.length) {",
+                        "        arr[index] = value;",
+                        "    }",
+                        "}"
+                    ]
+                },
+                search: {
+                    time: "O(n)", space: "O(1)",
+                    code: [
+                        "function linearSearch(arr, target) {",
+                        "    // Traverse array comparing each element to target",
+                        "    for (let i = 0; i < arr.length; i++) {",
+                        "        if (arr[i] === target) {",
+                        "            return i; // Found",
+                        "        }",
+                        "    }",
+                        "    return -1; // Not Found",
+                        "}"
+                    ]
                 }
-                box.classList.remove('active');
+            };
+
+            // Utilities
+            function sleep(ms = animationSpeed) {
+                return new Promise(resolve => setTimeout(resolve, ms * 2.5));
             }
 
-            if(!found) {
-                highlightLine(7);
-                explain(`<strong>Target ${target} not found in the array.</strong>`, "var(--box-delete)");
-            } else {
+            function showToast(msg) {
+                toastEl.innerText = msg;
+                toastEl.classList.add('show');
+                setTimeout(() => toastEl.classList.remove('show'), 3000);
+            }
+
+            function explain(text, color = "var(--text-main)") {
+                explanationText.innerHTML = `<span style="color: ${color}">${text}</span>`;
+            }
+
+            function loadCode(operation) {
+                const data = codeSnippets[operation];
+                timeC.innerText = data.time;
+                spaceC.innerText = data.space;
+                codeBlock.innerHTML = data.code.map((line, idx) => {
+                    const formatted = line.replace(/^( +)/, match => '&nbsp;'.repeat(match.length));
+                    return `<span class="code-line" id="line-${idx}">${formatted}</span>`;
+                }).join("\n");
+            }
+
+            function highlightLine(...indices) {
+                document.querySelectorAll('.code-line').forEach(el => el.classList.remove('active'));
+                indices.forEach(idx => {
+                    const line = document.getElementById(`line-${idx}`);
+                    if (line) line.classList.add('active');
+                });
+            }
+
+            function lockControls(locked) {
+                isAnimating = locked;
+                document.querySelectorAll('button, input').forEach(el => {
+                    el.disabled = locked;
+                });
+            }
+
+            function renderArray() {
+                arrayContainer.innerHTML = "";
+                arrLenDisplay.innerText = array.length;
+
+                array.forEach((val, idx) => {
+                    const wrapper = document.createElement("div");
+                    wrapper.classList.add("array-box-wrapper");
+                    wrapper.id = `wrapper-${idx}`;
+
+                    const box = document.createElement("div");
+                    box.classList.add("array-box");
+                    box.id = `box-${idx}`;
+                    box.innerText = val;
+
+                    const label = document.createElement("div");
+                    label.classList.add("index-label");
+                    label.innerText = `[${idx}]`;
+
+                    wrapper.appendChild(box);
+                    wrapper.appendChild(label);
+
+                    arrayContainer.appendChild(wrapper);
+                });
+            }
+
+            function getWrapper(idx) {
+                return document.getElementById(`wrapper-${idx}`);
+            }
+            function getBox(idx) {
+                return document.getElementById(`box-${idx}`);
+            }
+
+            function generateRandomArray() {
+                if (isAnimating) return;
+                let size = parseInt(arrSizeInput.value);
+                if (isNaN(size) || size < 1) size = 7;
+                if (size > MAX_SIZE) {
+                    size = MAX_SIZE;
+                    arrSizeInput.value = MAX_SIZE;
+                    showToast(`Reduced to maximum size: ${MAX_SIZE}`);
+                }
+                array = [];
+                for (let i = 0; i < size; i++) {
+                    array.push(Math.floor(Math.random() * 90) + 10);
+                }
+                renderArray();
+                explain(`Generated random array of size ${size}.`);
+                codeBlock.innerHTML = `<span style="color: var(--text-muted);">// Random array created. Select an operation to visualize its code.</span>`;
+                timeC.innerText = "O(1)"; spaceC.innerText = "O(n)";
+            }
+
+            function createCustomArray() {
+                if (isAnimating) return;
+                let text = initArrayDesc.value.trim();
+                if (!text) {
+                    showToast("Enter comma separated numbers first.");
+                    return;
+                }
+                let parsed = text.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+                if (parsed.length === 0) {
+                    showToast("No valid numbers found!");
+                    return;
+                }
+                if (parsed.length > MAX_SIZE) {
+                    parsed = parsed.slice(0, MAX_SIZE);
+                    showToast(`Truncated to max ${MAX_SIZE} elements.`);
+                }
+                array = parsed;
+                arrSizeInput.value = array.length;
+                renderArray();
+                explain(`Custom array initialized with ${array.length} elements.`);
+                codeBlock.innerHTML = `<span style="color: var(--text-muted);">// Custom array created. Select an operation to visualize its code.</span>`;
+                timeC.innerText = "O(1)"; spaceC.innerText = "O(n)";
+            }
+
+            function resetArray() {
+                if (isAnimating) return;
+                array = [];
+                renderArray();
+                explain("Array cleared.");
+            }
+
+            async function visualizeInsert() {
+                if (isAnimating) return;
+                let val = parseInt(insertVal.value);
+                let idx = parseInt(insertIdx.value);
+
+                if (isNaN(val) || isNaN(idx)) return showToast("Provide both Value and Index!");
+                if (idx < 0 || idx > array.length) return showToast(`Invalid Index. Must be between 0 and ${array.length}.`);
+                if (array.length >= MAX_SIZE) return showToast(`Array is full! (Max ${MAX_SIZE})`);
+
+                lockControls(true);
+                loadCode('insert');
+                explain(`Started adding ${val} at index ${idx}.`);
+                highlightLine(0);
+                await sleep(500);
+
+                highlightLine(2);
+                explain(`Shifting elements from index ${idx} to the right to make space.`);
+
+                const shiftAmount = BOX_WIDTH + BOX_GAP;
+                for (let i = idx; i < array.length; i++) {
+                    getWrapper(i).style.transform = `translateX(${shiftAmount}px)`;
+                }
+
+                for (let i = array.length - 1; i >= idx; i--) {
+                    highlightLine(3);
+                    getBox(i).classList.add('active');
+                    explain(`Moved element ${array[i]} to index ${i + 1}.`);
+                    await sleep(500);
+                    getBox(i).classList.remove('active');
+                }
+
+                if (array.length > idx) {
+                    await sleep(300);
+                }
+
+                array.splice(idx, 0, val);
+                renderArray();
+
+                highlightLine(5, 6);
+                explain(`Inserted value ${val} at index ${idx}.`, "var(--box-insert)");
+                let newBox = getBox(idx);
+                newBox.classList.add('insert');
+                await sleep(1000);
+                newBox.classList.remove('insert');
+
                 highlightLine(-1);
-                explain(`Search completed.`);
+                explain(`Insertion complete. Array size is now ${array.length}.`);
+                insertVal.value = "";
+                insertIdx.value = "";
+                lockControls(false);
             }
 
-            searchVal.value = "";
-            lockControls(false);
-        }
+            async function visualizeDelete() {
+                if (isAnimating) return;
+                let idx = parseInt(deleteIdx.value);
 
-        // Header & Dropdown functionality
-        function toggleDropdown() {
-            const dropdown = document.getElementById('userDropdown');
-            dropdown.classList.toggle('show');
-        }
+                if (isNaN(idx)) return showToast("Provide an Index to delete!");
+                if (idx < 0 || idx >= array.length) return showToast(`Invalid Index. Must be between 0 and ${array.length - 1}.`);
 
-        document.addEventListener('click', function(event) {
-            const userMenu = document.querySelector('.user-menu');
-            const dropdown = document.getElementById('userDropdown');
-            if (userMenu && !userMenu.contains(event.target)) {
-                dropdown.classList.remove('show');
+                lockControls(true);
+                loadCode('delete');
+                highlightLine(0);
+                explain(`Going to delete element at index ${idx}.`);
+                await sleep(500);
+
+                let targetBox = getBox(idx);
+                targetBox.classList.add('delete');
+                explain(`Element ${array[idx]} targeted for deletion.`, "var(--box-delete)");
+                await sleep(800);
+
+                targetBox.style.opacity = '0';
+                targetBox.style.transform = 'scale(0.5)';
+                await sleep(400);
+
+                highlightLine(2);
+                explain(`Shifting subsequent elements left to fill the gap.`);
+
+                const shiftAmount = -(BOX_WIDTH + BOX_GAP);
+                for (let i = idx + 1; i < array.length; i++) {
+                    highlightLine(3);
+                    let w = getWrapper(i);
+                    getBox(i).classList.add('active');
+                    w.style.transform = `translateX(${shiftAmount}px)`;
+                    explain(`Shifted element ${array[i]} to index ${i - 1}.`);
+                    await sleep(500);
+                    getBox(i).classList.remove('active');
+                }
+
+                highlightLine(5, 6);
+                explain(`Removing the excess duplicate element at the rear.`);
+                await sleep(600);
+
+                let removed = array.splice(idx, 1)[0];
+                renderArray();
+
+                highlightLine(-1);
+                explain(`Deleted ${removed} completely. Array size is now ${array.length}.`);
+                deleteIdx.value = "";
+                lockControls(false);
             }
-        });
 
-        // Initialize on load
-        window.onload = () => {
-            generateRandomArray();
-        };
+            async function visualizeUpdate() {
+                if (isAnimating) return;
+                let val = parseInt(updateVal.value);
+                let idx = parseInt(updateIdx.value);
 
-    </script>
+                if (isNaN(val) || isNaN(idx)) return showToast("Provide both Value and Index!");
+                if (idx < 0 || idx >= array.length) return showToast(`Invalid Index. Must be between 0 and ${array.length - 1}.`);
+
+                lockControls(true);
+                loadCode('update');
+                highlightLine(0);
+                explain(`Updating index ${idx} to value ${val}.`);
+                await sleep(500);
+
+                highlightLine(2);
+                let box = getBox(idx);
+                box.classList.add('active');
+                explain(`Accessing index ${idx}... Currently holds ${array[idx]}.`);
+                await sleep(800);
+
+                highlightLine(3);
+                array[idx] = val;
+                box.innerText = val;
+                box.classList.remove('active');
+                box.classList.add('insert');
+                explain(`Overwritten with new value ${val}.`, "var(--box-insert)");
+
+                await sleep(1000);
+                box.classList.remove('insert');
+
+                highlightLine(-1);
+                explain(`Update successful.`);
+                updateVal.value = "";
+                updateIdx.value = "";
+                lockControls(false);
+            }
+
+            async function visualizeSearch() {
+                if (isAnimating) return;
+                let target = parseInt(searchVal.value);
+
+                if (isNaN(target)) return showToast("Provide a Value to search for!");
+                if (array.length === 0) return showToast("Array is empty!");
+
+                lockControls(true);
+                loadCode('search');
+                highlightLine(0);
+                explain(`Starting Linear Search for target: ${target}`);
+                await sleep(500);
+
+                let found = false;
+
+                for (let i = 0; i < array.length; i++) {
+                    highlightLine(2);
+                    let box = getBox(i);
+                    box.classList.add('active');
+                    explain(`Checking index ${i}. Value is ${array[i]}.`);
+                    await sleep(500);
+
+                    highlightLine(3);
+                    if (array[i] === target) {
+                        highlightLine(4, 5);
+                        box.classList.remove('active');
+                        box.classList.add('insert');
+                        explain(`<strong>Target ${target} found at index ${i}!</strong>`, "var(--box-insert)");
+                        found = true;
+                        await sleep(1500);
+                        box.classList.remove('insert');
+                        break;
+                    } else {
+                        explain(`${array[i]} is not ${target}. Moving to next element.`);
+                        await sleep(400);
+                    }
+                    box.classList.remove('active');
+                }
+
+                if (!found) {
+                    highlightLine(7);
+                    explain(`<strong>Target ${target} not found in the array.</strong>`, "var(--box-delete)");
+                } else {
+                    highlightLine(-1);
+                    explain(`Search completed.`);
+                }
+
+                searchVal.value = "";
+                lockControls(false);
+            }
+
+            // Header & Dropdown functionality
+            function toggleDropdown() {
+                const dropdown = document.getElementById('userDropdown');
+                dropdown.classList.toggle('show');
+            }
+
+            document.addEventListener('click', function (event) {
+                const userMenu = document.querySelector('.user-menu');
+                const dropdown = document.getElementById('userDropdown');
+                if (userMenu && !userMenu.contains(event.target)) {
+                    dropdown.classList.remove('show');
+                }
+            });
+
+            // Initialize on load
+            window.onload = () => {
+                generateRandomArray();
+            };
+
+        </script>
 </body>
 
 </html>

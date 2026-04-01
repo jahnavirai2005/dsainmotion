@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Searching Visualizer | DSA In Motion</title>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;600&family=Outfit:wght@400;600;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* --- Color Variables & Setup --- */
@@ -20,7 +22,7 @@
             --accent-purple: #A98BD1;
             --accent-pink: #F4BBD7;
             --border-color: rgba(169, 139, 209, 0.2);
-            
+
             /* Bar Colors */
             --bar-default: #A98BD1;
             --bar-checking: #9FCEEE;
@@ -36,7 +38,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background-image: 
+            background-image:
                 radial-gradient(at 0% 0%, rgba(169, 139, 209, 0.1) 0px, transparent 50%),
                 radial-gradient(at 100% 0%, rgba(159, 206, 238, 0.1) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(244, 187, 215, 0.1) 0px, transparent 50%),
@@ -79,7 +81,8 @@
             transition: color 0.3s;
         }
 
-        .nav-link:hover, .nav-link.active {
+        .nav-link:hover,
+        .nav-link.active {
             color: #fff;
         }
 
@@ -348,7 +351,9 @@
             font-weight: 500;
         }
 
-        input[type="text"], input[type="number"], select {
+        input[type="text"],
+        input[type="number"],
+        select {
             width: 100%;
             padding: 12px;
             box-sizing: border-box;
@@ -362,7 +367,8 @@
             font-size: 0.95rem;
         }
 
-        input:focus, select:focus {
+        input:focus,
+        select:focus {
             border-color: var(--accent-purple);
         }
 
@@ -396,11 +402,31 @@
             box-shadow: none;
         }
 
-        .btn-primary { background: var(--primary-gradient); color: white; }
-        .btn-secondary { background: transparent; border: 1px solid var(--accent-blue); color: var(--accent-blue); }
-        .btn-secondary:hover:not(:disabled) { background-color: rgba(96, 165, 250, 0.1); }
-        .btn-danger { background-color: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; }
-        .btn-danger:hover:not(:disabled) { background-color: #ef4444; color: white; }
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: rgba(96, 165, 250, 0.1);
+        }
+
+        .btn-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background-color: #ef4444;
+            color: white;
+        }
 
         .complexity-box {
             display: flex;
@@ -464,427 +490,446 @@
 
 <body>
 
-<div th:replace="~{fragments/navbar :: navbar}"></div>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <div style="width: 100%; max-width: 1300px; margin: 20px auto 0 auto; padding: 0 20px;">
     </div>
 
 
     <div class="main-content">
-        <div class="brand-title">DSA In Motion</div>
-        <h1><span class="gradient-text">Searching</span> Visualizer</h1>
-        <p class="subtitle">An interactive tool to step-by-step visualize searching algorithms and understand their inner workings.</p>
-        <a href="/dashboard" class="back-button" style="margin-bottom: 30px; margin-top: 0; width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; background: linear-gradient(90deg, #9FCEEE, #A98BD1); color: #fff; border: none; border-radius: 16px; padding: 18px 0; box-shadow: 0 4px 24px rgba(159, 206, 238, 0.12);"><i class="fa-solid fa-arrow-left" style="margin-right: 12px;"></i> Back to Dashboard</a>
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+            <div class="brand-title" style="margin-bottom: 20px;">DSA In Motion</div>
+            <h1><span class="gradient-text">Searching</span> Visualizer</h1>
+            <p class="subtitle">An interactive tool to step-by-step visualize searching algorithms and understand their
+                inner workings.</p>
+            <a href="/dashboard" class="back-button"
+                style="margin-bottom: 30px; margin-top: 0; width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; background: linear-gradient(90deg, #9FCEEE, #A98BD1); color: #fff; border: none; border-radius: 16px; padding: 18px 0; box-shadow: 0 4px 24px rgba(159, 206, 238, 0.12); text-decoration: none;"><i
+                    class="fa-solid fa-arrow-left" style="margin-right: 12px;"></i> Back to Dashboard</a>
+        </div>
         <div class="container">
-        <div class="top-row">
-            
-            <!-- Visualization Panel -->
-            <div class="panel visual-box">
-                <h3>Visualization</h3>
-                
-                <div class="bars-container" id="barsContainer">
-                    <!-- Bars injected here -->
+            <div class="top-row">
+
+                <!-- Visualization Panel -->
+                <div class="panel visual-box">
+                    <h3>Visualization</h3>
+
+                    <div class="bars-container" id="barsContainer">
+                        <!-- Bars injected here -->
+                    </div>
+
+                    <div class="color-legend">
+                        <div class="legend-item">
+                            <div class="color-box" style="background-color: var(--bar-default)"></div> Unsearched
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-box" style="background-color: var(--bar-checking)"></div> Checking
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-box" style="background-color: var(--bar-eliminated)"></div> Eliminated
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-box" style="background-color: var(--bar-found)"></div> Found
+                        </div>
+                    </div>
+
+                    <div class="status-box">
+                        <strong>Current Action:</strong>
+                        <span id="explanationText">Ready to start searching. Enter a target and click Search.</span>
+                    </div>
                 </div>
 
-                <div class="color-legend">
-                    <div class="legend-item"><div class="color-box" style="background-color: var(--bar-default)"></div> Unsearched</div>
-                    <div class="legend-item"><div class="color-box" style="background-color: var(--bar-checking)"></div> Checking</div>
-                    <div class="legend-item"><div class="color-box" style="background-color: var(--bar-eliminated)"></div> Eliminated</div>
-                    <div class="legend-item"><div class="color-box" style="background-color: var(--bar-found)"></div> Found</div>
-                </div>
+                <!-- Controls Panel -->
+                <div class="panel controls-box">
+                    <h3>Settings</h3>
 
-                <div class="status-box">
-                    <strong>Current Action:</strong>
-                    <span id="explanationText">Ready to start searching. Enter a target and click Search.</span>
-                </div>
-            </div>
+                    <div class="control-group">
+                        <label>Algorithm</label>
+                        <div class="btn-row">
+                            <button class="btn-primary" id="btnLinear" onclick="selectAlgo('linear')">Linear
+                                Search</button>
+                            <button class="btn-secondary" id="btnBinary" onclick="selectAlgo('binary')">Binary
+                                Search</button>
+                        </div>
+                    </div>
 
-            <!-- Controls Panel -->
-            <div class="panel controls-box">
-                <h3>Settings</h3>
-                
-                <div class="control-group">
-                    <label>Algorithm</label>
+                    <div class="control-group">
+                        <label>Target Value</label>
+                        <input type="number" id="targetInput" placeholder="E.g. 45" value="45">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Custom Array (Comma Separated)</label>
+                        <input type="text" id="customArray" placeholder="E.g. 5, 23, 7, 18, 9">
+                        <button class="btn-secondary" id="btnSet" onclick="setCustomArray()"
+                            style="margin-top: 8px; width: 100%;">Set Custom Array</button>
+                    </div>
+
+                    <div class="control-group" style="margin-bottom: 20px;">
+                        <label>Generate Array of Size</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" id="sizeInput" placeholder="E.g. 15" min="2" max="50" value="15"
+                                style="margin-bottom: 0;">
+                            <button class="btn-secondary" onclick="generateRandomArray()"
+                                style="flex: 0 0 auto; padding: 0 15px;">Random</button>
+                        </div>
+                    </div>
+
                     <div class="btn-row">
-                        <button class="btn-primary" id="btnLinear" onclick="selectAlgo('linear')">Linear Search</button>
-                        <button class="btn-secondary" id="btnBinary" onclick="selectAlgo('binary')">Binary Search</button>
+                        <button class="btn-primary" id="btnStart" onclick="startSearch()">START SEARCHING</button>
+                    </div>
+
+                    <div class="btn-row" style="margin-top: 5px;">
+                        <button class="btn-danger" id="btnPause" onclick="pauseResume()" disabled>Pause</button>
+                        <button class="btn-secondary" id="btnReset" onclick="resetApp()">Reset</button>
+                    </div>
+
+                    <div class="complexity-box">
+                        <div class="complexity-item">Time: <span id="timeC">O(n)</span></div>
+                        <div class="complexity-item">Space: <span id="spaceC">O(1)</span></div>
                     </div>
                 </div>
+            </div>
 
-                <div class="control-group">
-                    <label>Target Value</label>
-                    <input type="number" id="targetInput" placeholder="E.g. 45" value="45">
-                </div>
-
-                <div class="control-group">
-                    <label>Custom Array (Comma Separated)</label>
-                    <input type="text" id="customArray" placeholder="E.g. 5, 23, 7, 18, 9">
-                    <button class="btn-secondary" id="btnSet" onclick="setCustomArray()" style="margin-top: 8px; width: 100%;">Set Custom Array</button>
-                </div>
-
-                <div class="control-group" style="margin-bottom: 20px;">
-                    <label>Generate Array of Size</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="number" id="sizeInput" placeholder="E.g. 15" min="2" max="50" value="15" style="margin-bottom: 0;">
-                        <button class="btn-secondary" onclick="generateRandomArray()" style="flex: 0 0 auto; padding: 0 15px;">Random</button>
-                    </div>
-                </div>
-
-                <div class="btn-row">
-                    <button class="btn-primary" id="btnStart" onclick="startSearch()">START SEARCHING</button>
-                </div>
-
-                <div class="btn-row" style="margin-top: 5px;">
-                    <button class="btn-danger" id="btnPause" onclick="pauseResume()" disabled>Pause</button>
-                    <button class="btn-secondary" id="btnReset" onclick="resetApp()">Reset</button>
-                </div>
-
-                <div class="complexity-box">
-                    <div class="complexity-item">Time: <span id="timeC">O(n)</span></div>
-                    <div class="complexity-item">Space: <span id="spaceC">O(1)</span></div>
-                </div>
+            <!-- Code Panel -->
+            <div class="panel code-box">
+                <h3>Live Algorithm Code</h3>
+                <pre id="codeBlock"></pre>
             </div>
         </div>
 
-        <!-- Code Panel -->
-        <div class="panel code-box">
-            <h3>Live Algorithm Code</h3>
-            <pre id="codeBlock"></pre>
-        </div>
-    </div>
+        <footer>
+            © 2026 DSA In Motion | Crafted for visual learners.
+        </footer>
 
-    <footer>
-        © 2026 DSA In Motion | Crafted for visual learners.
-    </footer>
+        <script>
+            // DOM Elements
+            const barsContainer = document.getElementById('barsContainer');
+            const explanationText = document.getElementById('explanationText');
+            const codeBlock = document.getElementById('codeBlock');
+            const sizeInput = document.getElementById('sizeInput');
+            const targetInput = document.getElementById('targetInput');
+            let currentAlgo = 'linear';
+            const timeC = document.getElementById('timeC');
+            const spaceC = document.getElementById('spaceC');
+            const customArrayInput = document.getElementById('customArray');
 
-    <script>
-        // DOM Elements
-        const barsContainer = document.getElementById('barsContainer');
-        const explanationText = document.getElementById('explanationText');
-        const codeBlock = document.getElementById('codeBlock');
-        const sizeInput = document.getElementById('sizeInput');
-        const targetInput = document.getElementById('targetInput');
-        let currentAlgo = 'linear';
-        const timeC = document.getElementById('timeC');
-        const spaceC = document.getElementById('spaceC');
-        const customArrayInput = document.getElementById('customArray');
+            const btnGen = document.getElementById('btnSet');
+            const btnStart = document.getElementById('btnStart');
+            const btnPause = document.getElementById('btnPause');
+            const btnReset = document.getElementById('btnReset');
 
-        const btnGen = document.getElementById('btnSet');
-        const btnStart = document.getElementById('btnStart');
-        const btnPause = document.getElementById('btnPause');
-        const btnReset = document.getElementById('btnReset');
+            // State variables
+            let array = [];
+            let isSearching = false;
+            let isPaused = false;
+            let pauseResolver = null;
+            let abortController = null;
+            let animationDelay = 1000;
 
-        // State variables
-        let array = [];
-        let isSearching = false;
-        let isPaused = false;
-        let pauseResolver = null;
-        let abortController = null;
-        let animationDelay = 1000; 
-        
-        // Colors
-        const COLOR_DEFAULT = "var(--bar-default)";
-        const COLOR_CHECKING = "var(--bar-checking)";
-        const COLOR_FOUND = "var(--bar-found)";
-        const COLOR_ELIMINATED = "var(--bar-eliminated)";
+            // Colors
+            const COLOR_DEFAULT = "var(--bar-default)";
+            const COLOR_CHECKING = "var(--bar-checking)";
+            const COLOR_FOUND = "var(--bar-found)";
+            const COLOR_ELIMINATED = "var(--bar-eliminated)";
 
-        const algoData = {
-            linear: {
-                time: "O(n)", space: "O(1)",
-                code: [
-                    "function linearSearch(arr, target) {",
-                    "    for (let i = 0; i < arr.length; i++) {",
-                    "        if (arr[i] === target) {",
-                    "            return i; // Found",
-                    "        }",
-                    "    }",
-                    "    return -1; // Not Found",
-                    "}"
-                ]
-            },
-            binary: {
-                time: "O(log n)", space: "O(1)",
-                code: [
-                    "function binarySearch(arr, target) {",
-                    "    let low = 0;",
-                    "    let high = arr.length - 1;",
-                    "    while (low <= high) {",
-                    "        let mid = Math.floor((low + high) / 2);",
-                    "        if (arr[mid] === target)",
-                    "            return mid; // Found",
-                    "        else if (arr[mid] < target)",
-                    "            low = mid + 1;",
-                    "        else",
-                    "            high = mid - 1;",
-                    "    }",
-                    "    return -1; // Not Found",
-                    "}"
-                ]
+            const algoData = {
+                linear: {
+                    time: "O(n)", space: "O(1)",
+                    code: [
+                        "function linearSearch(arr, target) {",
+                        "    for (let i = 0; i < arr.length; i++) {",
+                        "        if (arr[i] === target) {",
+                        "            return i; // Found",
+                        "        }",
+                        "    }",
+                        "    return -1; // Not Found",
+                        "}"
+                    ]
+                },
+                binary: {
+                    time: "O(log n)", space: "O(1)",
+                    code: [
+                        "function binarySearch(arr, target) {",
+                        "    let low = 0;",
+                        "    let high = arr.length - 1;",
+                        "    while (low <= high) {",
+                        "        let mid = Math.floor((low + high) / 2);",
+                        "        if (arr[mid] === target)",
+                        "            return mid; // Found",
+                        "        else if (arr[mid] < target)",
+                        "            low = mid + 1;",
+                        "        else",
+                        "            high = mid - 1;",
+                        "    }",
+                        "    return -1; // Not Found",
+                        "}"
+                    ]
+                }
+            };
+
+            function sleep() {
+                return new Promise(async resolve => {
+                    if (abortController && abortController.signal.aborted) return resolve();
+                    if (isPaused) {
+                        await new Promise(res => pauseResolver = res);
+                    }
+                    setTimeout(resolve, animationDelay);
+                });
             }
-        };
 
-        function sleep() {
-            return new Promise(async resolve => {
-                if (abortController && abortController.signal.aborted) return resolve();
+            function checkAbort() {
+                if (abortController && abortController.signal.aborted) {
+                    throw new Error("Aborted");
+                }
+            }
+
+            function explain(text, color = "var(--text-main)") {
+                explanationText.innerHTML = `<span style="color: ${color}">${text}</span>`;
+            }
+
+            function highlightLine(...indices) {
+                document.querySelectorAll('.code-line').forEach(el => el.classList.remove('active'));
+                indices.forEach(idx => {
+                    const line = document.getElementById(`line-${idx}`);
+                    if (line) line.classList.add('active');
+                });
+            }
+
+            function selectAlgo(algo) {
+                currentAlgo = algo;
+                document.getElementById('btnLinear').className = algo === 'linear' ? 'btn-primary' : 'btn-secondary';
+                document.getElementById('btnBinary').className = algo === 'binary' ? 'btn-primary' : 'btn-secondary';
+                updateAlgoSettings();
+            }
+
+            function updateAlgoSettings() {
+                const algo = currentAlgo;
+                const data = algoData[algo];
+                timeC.innerText = data.time;
+                spaceC.innerText = data.space;
+
+                codeBlock.innerHTML = data.code.map((line, idx) => {
+                    const formatted = line.replace(/^( +)/, match => '&nbsp;'.repeat(match.length));
+                    return `<span class="code-line" id="line-${idx}">${formatted}</span>`;
+                }).join("\n");
+
+                if (algo === 'binary' && array.length > 0 && !isSearching) {
+                    let isSorted = true;
+                    for (let i = 0; i < array.length - 1; i++) {
+                        if (array[i] > array[i + 1]) { isSorted = false; break; }
+                    }
+                    if (!isSorted) {
+                        explain("Binary search requires a sorted array. Sorting...", "var(--accent-pink)");
+                        array.sort((a, b) => a - b);
+                        renderArray();
+                    }
+                }
+            }
+
+            function pauseResume() {
+                if (!isSearching) return;
+                isPaused = !isPaused;
                 if (isPaused) {
-                    await new Promise(res => pauseResolver = res);
-                }
-                setTimeout(resolve, animationDelay);
-            });
-        }
-
-        function checkAbort() {
-            if (abortController && abortController.signal.aborted) {
-                throw new Error("Aborted");
-            }
-        }
-
-        function explain(text, color = "var(--text-main)") {
-            explanationText.innerHTML = `<span style="color: ${color}">${text}</span>`;
-        }
-
-        function highlightLine(...indices) {
-            document.querySelectorAll('.code-line').forEach(el => el.classList.remove('active'));
-            indices.forEach(idx => {
-                const line = document.getElementById(`line-${idx}`);
-                if(line) line.classList.add('active');
-            });
-        }
-
-        function selectAlgo(algo) {
-            currentAlgo = algo;
-            document.getElementById('btnLinear').className = algo === 'linear' ? 'btn-primary' : 'btn-secondary';
-            document.getElementById('btnBinary').className = algo === 'binary' ? 'btn-primary' : 'btn-secondary';
-            updateAlgoSettings();
-        }
-
-        function updateAlgoSettings() {
-            const algo = currentAlgo;
-            const data = algoData[algo];
-            timeC.innerText = data.time;
-            spaceC.innerText = data.space;
-            
-            codeBlock.innerHTML = data.code.map((line, idx) => {
-                const formatted = line.replace(/^( +)/, match => '&nbsp;'.repeat(match.length));
-                return `<span class="code-line" id="line-${idx}">${formatted}</span>`;
-            }).join("\n");
-            
-            if (algo === 'binary' && array.length > 0 && !isSearching) {
-                let isSorted = true;
-                for(let i=0; i<array.length-1; i++) {
-                    if(array[i] > array[i+1]) { isSorted = false; break; }
-                }
-                if (!isSorted) {
-                    explain("Binary search requires a sorted array. Sorting...", "var(--accent-pink)");
-                    array.sort((a,b) => a - b);
-                    renderArray();
-                }
-            }
-        }
-
-        function pauseResume() {
-            if(!isSearching) return;
-            isPaused = !isPaused;
-            if(isPaused) {
-                btnPause.innerText = "Resume";
-                btnPause.classList.remove("btn-danger");
-                btnPause.classList.add("btn-secondary");
-                explain("⏸️ Searching paused.");
-            } else {
-                btnPause.innerText = "Pause";
-                btnPause.classList.add("btn-danger");
-                btnPause.classList.remove("btn-secondary");
-                explain("▶️ Searching resumed.");
-                if(pauseResolver) pauseResolver();
-            }
-        }
-
-        function setControlsState(searching) {
-            isSearching = searching;
-            document.querySelectorAll('input, select, button').forEach(el => {
-                if (el.id !== 'btnPause' && el.id !== 'btnReset') el.disabled = searching;
-            });
-            if(searching) {
-                btnPause.disabled = false;
-                isPaused = false;
-                btnPause.innerText = "Pause";
-                btnPause.className = "btn-danger";
-            } else {
-                btnPause.disabled = true;
-            }
-        }
-
-        function resetApp() {
-            if(abortController) abortController.abort();
-            if(isPaused && pauseResolver) pauseResolver();
-            setControlsState(false);
-            renderArray();
-            explain("System reset. Ready to start.");
-            highlightLine(-1);
-        }
-
-        function generateRandomArray() {
-            const size = parseInt(sizeInput.value) || 15;
-            array = [];
-            for(let i=0; i<size; i++) array.push(Math.floor(Math.random() * 95) + 5);
-            if (currentAlgo === 'binary') array.sort((a,b) => a - b);
-            if (Math.random() > 0.3) targetInput.value = array[Math.floor(Math.random() * array.length)];
-            else targetInput.value = Math.floor(Math.random() * 95) + 5;
-            renderArray();
-            explain("Random array generated.");
-        }
-
-        function setCustomArray() {
-            const val = customArrayInput.value;
-            if(!val) return;
-            let parsed = val.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x) && x > 0);
-            if(parsed.length < 2) {
-                alert("Please provide at least 2 valid numbers.");
-                return;
-            }
-            if(parsed.length > 50) parsed = parsed.slice(0, 50);
-            array = parsed;
-            sizeInput.value = array.length;
-            if (currentAlgo === 'binary') array.sort((a,b) => a - b);
-            renderArray();
-            explain("Custom array loaded.");
-        }
-
-        function renderArray() {
-            barsContainer.innerHTML = "";
-            let maxVal = Math.max(...array, 10);
-            array.forEach((val, index) => {
-                const wrapper = document.createElement("div");
-                wrapper.classList.add("bar-wrapper");
-                wrapper.style.width = `${Math.max(8, 100/array.length - 1)}%`;
-                const bar = document.createElement("div");
-                bar.classList.add("array-bar");
-                bar.id = `bar-${index}`;
-                bar.style.height = `${Math.max(10, (val / maxVal) * 100)}%`;
-                bar.style.width = "80%";
-                if(array.length <= 30) bar.innerText = val;
-                const label = document.createElement("div");
-                label.classList.add("pointer-label");
-                label.id = `label-${index}`;
-                wrapper.appendChild(bar);
-                wrapper.appendChild(label);
-                barsContainer.appendChild(wrapper);
-            });
-        }
-
-        function getBar(index) { return document.getElementById(`bar-${index}`); }
-        function updateLabel(index, text, show) {
-            const label = document.getElementById(`label-${index}`);
-            if(label) {
-                if(text) label.innerText = text;
-                if(show) label.classList.add("show");
-                else label.classList.remove("show");
-            }
-        }
-        function clearAllLabels() { for(let i=0; i<array.length; i++) updateLabel(i, "", false); }
-
-        async function startSearch() {
-            if(isSearching) return;
-            if(array.length === 0) generateRandomArray();
-            const target = parseInt(targetInput.value);
-            if (isNaN(target)) { alert("Enter target."); return; }
-            setControlsState(true);
-            abortController = new AbortController();
-            renderArray();
-            try {
-                if(currentAlgo === 'linear') await linearSearch(target);
-                else if(currentAlgo === 'binary') await binarySearch(target);
-            } catch (err) { if(err.message !== "Aborted") console.error(err); }
-            finally { setControlsState(false); }
-        }
-
-        async function linearSearch(target) {
-            highlightLine(0);
-            explain(`Starting Linear Search for: ${target}`);
-            await sleep();
-            for (let i = 0; i < array.length; i++) {
-                checkAbort();
-                highlightLine(1);
-                getBar(i).style.backgroundColor = COLOR_CHECKING;
-                updateLabel(i, "Current", true);
-                await sleep();
-                highlightLine(2);
-                if (array[i] === target) {
-                    highlightLine(3);
-                    explain(`<strong>Found at ${i}!</strong>`, COLOR_FOUND);
-                    getBar(i).style.backgroundColor = COLOR_FOUND;
-                    updateLabel(i, "FOUND", true);
-                    return;
-                }
-                highlightLine(4);
-                getBar(i).style.backgroundColor = COLOR_ELIMINATED;
-                updateLabel(i, "", false);
-                await sleep();
-            }
-            highlightLine(6);
-            explain(`<strong>Not found.</strong>`, "#ef4444");
-        }
-
-        async function binarySearch(target) {
-            highlightLine(0);
-            explain(`Starting Binary Search for: ${target}`);
-            await sleep();
-            highlightLine(1, 2);
-            let low = 0, high = array.length - 1;
-            updateLabel(low, "LOW", true);
-            updateLabel(high, "HIGH", true);
-            await sleep();
-            while (low <= high) {
-                checkAbort();
-                highlightLine(3);
-                await sleep();
-                highlightLine(4);
-                let mid = Math.floor((low + high) / 2);
-                clearAllLabels();
-                updateLabel(low, "LOW", true);
-                if (low !== high) updateLabel(high, "HIGH", true);
-                const midLabel = document.getElementById(`label-${mid}`);
-                let txt = midLabel.innerText;
-                updateLabel(mid, (txt && midLabel.classList.contains("show") ? txt + " / MID" : "MID"), true);
-                getBar(mid).style.backgroundColor = COLOR_CHECKING;
-                await sleep();
-                highlightLine(5);
-                if (array[mid] === target) {
-                    highlightLine(6);
-                    getBar(mid).style.backgroundColor = COLOR_FOUND;
-                    clearAllLabels();
-                    updateLabel(mid, "FOUND", true);
-                    return;
-                }
-                highlightLine(7);
-                if (array[mid] < target) {
-                    highlightLine(8);
-                    for(let i=low; i<=mid; i++) getBar(i).style.backgroundColor = COLOR_ELIMINATED;
-                    low = mid + 1;
+                    btnPause.innerText = "Resume";
+                    btnPause.classList.remove("btn-danger");
+                    btnPause.classList.add("btn-secondary");
+                    explain("⏸️ Searching paused.");
                 } else {
-                    highlightLine(9, 10);
-                    for(let i=mid; i<=high; i++) getBar(i).style.backgroundColor = COLOR_ELIMINATED;
-                    high = mid - 1;
+                    btnPause.innerText = "Pause";
+                    btnPause.classList.add("btn-danger");
+                    btnPause.classList.remove("btn-secondary");
+                    explain("▶️ Searching resumed.");
+                    if (pauseResolver) pauseResolver();
                 }
-                clearAllLabels();
-                if(low <= high && low < array.length && high >= 0) {
-                    updateLabel(low, "LOW", true);
-                    if(low !== high) updateLabel(high, "HIGH", true);
-                }
-                await sleep();
             }
-            highlightLine(12);
-            clearAllLabels();
-            explain(`<strong>Not found.</strong>`, "#ef4444");
-        }
 
-        function toggleDropdown() { document.getElementById('userDropdown').classList.toggle('show'); }
-        document.addEventListener('click', function(e) {
-            const menu = document.querySelector('.user-menu');
-            if (menu && !menu.contains(e.target)) document.getElementById('userDropdown').classList.remove('show');
-        });
+            function setControlsState(searching) {
+                isSearching = searching;
+                document.querySelectorAll('input, select, button').forEach(el => {
+                    if (el.id !== 'btnPause' && el.id !== 'btnReset') el.disabled = searching;
+                });
+                if (searching) {
+                    btnPause.disabled = false;
+                    isPaused = false;
+                    btnPause.innerText = "Pause";
+                    btnPause.className = "btn-danger";
+                } else {
+                    btnPause.disabled = true;
+                }
+            }
 
-        window.onload = () => { updateAlgoSettings(); generateRandomArray(); };
-    </script>
+            function resetApp() {
+                if (abortController) abortController.abort();
+                if (isPaused && pauseResolver) pauseResolver();
+                setControlsState(false);
+                renderArray();
+                explain("System reset. Ready to start.");
+                highlightLine(-1);
+            }
+
+            function generateRandomArray() {
+                const size = parseInt(sizeInput.value) || 15;
+                array = [];
+                for (let i = 0; i < size; i++) array.push(Math.floor(Math.random() * 95) + 5);
+                if (currentAlgo === 'binary') array.sort((a, b) => a - b);
+                if (Math.random() > 0.3) targetInput.value = array[Math.floor(Math.random() * array.length)];
+                else targetInput.value = Math.floor(Math.random() * 95) + 5;
+                renderArray();
+                explain("Random array generated.");
+            }
+
+            function setCustomArray() {
+                const val = customArrayInput.value;
+                if (!val) return;
+                let parsed = val.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x) && x > 0);
+                if (parsed.length < 2) {
+                    alert("Please provide at least 2 valid numbers.");
+                    return;
+                }
+                if (parsed.length > 50) parsed = parsed.slice(0, 50);
+                array = parsed;
+                sizeInput.value = array.length;
+                if (currentAlgo === 'binary') array.sort((a, b) => a - b);
+                renderArray();
+                explain("Custom array loaded.");
+            }
+
+            function renderArray() {
+                barsContainer.innerHTML = "";
+                let maxVal = Math.max(...array, 10);
+                array.forEach((val, index) => {
+                    const wrapper = document.createElement("div");
+                    wrapper.classList.add("bar-wrapper");
+                    wrapper.style.width = `${Math.max(8, 100 / array.length - 1)}%`;
+                    const bar = document.createElement("div");
+                    bar.classList.add("array-bar");
+                    bar.id = `bar-${index}`;
+                    bar.style.height = `${Math.max(10, (val / maxVal) * 100)}%`;
+                    bar.style.width = "80%";
+                    if (array.length <= 30) bar.innerText = val;
+                    const label = document.createElement("div");
+                    label.classList.add("pointer-label");
+                    label.id = `label-${index}`;
+                    wrapper.appendChild(bar);
+                    wrapper.appendChild(label);
+                    barsContainer.appendChild(wrapper);
+                });
+            }
+
+            function getBar(index) { return document.getElementById(`bar-${index}`); }
+            function updateLabel(index, text, show) {
+                const label = document.getElementById(`label-${index}`);
+                if (label) {
+                    if (text) label.innerText = text;
+                    if (show) label.classList.add("show");
+                    else label.classList.remove("show");
+                }
+            }
+            function clearAllLabels() { for (let i = 0; i < array.length; i++) updateLabel(i, "", false); }
+
+            async function startSearch() {
+                if (isSearching) return;
+                if (array.length === 0) generateRandomArray();
+                const target = parseInt(targetInput.value);
+                if (isNaN(target)) { alert("Enter target."); return; }
+                setControlsState(true);
+                abortController = new AbortController();
+                renderArray();
+                try {
+                    if (currentAlgo === 'linear') await linearSearch(target);
+                    else if (currentAlgo === 'binary') await binarySearch(target);
+                } catch (err) { if (err.message !== "Aborted") console.error(err); }
+                finally { setControlsState(false); }
+            }
+
+            async function linearSearch(target) {
+                highlightLine(0);
+                explain(`Starting Linear Search for: ${target}`);
+                await sleep();
+                for (let i = 0; i < array.length; i++) {
+                    checkAbort();
+                    highlightLine(1);
+                    getBar(i).style.backgroundColor = COLOR_CHECKING;
+                    updateLabel(i, "Current", true);
+                    await sleep();
+                    highlightLine(2);
+                    if (array[i] === target) {
+                        highlightLine(3);
+                        explain(`<strong>Found at ${i}!</strong>`, COLOR_FOUND);
+                        getBar(i).style.backgroundColor = COLOR_FOUND;
+                        updateLabel(i, "FOUND", true);
+                        return;
+                    }
+                    highlightLine(4);
+                    getBar(i).style.backgroundColor = COLOR_ELIMINATED;
+                    updateLabel(i, "", false);
+                    await sleep();
+                }
+                highlightLine(6);
+                explain(`<strong>Not found.</strong>`, "#ef4444");
+            }
+
+            async function binarySearch(target) {
+                highlightLine(0);
+                explain(`Starting Binary Search for: ${target}`);
+                await sleep();
+                highlightLine(1, 2);
+                let low = 0, high = array.length - 1;
+                updateLabel(low, "LOW", true);
+                updateLabel(high, "HIGH", true);
+                await sleep();
+                while (low <= high) {
+                    checkAbort();
+                    highlightLine(3);
+                    await sleep();
+                    highlightLine(4);
+                    let mid = Math.floor((low + high) / 2);
+                    clearAllLabels();
+                    updateLabel(low, "LOW", true);
+                    if (low !== high) updateLabel(high, "HIGH", true);
+                    const midLabel = document.getElementById(`label-${mid}`);
+                    let txt = midLabel.innerText;
+                    updateLabel(mid, (txt && midLabel.classList.contains("show") ? txt + " / MID" : "MID"), true);
+                    getBar(mid).style.backgroundColor = COLOR_CHECKING;
+                    await sleep();
+                    highlightLine(5);
+                    if (array[mid] === target) {
+                        highlightLine(6);
+                        getBar(mid).style.backgroundColor = COLOR_FOUND;
+                        clearAllLabels();
+                        updateLabel(mid, "FOUND", true);
+                        return;
+                    }
+                    highlightLine(7);
+                    if (array[mid] < target) {
+                        highlightLine(8);
+                        for (let i = low; i <= mid; i++) getBar(i).style.backgroundColor = COLOR_ELIMINATED;
+                        low = mid + 1;
+                    } else {
+                        highlightLine(9, 10);
+                        for (let i = mid; i <= high; i++) getBar(i).style.backgroundColor = COLOR_ELIMINATED;
+                        high = mid - 1;
+                    }
+                    clearAllLabels();
+                    if (low <= high && low < array.length && high >= 0) {
+                        updateLabel(low, "LOW", true);
+                        if (low !== high) updateLabel(high, "HIGH", true);
+                    }
+                    await sleep();
+                }
+                highlightLine(12);
+                clearAllLabels();
+                explain(`<strong>Not found.</strong>`, "#ef4444");
+            }
+
+            function toggleDropdown() { document.getElementById('userDropdown').classList.toggle('show'); }
+            document.addEventListener('click', function (e) {
+                const menu = document.querySelector('.user-menu');
+                if (menu && !menu.contains(e.target)) document.getElementById('userDropdown').classList.remove('show');
+            });
+
+            window.onload = () => { updateAlgoSettings(); generateRandomArray(); };
+        </script>
 </body>
+
 </html>

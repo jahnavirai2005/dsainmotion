@@ -1,8 +1,6 @@
 package com.dsainmotion;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -218,38 +216,7 @@ private PasswordEncoder passwordEncoder;
 public String forgotPasswordPage() {
     return "forgot-password";
 }
-@Autowired
-private JavaMailSender mailSender;
 
-@PostMapping("/forgot-password")
-public String processForgotPassword(@RequestParam String email, Model model) {
-
-    User user = userRepository.findByEmail(email);
-
-    if(user != null) {
-        String token = java.util.UUID.randomUUID().toString();
-
-        user.setResetToken(token);
-        user.setTokenExpiry(java.time.LocalDateTime.now().plusMinutes(15));
-
-        userRepository.save(user);
-
-        String link = "http://localhost:8082/reset-password?token=" + token;
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("Reset Password");
-        message.setText("Click this link to reset your password:\n" + link);
-
-        mailSender.send(message);
-
-        model.addAttribute("message", "Reset link sent to your email!");
-    } else {
-        model.addAttribute("message", "Email not found!");
-    }
-
-    return "forgot-password";
-}
 
     @PostMapping("/admin-login")
     public String loginAdmin(
@@ -526,21 +493,6 @@ public String update(@RequestParam int id,
             return "register";
         }
     }
-    @GetMapping("/mail-test")
-@ResponseBody
-public String testMail() {
-    try {
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo("YOUR_EMAIL@gmail.com");
-        msg.setSubject("Test");
-        msg.setText("Working");
-
-        mailSender.send(msg);
-        return "Mail sent!";
-    } catch (Exception e) {
-        e.printStackTrace();
-        return "Error: " + e.getMessage();
-    }
+   
 }
 
-}
