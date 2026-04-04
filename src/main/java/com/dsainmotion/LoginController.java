@@ -212,10 +212,6 @@ private PasswordEncoder passwordEncoder;
             return "redirect:" + errorUrl;
         }
     }
-    @GetMapping("/forgot-password")
-public String forgotPasswordPage() {
-    return "forgot-password";
-}
 
 
     @PostMapping("/admin-login")
@@ -482,6 +478,7 @@ public String update(@RequestParam int id,
             user.setEmail(email);
             user.setPhone(phone);
             user.setPass(passwordEncoder.encode(pass));
+            user.setCreatedOn(java.time.LocalDateTime.now());
 
             userRepository.save(user);
             System.out.println("[registerUser] success user saved: " + user_id);

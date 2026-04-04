@@ -30,11 +30,8 @@ public class User {
     @Column(name = "last_login_date")
     private java.time.LocalDate lastLoginDate;
 
-    @Column(name = "reset_token")
-private String resetToken;
-
-@Column(name = "token_expiry")
-private java.time.LocalDateTime tokenExpiry;
+    @Column(name = "created_on")
+    private java.time.LocalDateTime createdOn;
 
     // getters & setters
 
@@ -86,35 +83,12 @@ private java.time.LocalDateTime tokenExpiry;
         this.phone = phone;
     }
 
-    public Integer getStreak() {
-        return streak;
+    public java.time.LocalDateTime getCreatedOn() {
+        return createdOn;
     }
 
-    public void setStreak(Integer streak) {
-        this.streak = streak;
+    public void setCreatedOn(java.time.LocalDateTime createdOn) {
+        this.createdOn = createdOn;
     }
-
-    public java.time.LocalDate getLastLoginDate() {
-        return lastLoginDate;
-    }
-
-    public void setLastLoginDate(java.time.LocalDate lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
-    }
-    public String getResetToken() {
-    return resetToken;
-}
-
-public void setResetToken(String resetToken) {
-    this.resetToken = resetToken;
-}
-
-public LocalDateTime getTokenExpiry() {
-    return tokenExpiry;
-}
-
-public void setTokenExpiry(LocalDateTime tokenExpiry) {
-    this.tokenExpiry = tokenExpiry;
-}
 }
 

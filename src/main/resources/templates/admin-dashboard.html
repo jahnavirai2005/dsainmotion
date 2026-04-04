@@ -830,7 +830,7 @@ var studyVault = /*[[${studyVault}]]*/ [];
                 id: u.userId,
                 name: u.firstName + ' ' + u.lastName,
                 email: u.email,
-                joined: '2024-01-01', // Placeholder, can be improved
+                joined: u.createdOn ? u.createdOn.substring(0, 10) : 'Unknown',
                 status: 'Active'
             }));
             const usersTbody = document.getElementById('users-tbody');
