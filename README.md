@@ -1,4 +1,4 @@
-*DSA In Motion* 
+
 DSA In Motion is an interactive web-based learning platform designed to make Data Structures and Algorithms (DSA) easier to understand through visual animations and structured theory content. Instead of learning only from static code or textbooks, users can explore how data structures work step by step with animations, explanations, and interactive features.
 
 📖 Project Overview
